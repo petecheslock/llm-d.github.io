@@ -1,0 +1,82 @@
+export default function Welcome() {
+  return (
+    <div className="welcome welcome-viewport">
+
+      <div className="welcome-info">
+
+        <h1 className="header">LLM-d</h1>
+
+        <h2 className="welcome-h2">
+          Distributed AI inference with the compute resources you <b><em>have</em></b>
+        </h2>
+
+        <p>
+          While some distributed AI solutions rely on a single vendor's
+          hardware, If you have a heterogeneous compute environment that
+          includes AMD or Intel accelerators in addition to NVIDIA GPUs, you
+          want a distributed inference solution based on vLLM.
+        </p>
+
+        <ul className="ul-bulleted">
+          <li>
+            <strong>LLM-d</strong> is a toolbox of components which together
+            enable distributed inference in just such a heterogenous compute
+            environment.
+          </li>
+          <li>
+            <strong>LLM-d</strong> allows you to achieve distributed AI
+            inference with the compute resources you <em>have</em> rather than
+            the resources someone wishes to <em>sell</em>
+          </li>
+        </ul>
+
+        <div className="button-group">
+          <button className="static-button" href="#">
+            About LLM-d
+          </button>
+          <button className="static-button" href="#">
+            {/* Link to install page on the docs */}
+            Installation
+          </button>
+          <button className="static-button" href="#">
+            {/* Link to Community tab */}
+            Community
+          </button>
+        </div>
+
+        {/* <ul>
+              <li>
+                  <button className="static-button" href="#">
+                    <img src={icon} alt="Button 1"></img>
+                    Link 1
+                  </button>
+              </li>
+              <li>
+                  <button className="static-button" href="#">
+                    <img src={icon} alt="Button 2"></img>
+                    Link 2
+                  </button>
+              </li>
+              <li>
+                  <button className="static-button" href="#">
+                    <img src={icon} alt="Button 3"></img>
+                    Link 3
+                  </button>
+              </li>
+              <li>
+                  <button className="static-button" href="#">
+                    <img src={icon} alt="Button 4"></img>
+                    Link 4
+                  </button>
+              </li>
+              <li>
+                  <button className="static-button" href="#">
+                    <img src={icon} alt="Button 5"></img>
+                    Link 5
+                  </button>
+              </li>
+            </ul> */}
+      </div>
+    </div>
+  );
+}

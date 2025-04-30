@@ -1,0 +1,386 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ * https://infima.dev/
+ * 
+ * Colour Generation for :root
+ * https://docusaurus.io/docs/styling-layout
+ */
+
+/* You can override the default Infima variables here. */
+
+@font-face {
+  font-family: "Red Hat Mono";
+  src: url(fonts/RedHatMono-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Red Hat Display";
+  src: url(fonts/RedHatDisplay-VariableFont_wght.ttf);
+}
+
+:root {
+  --ifm-color-primary: #a60000;
+  --ifm-color-primary-dark: #950000;
+  --ifm-color-primary-darker: #8d0000;
+  --ifm-color-primary-darkest: #740000;
+  --ifm-color-primary-light: #b70000;
+  --ifm-color-primary-lighter: #bf0000;
+  --ifm-color-primary-lightest: #d80000;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-font-family-base: "Red Hat Display", Arial, Helvetica, sans-serif;
+  --ifm-font-family-monospace: "Red Hat Mono", "Courier New", monospace;
+  background-color: whitesmoke;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #f56e6e;
+  --ifm-color-primary-dark: #f34d4d;
+  --ifm-color-primary-darker: #f23c3c;
+  --ifm-color-primary-darkest: #e81010;
+  --ifm-color-primary-light: #f78f8f;
+  --ifm-color-primary-lighter: #f8a0a0;
+  --ifm-color-primary-lightest: #fcd2d2;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-pre-background: #ac0000;
+  background-color: #262626;
+}
+
+.header {
+  display: flex;
+  align-content: center;
+  @media screen and (max-width: 1440px) {
+    font-size: 2.5rem;
+  }
+}
+
+* em b {
+  box-sizing: border-box;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.viewport {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+}
+
+.about-viewport {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  @media screen and (max-width: 1024px) {
+    height: auto;
+  }
+}
+
+.welcome-viewport {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  @media screen and (max-width: 500px) {
+    height: auto;
+  }
+}
+
+.background-2 {
+  color: white;
+  background-color: #707070;
+}
+
+.welcome,
+.install,
+.demo,
+.about {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0%;
+}
+
+/* ----------------------------- Welcome Section ---------------------------- */
+
+.welcome {
+  background-image: url('@site/static/img/background.png');
+  background-position: center;
+  background-size: cover;
+}
+
+.welcome-info,
+.install-gif {
+  display: block;
+}
+
+.welcome-info {
+  display: flexbox;
+  justify-content: center;
+  padding: 5%;
+  background-color: rgba(255, 255, 255, 0.75);
+  margin: 20%;
+  border-radius: 40px;
+  @media screen and (max-width: 1024px) {
+    padding: 10%;
+  } 
+}
+
+.welcome-h1 {
+  display: inline;
+  font-weight: 500;
+}
+
+.welcome-h2 {
+  font-weight: 500;
+  padding-right: 10rem;
+  @media screen and (max-width: 768px) {
+    padding: 0%;
+    font-size: 1rem;
+  }
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  @media screen and (max-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.static-button {
+  align-items: center;
+  justify-items: center;
+  border-radius: 15px;
+  border: 1px solid transparent;
+  margin: 12.5px 12.5px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  background-color: #e54b83;
+  color: #fff;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  max-width: 50%;
+  @media screen and (max-width: 1024px) {
+    max-width: 100%;
+  }
+}
+
+/* ----------------------------- Install Section ---------------------------- */
+
+.install-grid {
+  display: grid;
+  grid-template-areas: "install-info demo-graphic";
+  align-items: center;
+  align-content: stretch;
+  justify-items: center;
+  justify-content: stretch;
+  @media screen and (max-width: 500px) {
+    grid-template-areas: "install-info"
+    "demo-graphic"
+  }
+}
+
+.install-info {
+  padding: 10%;
+
+}
+
+.install-h3 {
+  font-weight: 500;
+}
+
+.install-code {
+  /* word-break: break-all; */
+  font-family: "Red Hat Mono", monospace !important;
+  font-weight: 500;
+  padding: 1rem;
+  background-color: #262626;
+  border-radius: 15px;
+  width: 100%;
+}
+
+.install-code p {
+  display: inline-flex;
+}
+
+.install-button {
+  @media screen and (max-width: 768px) {
+    padding: 10px;
+    font-size: larger;
+  }
+}
+
+.install-graphic {
+  padding: 10%;
+}
+
+.install-gif {
+  align-self: center;
+  justify-self: center;
+  grid-area: demo-graphic;
+  width: 100%;
+  @media screen and (max-width: 1024px) {
+    width: 75%;
+  }
+}
+
+/* ------------------------------ Demo Section ------------------------------ */
+
+.demo-h1 {
+  text-align: center;
+  font-size: xx-large;
+}
+
+.demo-gif {
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  width: 100%;
+}
+
+/* ------------------------------ About Section ----------------------------- */
+
+.demo,
+.about {
+  padding: 10%;
+}
+
+.about {
+  @media screen and (max-width: 1024px) {
+    padding: 15% 10%;
+    @media screen and (max-width: 500px) {
+      padding: 30% 10%;
+    }
+  }
+}
+
+.about-header {
+  display: flex;
+  align-content: center;
+  @media screen and (max-width: 1440px) {
+    font-size: 2.5rem;
+  }
+}
+
+.about-grid {
+  display: grid;
+  grid-template-areas:
+    "graphic-1 graphic-2 graphic-3 graphic-4"
+    "text-1 text-2 text-3 text-4";
+  align-items: center;
+  align-content: stretch;
+  justify-items: center;
+  justify-content: stretch;
+  text-align: center;
+  gap: 2em;
+  height: auto;
+
+  @media screen and (max-width: 1024px) {
+    grid-template-areas:
+      "graphic-1 graphic-2"
+      "text-1 text-2"
+      "graphic-3 graphic-4"
+      "text-3 text-4";
+    gap: 1em;
+    
+    @media screen and (max-width: 500px) {
+      grid-template-areas:
+        "graphic-1"
+        "text-1"
+        "graphic-2"
+        "text-2"
+        "graphic-3"
+        "text-3"
+        "graphic-4"
+        "text-4";
+    }
+  }
+}
+
+.about-grid > * {
+  justify-self: center;
+  align-self: center;
+  height: auto;
+}
+
+.about-graphic-1 {
+  grid-area: graphic-1;
+}
+
+.about-graphic-2 {
+  grid-area: graphic-2;
+}
+
+.about-graphic-3 {
+  grid-area: graphic-3;
+}
+
+.about-graphic-4 {
+  grid-area: graphic-4;
+}
+
+.about-text-1 {
+  grid-area: text-1;
+}
+
+.about-text-2 {
+  grid-area: text-2;
+}
+
+.about-text-3 {
+  grid-area: text-3;
+}
+
+.about-text-4 {
+  grid-area: text-4;
+}
+
+.about-graphic-1,
+.about-graphic-2,
+.about-graphic-3,
+.about-graphic-4 {
+  width: 18vw;
+  margin-top: 1vh;
+  @media screen and (max-width: 1024px) {
+    width: 25vw;
+    @media screen and (max-width: 500px) {
+      width: 75vw;
+    }
+  }
+}
+
+.about-text-1,
+.about-text-2,
+.about-text-3,
+.about-text-4 {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.static-button:not(.install-button) {
+  width: 70%;
+  @media screen and (max-width: 500px) {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.7rem;
+    width: 100%;
+  }
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ul-bulleted {
+  list-style-type: disc;
+  padding: 0;
+}
+
+.footer--dark {
+  --ifm-footer-background-color: #262626 !important;
+}
