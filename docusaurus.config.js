@@ -81,8 +81,8 @@ const config = {
         // title: "My Site",
         logo: {
           alt: "LLM-d Logo",
-          src: "#",
-          srcDark: "#"
+          src: "img/llm-d logo.temp.thick.png",
+          srcDark: "img/llm-d logo.temp.thick.png"
         },
         items: [
           {

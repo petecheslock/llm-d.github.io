@@ -2,9 +2,10 @@ export default function Welcome() {
   return (
     <div className="welcome welcome-viewport">
 
-      <div className="welcome-info">
+      <div className="welcome-info" >
 
-        <h1 className="header">LLM-d</h1>
+        {/* <h1 className="header">LLM-d </h1> */}
+        <img  alt="LLM-d" src="img/llm-d-logotype.temp.svg"></img>
 
         <h2 className="welcome-h2">
           Distributed AI inference with the compute resources you <b><em>have</em></b>
