@@ -31,17 +31,17 @@ export default function Welcome() {
         </ul>
 
         <div className="button-group">
-          <button className="static-button" href="./architecture/architecture.md">
+          <button className="static-button"><a className="button-link" href="/docs/architecture/">
             About LLM-d
-          </button>
-          <button className="static-button" href="./guide/Installation/Prerequisites.md">
+          </a></button>
+          <button className="static-button"><a className="button-link"  href="/docs/guide/Installation/Prerequisites">
             {/* Link to install page on the docs */}
             Installation
-          </button>
-          <button className="static-button" href="#">
+          </a></button>
+          <button className="static-button"><a className="button-link"  href="/docs/community/work_with_us">
             {/* Link to Community tab */}
             Community
-          </button>
+          </a></button>
         </div>
 
         {/* <ul>

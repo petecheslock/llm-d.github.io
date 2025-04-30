@@ -46,8 +46,8 @@ const config = {
 
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
+        //  editUrl:
+        //    "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
         },
         blog: {
           showReadingTime: true,
@@ -58,8 +58,8 @@ const config = {
 
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-          "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
+        //  editUrl:
+        //  "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
 
           // Useful options to enforce blogging best practices
           onInlineTags: "warn",
@@ -97,7 +97,14 @@ const config = {
             position: "left",
             label: "Architecture",
           },
+          {
+            type: "docSidebar",
+            sidebarId: "commSidebar",
+            position: "left",
+            label: "Community",
+          },
           { to: "/blog", label: "News", position: "left" },
+          //{ to: "./community", label: "Community", position: "left"},
           {
             href: "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
             label: "GitHub",

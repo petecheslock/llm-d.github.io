@@ -170,6 +170,11 @@
   }
 }
 
+.button-link {
+  text-decoration: none;
+  color: #fff;
+}
+
 /* ----------------------------- Install Section ---------------------------- */
 
 .install-grid {
