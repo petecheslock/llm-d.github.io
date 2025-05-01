@@ -2,9 +2,10 @@ export default function Welcome() {
   return (
     <div className="welcome welcome-viewport">
 
-      <div className="welcome-info">
+      <div className="welcome-info" >
 
-        <h1 className="header">LLM-d</h1>
+        {/* <h1 className="header">LLM-d </h1> */}
+        <img  alt="LLM-d" src="img/llm-d-logotype.temp.svg"></img>
 
         <h2 className="welcome-h2">
           Distributed AI inference with the compute resources you <b><em>have</em></b>
@@ -31,17 +32,17 @@ export default function Welcome() {
         </ul>
 
         <div className="button-group">
-          <button className="static-button" href="#">
+          <button className="static-button"><a className="button-link" href="/docs/architecture/">
             About LLM-d
-          </button>
-          <button className="static-button" href="#">
+          </a></button>
+          <button className="static-button"><a className="button-link"  href="/docs/guide/Installation/Prerequisites">
             {/* Link to install page on the docs */}
             Installation
-          </button>
-          <button className="static-button" href="#">
+          </a></button>
+          <button className="static-button"><a className="button-link"  href="/docs/community/work_with_us">
             {/* Link to Community tab */}
             Community
-          </button>
+          </a></button>
         </div>
 
         {/* <ul>

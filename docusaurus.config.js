@@ -12,7 +12,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 const config = {
   title: "LLM-d Website",
   tagline: "Powered by Docusaurus",
-  favicon: "img/favicon.ico",
+  favicon: "img/llm-d-favicon.png",
 
   // Set the production url of your site here
   url: "https://your-docusaurus-site.example.com",
@@ -46,8 +46,8 @@ const config = {
 
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
+        //  editUrl:
+        //    "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
         },
         blog: {
           showReadingTime: true,
@@ -58,8 +58,8 @@ const config = {
 
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-          "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
+        //  editUrl:
+        //  "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
 
           // Useful options to enforce blogging best practices
           onInlineTags: "warn",
@@ -81,17 +81,30 @@ const config = {
         // title: "My Site",
         logo: {
           alt: "LLM-d Logo",
-          src: "#",
-          srcDark: "#"
+          src: "img/llm-d logo.temp.thick.png",
+          srcDark: "img/llm-d logo.temp.thick.png"
         },
         items: [
           {
             type: "docSidebar",
-            sidebarId: "tutorialSidebar",
+            sidebarId: "guideSidebar",
             position: "left",
-            label: "Docs",
+            label: "User Guide",
+          },
+          {
+            type: "docSidebar",
+            sidebarId: "structureSidebar",
+            position: "left",
+            label: "Architecture",
+          },
+          {
+            type: "docSidebar",
+            sidebarId: "commSidebar",
+            position: "left",
+            label: "Community",
           },
           { to: "/blog", label: "News", position: "left" },
+          //{ to: "./community", label: "Community", position: "left"},
           {
             href: "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
             label: "GitHub",

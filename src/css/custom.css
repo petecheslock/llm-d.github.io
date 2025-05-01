@@ -79,6 +79,7 @@
 }
 
 .welcome-viewport {
+  color: black;
   width: 100vw;
   height: 100vh;
   max-width: 100%;
@@ -168,6 +169,11 @@
   @media screen and (max-width: 1024px) {
     max-width: 100%;
   }
+}
+
+.button-link {
+  text-decoration: none;
+  color: #fff;
 }
 
 /* ----------------------------- Install Section ---------------------------- */
