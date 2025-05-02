@@ -24,8 +24,8 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "neuralmagic", // Usually your GitHub org/user name.
   projectName: "llm-d-website", // Usually your repo name.
-
-  onBrokenLinks: "throw",
+  trailingSlash: false,
+  onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
 
   // Even if you don't use internationalization, you can use this field to set

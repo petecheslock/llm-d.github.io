@@ -5,7 +5,7 @@ export default function About() {
   return (
       <div className="about about-viewport" id="about">
         <div className="about-info">
-          <h1 className="about-header">About header here</h1>
+          <h1 className="about-header">Under The Covers</h1>
           <div className="about-grid">
             <img
               className="about-graphic-1"
