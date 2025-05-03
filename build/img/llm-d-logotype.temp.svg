@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650.88 254.34">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #ec008c;
+        stroke-miterlimit: 10;
+        stroke-width: 13px;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        stroke-linecap: round;
+      }
+
+      .cls-3 {
+        fill: #231f20;
+        font-family: Fredoka-Regular, Fredoka;
+        font-size: 229.76px;
+        font-variation-settings: 'wght' 400, 'wdth' 100;
+      }
+    </style>
+  </defs>
+  <g>
+    <path class="cls-1" d="M593.77,101.72l-29.72,15.85c-4.63,2.47-7.52,7.29-7.52,12.54v29.8c0,5.25,2.89,10.07,7.52,12.54l29.72,15.85c4.18,2.23,9.19,2.23,13.37,0l29.72-15.85c4.63-2.47,7.52-7.29,7.52-12.54v-29.8c0-5.25-2.89-10.07-7.52-12.54l-29.72-15.85c-4.18-2.23-9.19-2.23-13.37,0Z"/>
+    <line class="cls-2" x1="644.38" y1="49.51" x2="644.38" y2="136.12"/>
+  </g>
+  <text class="cls-3" transform="translate(0 195.3)"><tspan x="0" y="0">LLM-</tspan></text>
+</svg>

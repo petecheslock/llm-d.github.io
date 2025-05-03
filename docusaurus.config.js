@@ -15,10 +15,11 @@ const config = {
   favicon: "img/llm-d-favicon.png",
 
   // Set the production url of your site here
-  url: "https://your-docusaurus-site.example.com",
+  //url: "https://kproche.github.io/",
+  url: "https://llm-d-website.github.io/"
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/",
+  baseUrl: "/llm-d-website/build/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -118,11 +119,11 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Docs",
+            title: "User Guide",
             items: [
               {
                 label: "How to Use",
-                to: "/docs/intro",
+                to: "docs/guide",
               },
             ],
           },

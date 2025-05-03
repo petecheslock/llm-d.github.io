@@ -32,14 +32,14 @@ export default function Welcome() {
         </ul>
 
         <div className="button-group">
-          <button className="static-button"><a className="button-link" href="/docs/architecture/">
+          <button className="static-button"><a className="button-link" href="docs/architecture/architecture">
             About LLM-d
           </a></button>
-          <button className="static-button"><a className="button-link"  href="/docs/guide/Installation/Prerequisites">
+          <button className="static-button"><a className="button-link"  href="docs/guide/Installation/Prerequisites">
             {/* Link to install page on the docs */}
             Installation
           </a></button>
-          <button className="static-button"><a className="button-link"  href="/docs/community/work_with_us">
+          <button className="static-button"><a className="button-link"  href="docs/community/work_with_us">
             {/* Link to Community tab */}
             Community
           </a></button>

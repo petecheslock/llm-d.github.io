@@ -14,6 +14,14 @@ The user guide is organized in sections to help you get started with LLM-d and t
 
 ## Configuration: Tuning the behaivor and performance of LLM-D
 
-    -[Overview](./LLM-d%20Configuration/configuration.md) Read before you tweak the settings!
+    -[Overview](./LLM-d_Cofiguration/00_configuration.md) Read before you tweak the settings!
+        ### Component Configuration
+
+        - [Deployer](/.LLM-d_Configuration/01_deployercfg.md)
+        - [Distributed KV-Cache](.LLM-d_Configuration/02_kv-cachecfg.md)
+        - [Prefil/Decode Disagg](./LLM-d_Configuration/03_prefill-decode.md)
+        - [Observability](./LLM-d_Configuration/04_observabilitycfg.md)
+        - [In-Cluster Routing](./LLM-d_Configuration/05_inclroutcfg.md)
+        - [NIXL/Communications](./LLM-d_Configuration/06_NIXL_commscfg.md)
 
     
