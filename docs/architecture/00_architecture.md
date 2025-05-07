@@ -1,6 +1,6 @@
 ---
 sidebar_position: 0
 ---
-# Overview of LLM-d architecture
+# Overview of llm-d architecture
 
 Here is where the magic happensS

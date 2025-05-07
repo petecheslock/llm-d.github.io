@@ -1,5 +1,6 @@
 import styles from './styles.module.css';
-import aboutGraphic from "@site/static/img/about-graphic.png";
+// import aboutGraphic from "@site/static/img/about-graphic.png";
+import aboutGraphic from "@site/static/img/llm-d-icon.png";
 
 export default function About() {
   return (
@@ -45,7 +46,7 @@ export default function About() {
 
             <img
               className="about-graphic-4"
-              src={aboutGraphic}
+              src="img/llm-d-logo.png"
               alt="About Graphic 4"
             ></img>
             <p className="about-text-4" role="paragraph">

@@ -10,20 +10,21 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "LLM-d Website",
+  title: "llm-d Website",
   tagline: "Powered by Docusaurus",
   favicon: "img/llm-d-favicon.png",
 
   // Set the production url of your site here
-  //url: "https://kproche.github.io/",
-  url: "https://llm-d-website.github.io/"
+  url: "https://kproche.github.io/",
+  //url: "https://neuralmagic.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/llm-d-website/build/",
+  baseUrl: "/llm-d-website/",
+  
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "neuralmagic", // Usually your GitHub org/user name.
+  organizationName: "kproche", // Usually your GitHub org/user name.
   projectName: "llm-d-website", // Usually your repo name.
   trailingSlash: false,
   onBrokenLinks: "warn",
@@ -81,9 +82,9 @@ const config = {
       navbar: {
         // title: "My Site",
         logo: {
-          alt: "LLM-d Logo",
-          src: "img/llm-d logo.temp.thick.png",
-          srcDark: "img/llm-d logo.temp.thick.png"
+          alt: "llm-d Logo",
+          src: "img/llm-d-logo.3.png",
+          srcDark: "img/llm-d-logo.3.png"
         },
         items: [
           {

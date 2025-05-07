@@ -1,1 +1,1 @@
-# Troubleshooting your LLM-d installation
+# Troubleshooting your llm-d installation

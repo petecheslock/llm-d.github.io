@@ -4,8 +4,8 @@ export default function Welcome() {
 
       <div className="welcome-info" >
 
-        {/* <h1 className="header">LLM-d </h1> */}
-        <img width="50%" alt="LLM-d" src="img/llm-d-logotype.temp.svg"></img>
+        {/* <h1 className="header">llm-d </h1> */}
+        <img width="75%" valign="middle" alt="llm-d" src="img/llm-d-logo-type.3b.svg"></img>
 
         <h2 className="welcome-h2">
           Distributed AI inference with the compute resources you <b><em>have</em></b>
@@ -20,12 +20,12 @@ export default function Welcome() {
 
         <ul className="ul-bulleted">
           <li>
-            <strong>LLM-d</strong> is a toolbox of components which together
+            <strong>llm-d</strong> is a toolbox of components which together
             enable distributed inference in just such a heterogenous compute
             environment.
           </li>
           <li>
-            <strong>LLM-d</strong> allows you to achieve distributed AI
+            <strong>llm-d</strong> allows you to achieve distributed AI
             inference with the compute resources you <em>have</em> rather than
             the resources someone wishes to <em>sell</em>
           </li>
@@ -33,7 +33,7 @@ export default function Welcome() {
 
         <div className="button-group">
           <button className="static-button"><a className="button-link" href="docs/architecture/architecture">
-            About LLM-d
+            About llm-d
           </a></button>
           <button className="static-button"><a className="button-link"  href="docs/guide/Installation/Prerequisites">
             {/* Link to install page on the docs */}

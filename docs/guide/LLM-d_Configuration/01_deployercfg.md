@@ -2,6 +2,6 @@
 sidebar_position: 1
 ---
 
-# LLM-d Deployer Configuration
+# llm-d Deployer Configuration
 
-The first piece of LLM-d's toolbox is the llm-d Deployer
+The first piece of llm-d's toolbox is the llm-d Deployer

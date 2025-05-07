@@ -8,6 +8,16 @@ hello:
   permalink: /hello
   description: Hello tag description
 
+welcome:
+  label: Welcome!
+  permalink: /welcome
+  description: Welcome tag description
+
+llm-d:
+  label: llm-d release news!
+  permalink: /llm-d
+  description: llm-d tag description
+
 docusaurus:
   label: Docusaurus
   permalink: /docusaurus

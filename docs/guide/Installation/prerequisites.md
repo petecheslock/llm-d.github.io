@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Prerequisites for running LLM-d
+# Prerequisites for running llm-d
 
 ## Compute resources
 
