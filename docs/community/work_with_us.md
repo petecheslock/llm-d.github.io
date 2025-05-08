@@ -1,6 +1,10 @@
-# Work with us on LLM-d!
+---
+sidebar_position: 1
+---
 
-There are several ways you can join the community effort to develop and enhance LLM-d
+# Work with us on llm-d!
+
+There are several ways you can join the community effort to develop and enhance llm-d
 
     - Via the [Github pages for our project](https://github.com/neuralmagic)
     - Via our [Slack Workspace](#)
