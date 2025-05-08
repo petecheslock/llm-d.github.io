@@ -36,7 +36,7 @@
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
+[data-theme="dark"] {
   --ifm-color-primary: #d494d4;
   --ifm-color-primary-dark: #ca7aca;
   --ifm-color-primary-darker: #c56dc5;
@@ -96,12 +96,13 @@
   justify-content: center;
   align-items: center;
   padding: 0%;
+  font-size: larger;
 }
 
 /* ----------------------------- Welcome Section ---------------------------- */
 
 .welcome {
-  background-image: url('@site/static/img/background.png');
+  background-image: url("@site/static/img/background.png");
   background-position: center;
   background-size: cover;
 }
@@ -111,16 +112,26 @@
   display: block;
 }
 
+img.llm-d-logo {
+  display: inline-block;
+  padding-bottom: 10%;
+}
+
 .welcome-info {
-  display: flexbox;
-  justify-content: center;
+  display: block;
+  text-align: center;
   padding: 5%;
   background-color: rgba(255, 255, 255, 0.75);
   margin: 20%;
   border-radius: 40px;
   @media screen and (max-width: 1024px) {
     padding: 10%;
-  } 
+  }
+}
+
+[data-theme="dark"] .welcome-info {
+  background-color: rgba(38, 38, 38, 0.75);
+  color: #fff;
 }
 
 .welcome-h1 {
@@ -130,7 +141,6 @@
 
 .welcome-h2 {
   font-weight: 500;
-  padding-right: 10rem;
   @media screen and (max-width: 768px) {
     padding: 0%;
     font-size: 1rem;
@@ -170,29 +180,30 @@
   transition: 250ms;
 }
 
-.button-link, .button-link:hover {
+.button-link,
+.button-link:hover {
   text-decoration: none;
   color: #fff;
 }
 
 /* ----------------------------- Install Section ---------------------------- */
 
-.install-grid {
-  display: grid;
-  grid-template-areas: "install-info demo-graphic";
-  align-items: center;
-  align-content: stretch;
-  justify-items: center;
-  justify-content: stretch;
-  @media screen and (max-width: 500px) {
-    grid-template-areas: "install-info"
-    "demo-graphic"
-  }
+.install-header {
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
 
 .install-info {
-  padding: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  padding: 30%;
+}
 
+.install-h1 {
+  font-size: 350%;
 }
 
 .install-h3 {
@@ -220,18 +231,9 @@
   }
 }
 
-.install-graphic {
-  padding: 10%;
-}
-
-.install-gif {
-  align-self: center;
-  justify-self: center;
-  grid-area: demo-graphic;
-  width: 100%;
-  @media screen and (max-width: 1024px) {
-    width: 75%;
-  }
+.install-logo {
+  margin-left: 2%;
+  padding-bottom: 2.5%;
 }
 
 /* ------------------------------ Demo Section ------------------------------ */
@@ -292,7 +294,7 @@
       "graphic-3 graphic-4"
       "text-3 text-4";
     gap: 1em;
-    
+
     @media screen and (max-width: 500px) {
       grid-template-areas:
         "graphic-1"
@@ -376,7 +378,7 @@
   }
 }
 
-ul {
+ul li {
   list-style: none;
   padding: 0;
 }
