@@ -5,7 +5,7 @@ export default function Welcome() {
       <div className="welcome-info" >
 
         {/* <h1 className="header">llm-d </h1> */}
-        <img width="75%" valign="middle" alt="llm-d" src="img/llm-d-logo-type.3b.svg"></img>
+        <img className="llm-d-logo" width="75%" valign="middle" alt="llm-d" src="img/llm-d-logotype-and-icon.png"></img>
 
         <h2 className="welcome-h2">
           Distributed AI inference with the compute resources you <b><em>have</em></b>
