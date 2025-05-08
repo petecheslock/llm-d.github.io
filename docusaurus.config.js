@@ -24,8 +24,19 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
+
+
+  //IF YOU ARE DEPLOYING PREVIEW PAGES via GITHUB PAGES FOR THE MAIN REPO 
+  // UNCOMMENT THE NEXT TWO LINES AND COMMENT OUT THE FORK SECTION BELOW
+  //organizationName: "nerualmagic", // Usually your GitHub org/user name.
+  //projectName: "llm-d-website.github.io", // Usually your repo name.
+
+  //IF YOU ARE DEPLOYING PREVIEW PAGES VIA GITHUB PAGES FOR A BRANCH OF A FORK IN YOUR ACCOUNT 
+  //EDIT THESE LINES APPROPRIATELY
   organizationName: "kproche", // Usually your GitHub org/user name.
   projectName: "llm-d-website", // Usually your repo name.
+
+
   trailingSlash: false,
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
@@ -74,6 +85,8 @@ const config = {
       }),
     ],
   ],
+  markdown: { mermaid: true,           },
+  themes: ['@docusaurus/theme-mermaid'],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -167,5 +180,8 @@ const config = {
       },
     }),
 };
+
+
+
 
 export default config;
