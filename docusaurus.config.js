@@ -15,7 +15,7 @@ const config = {
   favicon: "img/llm-d-favicon.png",
 
   // Set the production url of your site here
-  url: "https://kproche.github.io/",
+  url: "https://jessicachitas.github.io/",
   //url: "https://neuralmagic.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
@@ -33,7 +33,7 @@ const config = {
 
   //IF YOU ARE DEPLOYING PREVIEW PAGES VIA GITHUB PAGES FOR A BRANCH OF A FORK IN YOUR ACCOUNT 
   //EDIT THESE LINES APPROPRIATELY
-  organizationName: "kproche", // Usually your GitHub org/user name.
+  organizationName: "jessicachitas", // Usually your GitHub org/user name.
   projectName: "llm-d-website", // Usually your repo name.
 
 
