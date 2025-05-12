@@ -67,6 +67,9 @@
   width: 100vw;
   height: 100vh;
   max-width: 100%;
+  @media screen and (orientation: landscape) {
+    height: auto;
+  }
 }
 
 .about-viewport {
