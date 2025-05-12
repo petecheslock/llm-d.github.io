@@ -9,7 +9,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 /** @type {import('@docusaurus/types').Config} */
-const config = {
+const config = {llm
   title: "llm-d Website",
   tagline: "Powered by Docusaurus",
   favicon: "img/llm-d-favicon.png",
@@ -17,7 +17,7 @@ const config = {
   // Set the production url of your site here
   //url: "https://kproche.github.io/",
   //url: "https://jessicachitas.github.io/",
-  url: "https://neuralmagic.github.io/",
+  url: "https://llm-d.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/llm-d-website.github.io/",
@@ -30,7 +30,7 @@ const config = {
 
   //IF YOU ARE DEPLOYING PREVIEW PAGES via GITHUB PAGES FOR THE MAIN REPO 
   // UNCOMMENT THE NEXT TWO LINES AND COMMENT OUT THE FORK SECTION BELOW
-  organizationName: "neuralmagic", // Usually your GitHub org/user name.
+  organizationName: "llm-d", // Usually your GitHub org/user name.
   projectName: "llm-d-website.github.io", // Usually your repo name.
 
   //IF YOU ARE DEPLOYING PREVIEW PAGES VIA GITHUB PAGES FOR A BRANCH OF A FORK IN YOUR ACCOUNT 
@@ -63,7 +63,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
         //  editUrl:
-        //    "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
+        //    "https://github.com/llm-d/llm-d-website.github.io/tree/main/",
         },
         blog: {
           showReadingTime: true,
@@ -75,7 +75,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
         //  editUrl:
-        //  "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
+        //  "https://github.com/llm-d/llm-d-website.github.io/tree/main/",
 
           // Useful options to enforce blogging best practices
           onInlineTags: "warn",
@@ -123,7 +123,7 @@ const config = {
           { to: "/blog", label: "News", position: "left" },
           //{ to: "./community", label: "Community", position: "left"},
           {
-            href: "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
+            href: "https://github.com/llm-d/llm-d-website.github.io/tree/main/",
             label: "GitHub",
             position: "right",
           },
@@ -178,7 +178,7 @@ const config = {
               },
               {
                 label: "GitHub",
-                href: "https://github.com/neuralmagic/llm-d-website.github.io/tree/main/",
+                href: "https://github.com/llm-d/llm-d-website.github.io/tree/main/",
               },
             ],
           },
