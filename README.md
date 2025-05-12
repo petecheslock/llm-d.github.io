@@ -1,3 +1,6 @@
+# llm-d-webslim
+Slimmed down version of the llm-d-website
+
 # LLM-d Website
 
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.

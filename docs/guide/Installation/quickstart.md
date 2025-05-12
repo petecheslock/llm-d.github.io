@@ -4,13 +4,7 @@ sidebar_position: 2
 
 # Trying llm-d via the Quick Start installer
 
-# llm-d Quick Start
-
-Getting Started with llm-d on Kubernetes.
-
-## Overview
-
-This guide will walk you through the steps to install and deploy llm-d on a Kubernetes cluster.
+This guide will walk you through the steps to install and deploy the llm-d quickstart demo on a Kubernetes cluster.
 
 **What is llm-d?**
 
@@ -25,124 +19,11 @@ It includes:
 - Kubernetes-based, works on OCP, minikube, and other k8s distributions
 - NIXL inference transfer library
 
-**llm-d consists of the following components:**
+[For more information check out the Architecture Documentation](/architecture/00_architecture.md)
 
-- Gateway API Inference Extension (GIE) - This extension upgrades an ext-proc-capable proxy or gateway - such as Envoy Gateway, kGateway, or the GKE Gateway - to become an inference gateway - supporting inference platform teams self-hosting large language models on Kubernetes. This integration makes it easy to expose and control access to your local OpenAI-compatible chat completion endpoints to other workloads on or off cluster, or to integrate your self-hosted models alongside model-as-a-service providers in a higher level AI Gateway like LiteLLM, Solo AI Gateway, or Apigee.
-  The inference gateway:
-  - Improves the tail latency and throughput of LLM completion requests against Kubernetes-hosted model servers using an extendable request scheduling algorithm that is kv-cache and request cost aware, avoiding evictions or queueing as load increases
-  - Provides Kubernetes-native declarative APIs to route client model names to use-case specific LoRA adapters and control incremental rollout of new adapter versions, A/B traffic splitting, and safe blue-green base model and model server upgrades
-  - Adds end to end observability around service objective attainment
-  - Ensures operational guardrails between different client model names, allowing a platform team to safely serve many different GenAI workloads on the same pool of shared foundation model servers for higher utilization and fewer required accelerators
+## Prerequisites
 
-- Distributed KV Cache
-  - LMCache (in llm-d container)
-  - NIXL (in llm-d container)
-  - KVCache Indexer
-  - Redis
-
-- Model Service Controller - ModelService is a Kubernetes operator (CRD + controller) that enables the creation of vllm pods and routing resources for a given model.
-  - Enables disaggregated prefill
-  - Supports creation of Gateway API Inference Extension resources for routing
-  - Supports auto-scaling with HPA
-  - Supports independent scaling of prefill and decode instances
-  - Supports independent node affinities for prefill and decode instances
-  - Supports model loading from OCI images, HuggingFace public and private registries, and PVCs
-
-- Metrics Service (Prometheus)
-
-### Architecture
-
-![llm-d Architecture](arch.jpg)
-
-## Hardware Profiles
-
-Tested on:
-
-- Minikube on AWS
-  - single g6e.12xlarge
-- Red Hat OpenShift on AWS
-  - 6 x m5.4xlarge
-  - 2 x g6e.2xlarge
-  - OpenShift 4.17.21
-  - NVIDIA GPU Operator 24.9.2
-  - OpenShift Data Foundation 4.17.6
-
-## Client Configuration
-
-### Required tools
-
-Following prerequisite are required for the installer to work.
-
-- [yq – installation & releases](https://github.com/mikefarah/yq#install)
-- [jq – download & install guide](https://stedolan.github.io/jq/download/)
-- [git – installation guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- [Helm – quick-start install](https://helm.sh/docs/intro/install/)
-- [Kustomize – official install docs](https://kubectl.docs.kubernetes.io/installation/kustomize/)
-- [kubectl – install & setup](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-
-You can use the installer script that installs all the required dependencies.  Currently only Linux is supported.
-
-```bash
-# Currently Linux only
-./install-deps.sh
-```
-
-### Required credentials and configuration
-
-- [llm-d-deployer GitHub repo – clone here](https://github.com/neuralmagic/llm-d-deployer.git)
-- [Quay.io Registry – sign-up & credentials](https://quay.io/)
-- [Red Hat Registry – terms & access](https://access.redhat.com/registry/)
-- [HuggingFace HF_TOKEN](https://huggingface.co/docs/hub/en/security-tokens) with download access for the model you want to use.  By default the sample application will use [meta-llama/Llama-3.2-3B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct).
-  > ⚠️ You may need to visit Hugging Face [meta-llama/Llama-3.2-3B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct) and
-  > accept the usage terms to pull this with your HF token if you have not already done so.
-
-Registry Authentication: The installer looks for an auth file in:
-
-```bash
-~/.config/containers/auth.json
-# or
-~/.config/containers/config.json
-```
-
-If not found, you can create one with the following commands:
-
-Create with Docker:
-
-```bash
-docker --config ~/.config/containers/ login quay.io
-docker --config ~/.config/containers/ login registry.redhat.io
-```
-
-Create with Podman:
-
-```bash
-podman login quay.io --authfile ~/.config/containers/auth.json
-podman login registry.redhat.io --authfile ~/.config/containers/auth.json
-```
-
-### Target Platforms
-
-#### Kubernetes
-
-This can be run on a minimum ec2 node type [g6e.12xlarge](https://aws.amazon.com/ec2/instance-types/g6e/) (4xL40S 48GB but only 2 are used by default) to infer the model meta-llama/Llama-3.2-3B-Instruct that will get spun up.
-
-> ⚠️ If your cluster has no available GPUs, the **prefill** and **decode** pods will remain in **Pending** state.
-
-Verify you have properly installed the container toolkit with the runtime of your choice.
-
-```bash
-# Podman
-podman run --rm --security-opt=label=disable --device=nvidia.com/gpu=all ubuntu nvidia-smi
-# Docker
-sudo docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi
-```
-
-#### OpenShift
-
-- OpenShift - This quickstart was tested on OpenShift 4.18. Older versions may work but have not been tested.
-- NVIDIA GPU Operator and NFD Operator - The installation instructions can be found [here](https://docs.nvidia.com/datacenter/cloud-native/openshift/latest/steps-overview.html).
-- OpenShift Data Foundation - The installation instructions can be found [here](https://docs.redhat.com/en/documentation/red_hat_openshift_data_foundation/4.17/html/deploying_and_managing_openshift_data_foundation_using_red_hat_openstack_platform/deploying_openshift_data_foundation_on_red_hat_openstack_platform_in_internal_mode).  OF is not required, but a ReadWriteMany storage class is required.
-- NO Service Mesh or Istio installation as it will conflict with the gateway
+  Check the [prerequisites](./prerequisites.md) for the [compute resources](./prerequisites.md#compute-resources), and [client configuration](./prerequisites.md#software-prerequisites----client-configuration) required to run this demonstration.
 
 ## llm-d Installation
 
@@ -273,16 +154,3 @@ make a change, simply uninstall and then run the installer again with any change
 ```bash
 ./llmd-installer.sh --uninstall
 ```
-
-
---- 
-
-### Old placeholder text 
-
-
-If you have already confirmed you have the [prerequisite resources](./prerequisites.md) available, 
-you can try a basic Quick Start version of llm-d by executing this command:
-
-``` echo "Hello, World!" ```
-
-For a production environment, please refer to the [Custom Installation](customstart.md) page

@@ -14,9 +14,9 @@ export default function Home() {
       description="When we go live a useful description will go into this tag">
       <main>
         <Welcome />
+        <About />
         <Install />
         <Demo />
-        <About />
       </main>
     </Layout>
   );
