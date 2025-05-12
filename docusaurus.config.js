@@ -15,11 +15,13 @@ const config = {
   favicon: "img/llm-d-favicon.png",
 
   // Set the production url of your site here
-  url: "https://jessicachitas.github.io/",
-  //url: "https://neuralmagic.github.io/",
+  //url: "https://kproche.github.io/",
+  //url: "https://jessicachitas.github.io/",
+  url: "https://neuralmagic.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/llm-d-website/",
+  baseUrl: "/llm-d-website.github.io/",
+  //baseUrl: "/llm-d-website/",
   
 
   // GitHub pages deployment config.
@@ -28,13 +30,14 @@ const config = {
 
   //IF YOU ARE DEPLOYING PREVIEW PAGES via GITHUB PAGES FOR THE MAIN REPO 
   // UNCOMMENT THE NEXT TWO LINES AND COMMENT OUT THE FORK SECTION BELOW
-  //organizationName: "nerualmagic", // Usually your GitHub org/user name.
-  //projectName: "llm-d-website.github.io", // Usually your repo name.
+  organizationName: "neuralmagic", // Usually your GitHub org/user name.
+  projectName: "llm-d-website.github.io", // Usually your repo name.
 
   //IF YOU ARE DEPLOYING PREVIEW PAGES VIA GITHUB PAGES FOR A BRANCH OF A FORK IN YOUR ACCOUNT 
   //EDIT THESE LINES APPROPRIATELY
-  organizationName: "jessicachitas", // Usually your GitHub org/user name.
-  projectName: "llm-d-website", // Usually your repo name.
+  //organizationName: "jessicachitas", // Usually your GitHub org/user name.
+  //organizationName: "kproche", // Usually your GitHub org/user name.
+  //projectName: "llm-d-website", // Usually your repo name.
 
 
   trailingSlash: false,
@@ -140,28 +143,37 @@ const config = {
               },
             ],
           },
-          // {
-          //   title: "Community",
-          //   items: [
-          //     {
-          //       label: "Stack Overflow",
-          //       href: "https://stackoverflow.com/questions/tagged/docusaurus",
-          //     },
-          //     {
-          //       label: "Discord",
-          //       href: "https://discordapp.com/invite/docusaurus",
-          //     },
+          {
+            title: "Architecture",
+            items: [
+              {
+                label: "Overview",
+                to: "docs/architecture",
+              },
+            ],
+          },
+          {
+             title: "Community",
+             items: [
+               {
+                 label: "How to Join in",
+                 href: "docs/community",
+               },
+               {
+                 label: "Partners",
+                 href: "docs/partners",
+               },
           //     {
           //       label: "X",
           //       href: "https://x.com/docusaurus",
           //     },
-          //   ],
-          // },
+             ],
+          },
           {
             title: "More",
             items: [
               {
-                label: "Blog",
+                label: "News",
                 to: "/blog",
               },
               {
