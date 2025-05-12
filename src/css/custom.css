@@ -210,7 +210,7 @@ img.llm-d-logo {
 
 .install-h1 {
   text-align: center;
-  font-size: 350%;
+  font-size: 300%;
   @media screen and (max-width: 1024px) {
     font-size: 250%;
   }

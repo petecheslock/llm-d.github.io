@@ -8,12 +8,6 @@ export default function Install() {
         <div className="install-info">
           <div className="install-header">
             <h1 className="install-h1">Try the Quickstart Demo </h1>
-            <img
-            width={"20%"}
-              className="install-logo"
-              src="img/llm-d-logotype.svg"
-              alt="llm-d"
-            ></img>
           </div>
           <h2 className="install-h2">Want to kick the tires?<br/>It's as easy as 1...2...llm-d!</h2>
 
