@@ -10,7 +10,7 @@ export default function Welcome() {
         <h2 className="welcome-h2">
           Distributed AI inference with the compute resources you <b><em>have</em></b>
         </h2>
-
+<div className="hidden-for-mobile">
         <p>
           While some distributed AI solutions rely on a single vendor's
           hardware, If you have a heterogeneous compute environment that
@@ -30,6 +30,7 @@ export default function Welcome() {
             the resources someone wishes to <em>sell</em>
           </li>
         </ul>
+        </div>
 
         <div className="button-group">
           <button className="static-button"><a className="button-link" href="docs/architecture/architecture">

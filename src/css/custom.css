@@ -67,6 +67,9 @@
   width: 100vw;
   height: 100vh;
   max-width: 100%;
+  @media screen and (orientation: landscape) {
+    height: auto;
+  }
 }
 
 .about-viewport {
@@ -83,9 +86,6 @@
   width: 100vw;
   height: 100vh;
   max-width: 100%;
-  @media screen and (max-width: 1024px) {
-    height: auto;
-  }
 }
 
 .welcome,
@@ -120,12 +120,13 @@ img.llm-d-logo {
 .welcome-info {
   display: block;
   text-align: center;
-  padding: 5%;
+  padding: 10%;
   background-color: rgba(255, 255, 255, 0.75);
-  margin: 20%;
+  margin: 15%;
   border-radius: 40px;
-  @media screen and (max-width: 1024px) {
+  @media screen and (orientation: landscape) {
     padding: 10%;
+    margin: 10%;
   }
 }
 
@@ -147,6 +148,13 @@ img.llm-d-logo {
   }
 }
 
+.hidden-for-mobile {
+  display: block;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+
 .button-group {
   display: flex;
   justify-content: space-between;
@@ -156,7 +164,7 @@ img.llm-d-logo {
   }
 }
 
-.static-button {
+.static-button, .install-button {
   align-items: center;
   justify-items: center;
   border-radius: 15px;
@@ -169,10 +177,16 @@ img.llm-d-logo {
   background-color: #7f317f;
   cursor: pointer;
   transition: border-color 0.25s;
-  max-width: 50%;
+  width: 70%;
   @media screen and (max-width: 1024px) {
     max-width: 100%;
-  }
+    margin: 5% 0;
+    @media screen and (max-width: 500px) {
+      padding: 0.3rem 0.75rem;
+      font-size: 0.7rem;
+      width: 100%;
+    }
+  }  
 }
 
 .static-button:hover {
@@ -190,8 +204,6 @@ img.llm-d-logo {
 
 .install-header {
   display: flex;
-  align-content: center;
-  justify-content: center;
 }
 
 .install-info {
@@ -200,10 +212,17 @@ img.llm-d-logo {
   align-items: center;
   justify-items: center;
   padding: 30%;
+  @media screen and (max-width: 1024px) and (orientation: landscape) {
+    padding: 10%;
+  }
 }
 
 .install-h1 {
-  font-size: 350%;
+  text-align: center;
+  font-size: 300%;
+  @media screen and (max-width: 1024px) {
+    font-size: 200%;
+  }
 }
 
 .install-h3 {
@@ -224,16 +243,12 @@ img.llm-d-logo {
   display: inline-flex;
 }
 
-.install-button {
-  @media screen and (max-width: 768px) {
-    padding: 10px;
-    font-size: larger;
-  }
-}
-
 .install-logo {
   margin-left: 2%;
   padding-bottom: 2.5%;
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
 }
 
 /* ------------------------------ Demo Section ------------------------------ */
