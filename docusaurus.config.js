@@ -31,13 +31,13 @@ const config = {
   //IF YOU ARE DEPLOYING PREVIEW PAGES via GITHUB PAGES FOR THE MAIN REPO 
   // UNCOMMENT THE NEXT TWO LINES AND COMMENT OUT THE FORK SECTION BELOW
   //organizationName: "llm-d", // Usually your GitHub org/user name.
-  //projectName: "llm-d-website", // Usually your repo name.
+  projectName: "llm-d-website", // Usually your repo name.
 
   //IF YOU ARE DEPLOYING PREVIEW PAGES VIA GITHUB PAGES FOR A BRANCH OF A FORK IN YOUR ACCOUNT 
   //EDIT THESE LINES APPROPRIATELY
   //organizationName: "jessicachitas", // Usually your GitHub org/user name.
   organizationName: "kproche", // Usually your GitHub org/user name.
-  projectName: "llm-d-website", // Usually your repo name.
+  //projectName: "llm-d-website", // Usually your repo name.
 
 
   trailingSlash: false,
@@ -112,7 +112,7 @@ const config = {
             type: "docSidebar",
             sidebarId: "structureSidebar",
             position: "left",
-            label: "Architecture",
+            label: "What is llm-d?",
           },
           {
             type: "docSidebar",
@@ -149,6 +149,10 @@ const config = {
               {
                 label: "Overview",
                 to: "docs/architecture",
+              },
+              {
+                label: "FAQ",
+                to: "docs/architecture/faq.md",
               },
             ],
           },
