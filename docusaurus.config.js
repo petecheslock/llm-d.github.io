@@ -16,29 +16,26 @@ const config = {
 
   // Set the production url of your site here
   //url: "https://kproche.github.io/",
-  url: "https://jessicachitas.github.io/",
-  // url: "https://llm-d.github.io/",
+  // url: "https://jessicachitas.github.io/",
+  url: "https://llm-d.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/llm-d-website-new/",
+  baseUrl: "/",
   //baseUrl: "/llm-d-website/",
-  
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
 
-
-  //IF YOU ARE DEPLOYING PREVIEW PAGES via GITHUB PAGES FOR THE MAIN REPO 
+  //IF YOU ARE DEPLOYING PREVIEW PAGES via GITHUB PAGES FOR THE MAIN REPO
   // UNCOMMENT THE NEXT TWO LINES AND COMMENT OUT THE FORK SECTION BELOW
-  // organizationName: "llm-d", // Usually your GitHub org/user name.
-  // projectName: "llm-d-website.github.io", // Usually your repo name.
+  organizationName: "llm-d", // Usually your GitHub org/user name.
+  projectName: "llm-d-website.github.io", // Usually your repo name.
 
-  //IF YOU ARE DEPLOYING PREVIEW PAGES VIA GITHUB PAGES FOR A BRANCH OF A FORK IN YOUR ACCOUNT 
+  //IF YOU ARE DEPLOYING PREVIEW PAGES VIA GITHUB PAGES FOR A BRANCH OF A FORK IN YOUR ACCOUNT
   //EDIT THESE LINES APPROPRIATELY
-  organizationName: "jessicachitas", // Usually your GitHub org/user name.
+  //organizationName: "jessicachitas", // Usually your GitHub org/user name.
   //organizationName: "kproche", // Usually your GitHub org/user name.
-  projectName: "llm-d-website-new", // Usually your repo name.
-
+  //projectName: "llm-d-website-new", // Usually your repo name.
 
   trailingSlash: false,
   onBrokenLinks: "warn",
@@ -62,8 +59,8 @@ const config = {
 
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-        //  editUrl:
-        //    "https://github.com/llm-d/llm-d-website.github.io/tree/main/",
+          //  editUrl:
+          //    "https://github.com/llm-d/llm-d-website.github.io/tree/main/",
         },
         blog: {
           showReadingTime: true,
@@ -74,8 +71,8 @@ const config = {
 
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-        //  editUrl:
-        //  "https://github.com/llm-d/llm-d-website.github.io/tree/main/",
+          //  editUrl:
+          //  "https://github.com/llm-d/llm-d-website.github.io/tree/main/",
 
           // Useful options to enforce blogging best practices
           onInlineTags: "warn",
@@ -88,8 +85,8 @@ const config = {
       }),
     ],
   ],
-  markdown: { mermaid: true,           },
-  themes: ['@docusaurus/theme-mermaid'],
+  markdown: { mermaid: true },
+  themes: ["@docusaurus/theme-mermaid"],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -153,21 +150,21 @@ const config = {
             ],
           },
           {
-             title: "Community",
-             items: [
-               {
-                 label: "How to Join in",
-                 href: "docs/community",
-               },
-               {
-                 label: "Partners",
-                 href: "docs/partners",
-               },
-          //     {
-          //       label: "X",
-          //       href: "https://x.com/docusaurus",
-          //     },
-             ],
+            title: "Community",
+            items: [
+              {
+                label: "How to Join in",
+                href: "docs/community",
+              },
+              {
+                label: "Partners",
+                href: "docs/partners",
+              },
+              //     {
+              //       label: "X",
+              //       href: "https://x.com/docusaurus",
+              //     },
+            ],
           },
           {
             title: "More",
@@ -191,8 +188,5 @@ const config = {
       },
     }),
 };
-
-
-
 
 export default config;
