@@ -1,5 +1,6 @@
 ---
 sidebar_position: 0
+label: llm-d Architecture
 ---
 # Overview of llm-d architecture
 **What is llm-d?**
