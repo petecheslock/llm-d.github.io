@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <channel>
         <title>llm-d Website Blog</title>
-        <link>https://llm-d.github.io/llm-d-website/blog</link>
+        <link>https://llm-d.github.io/webdocs/blog</link>
         <description>llm-d Website Blog</description>
         <lastBuildDate>Wed, 07 May 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
@@ -10,8 +10,8 @@
         <language>en</language>
         <item>
             <title><![CDATA[Welcome to a new way to do distributed inference!]]></title>
-            <link>https://llm-d.github.io/llm-d-website/blog/welcome-llm-d-demonstration</link>
-            <guid>https://llm-d.github.io/llm-d-website/blog/welcome-llm-d-demonstration</guid>
+            <link>https://llm-d.github.io/webdocs/blog/welcome-llm-d-demonstration</link>
+            <guid>https://llm-d.github.io/webdocs/blog/welcome-llm-d-demonstration</guid>
             <pubDate>Wed, 07 May 2025 00:00:00 GMT</pubDate>
             <description><![CDATA[Opening post for the llm-d news blog]]></description>
             <content:encoded><![CDATA[<p>Welcome to the llm-d news blog. This blog is created with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer"><strong>Docusaurus</strong></a>.</p>]]></content:encoded>
