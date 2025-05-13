@@ -9,18 +9,18 @@ import { themes as prismThemes } from "prism-react-renderer";
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 /** @type {import('@docusaurus/types').Config} */
-const config = {llm
+const config = {
   title: "llm-d Website",
   tagline: "Powered by Docusaurus",
   favicon: "img/llm-d-favicon.png",
 
   // Set the production url of your site here
   //url: "https://kproche.github.io/",
-  //url: "https://jessicachitas.github.io/",
-  url: "https://llm-d.github.io/",
+  url: "https://jessicachitas.github.io/",
+  // url: "https://llm-d.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/llm-d-website.github.io/",
+  baseUrl: "/llm-d-website-new/",
   //baseUrl: "/llm-d-website/",
   
 
@@ -30,14 +30,14 @@ const config = {llm
 
   //IF YOU ARE DEPLOYING PREVIEW PAGES via GITHUB PAGES FOR THE MAIN REPO 
   // UNCOMMENT THE NEXT TWO LINES AND COMMENT OUT THE FORK SECTION BELOW
-  organizationName: "llm-d", // Usually your GitHub org/user name.
-  projectName: "llm-d-website.github.io", // Usually your repo name.
+  // organizationName: "llm-d", // Usually your GitHub org/user name.
+  // projectName: "llm-d-website.github.io", // Usually your repo name.
 
   //IF YOU ARE DEPLOYING PREVIEW PAGES VIA GITHUB PAGES FOR A BRANCH OF A FORK IN YOUR ACCOUNT 
   //EDIT THESE LINES APPROPRIATELY
-  //organizationName: "jessicachitas", // Usually your GitHub org/user name.
+  organizationName: "jessicachitas", // Usually your GitHub org/user name.
   //organizationName: "kproche", // Usually your GitHub org/user name.
-  //projectName: "llm-d-website", // Usually your repo name.
+  projectName: "llm-d-website-new", // Usually your repo name.
 
 
   trailingSlash: false,
