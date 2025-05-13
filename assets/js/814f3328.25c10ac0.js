@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocusaurus_test=self.webpackChunkdocusaurus_test||[]).push([[7472],{5513:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Welcome to a new way to do distributed inference!","permalink":"/llm-d-website/blog/welcome-llm-d-demonstration","unlisted":false,"date":"2025-05-07T00:00:00.000Z"}]}')}}]);
