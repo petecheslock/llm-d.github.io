@@ -27,7 +27,7 @@
         <author>
             <name>Big kahuna</name>
         </author>
-        <category label="blog" term="blog"/>
+        <category label="just a blog" term="just a blog"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[Welcome to a new way to do distributed inference!]]></title>
