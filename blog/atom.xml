@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://llm-d.github.io/webdocs/blog</id>
+    <id>https://llm-d.github.io/blog</id>
     <title>llm-d Website Blog</title>
     <updated>2025-05-20T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://llm-d.github.io/webdocs/blog"/>
+    <link rel="alternate" href="https://llm-d.github.io/blog"/>
     <subtitle>llm-d Website Blog</subtitle>
-    <icon>https://llm-d.github.io/webdocs/img/llm-d-favicon.png</icon>
+    <icon>https://llm-d.github.io/img/llm-d-favicon.png</icon>
     <entry>
         <title type="html"><![CDATA[Here's a News Release!]]></title>
-        <id>https://llm-d.github.io/webdocs/blog/heres-a-news-release</id>
-        <link href="https://llm-d.github.io/webdocs/blog/heres-a-news-release"/>
+        <id>https://llm-d.github.io/blog/heres-a-news-release</id>
+        <link href="https://llm-d.github.io/blog/heres-a-news-release"/>
         <updated>2025-05-20T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[News Release without Author]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="may-20-2025">May 20, 2025<a href="https://llm-d.github.io/webdocs/blog/heres-a-news-release#may-20-2025" class="hash-link" aria-label="Direct link to May 20, 2025" title="Direct link to May 20, 2025">​</a></h2>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="may-20-2025">May 20, 2025<a href="https://llm-d.github.io/blog/heres-a-news-release#may-20-2025" class="hash-link" aria-label="Direct link to May 20, 2025" title="Direct link to May 20, 2025">​</a></h2>
 <p>Something exciting happened!</p>]]></content>
         <category label="News Releases!" term="News Releases!"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[Here's a Blog Post!]]></title>
-        <id>https://llm-d.github.io/webdocs/blog/heres-a-blog-post</id>
-        <link href="https://llm-d.github.io/webdocs/blog/heres-a-blog-post"/>
+        <id>https://llm-d.github.io/blog/heres-a-blog-post</id>
+        <link href="https://llm-d.github.io/blog/heres-a-blog-post"/>
         <updated>2025-05-19T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Blog post with one author]]></summary>
         <content type="html"><![CDATA[<p>Something big happened today!</p>]]></content>
@@ -31,8 +31,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Welcome to a new way to do distributed inference!]]></title>
-        <id>https://llm-d.github.io/webdocs/blog/welcome-llm-d-demonstration</id>
-        <link href="https://llm-d.github.io/webdocs/blog/welcome-llm-d-demonstration"/>
+        <id>https://llm-d.github.io/blog/welcome-llm-d-demonstration</id>
+        <link href="https://llm-d.github.io/blog/welcome-llm-d-demonstration"/>
         <updated>2025-05-07T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Opening post for the llm-d news blog]]></summary>
         <content type="html"><![CDATA[<p>Welcome to the llm-d news blog. This blog is created with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer"><strong>Docusaurus</strong></a>.</p>]]></content>
