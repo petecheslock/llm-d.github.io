@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://llm-d.github.io/blog</id>
-    <title>llm-d Website Blog</title>
+    <title>llm-d Blog</title>
     <updated>2025-05-20T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://llm-d.github.io/blog"/>
-    <subtitle>llm-d Website Blog</subtitle>
+    <subtitle>llm-d Blog</subtitle>
     <icon>https://llm-d.github.io/img/llm-d-favicon.png</icon>
     <entry>
         <title type="html"><![CDATA[Here's a News Release!]]></title>
