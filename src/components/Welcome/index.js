@@ -17,26 +17,20 @@ export default function Welcome() {
         
 
         <div className="button-group">
-          <button className="static-button">
-            <a className="button-link" href="docs/architecture/architecture">
-              Architecture
-            </a>
-          </button>
-          <button className="static-button">
-            <a
-              className="button-link"
-              href="docs/guide/Installation/Prerequisites"
-            >
-              {/* Link to install page on the docs */}
-              Installation
-            </a>
-          </button>
-          <button className="static-button">
-            <a className="button-link" href="docs/community/contribute">
-              {/* Link to Community tab */}
-              Community
-            </a>
-          </button>
+          <a className="static-button button-link" href="docs/architecture/architecture">
+            Architecture
+          </a>
+          <a
+            className="static-button button-link"
+            href="docs/guide/Installation/Prerequisites"
+          >
+            {/* Link to install page on the docs */}
+            Installation
+          </a>
+          <a className="static-button button-link" href="docs/community/contribute">
+            {/* Link to Community tab */}
+            Community
+          </a>
         </div>
 
         <div className="hidden-for-mobile">
