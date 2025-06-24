@@ -48,11 +48,9 @@ export default function Install() {
               ></img>
               <a className="link" href="docs/guide/installation/quickstart#examples">Explore llm-d!</a></h3>
           {/* -------------------------------------------------------------------------- */}
-          <button className="static-button install-button" role="button" href="#">
-            <a className="button-link" href="docs/guide">
-              Complete install methods here
-            </a>
-          </button>
+          <a className="static-button install-button button-link" href="docs/guide">
+            Complete install methods here
+          </a>
         </div>
       </div>
     </>
