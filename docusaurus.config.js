@@ -5,6 +5,7 @@
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
 import { themes as prismThemes } from "prism-react-renderer";
+import remoteContentPlugins from "./remote-content/remote-content.js";
 
 //import GHiconUrl from "./docs/assets/github-mark-white.svg";
 //import LIiconURL from "./docs/assets/linkedin-mark-white.svg";
@@ -94,18 +95,28 @@ const config = {
       }),
     ],
   ],
-  markdown: { mermaid: true },
-  themes: ["@docusaurus/theme-mermaid"],
-
+  
+  // Plugins configuration
   plugins: [
+    // Remote content plugins (managed independently)
+    ...remoteContentPlugins,
+
+    // Other site plugins
     [
       require.resolve("docusaurus-lunr-search"),
       {
         languages: ["en"],
       },
     ],
-  ],
 
+    // Examples:
+    // ['@docusaurus/plugin-google-analytics', { trackingID: 'UA-XXXXXX-X' }],
+    // ['docusaurus-plugin-sass', {}],
+    // Add any other plugins you need
+  ],
+  
+  markdown: { mermaid: true },
+  themes: ["@docusaurus/theme-mermaid"],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
