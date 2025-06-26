@@ -14,16 +14,13 @@ export default function Welcome() {
         <h2 className="welcome-h2">
           llm-d: a Kubernetes-native high-performance distributed LLM inference framework
         </h2>
-        
+
 
         <div className="button-group">
           <a className="static-button button-link" href="docs/architecture/architecture">
             Architecture
           </a>
-          <a
-            className="static-button button-link"
-            href="docs/guide/Installation/Prerequisites"
-          >
+          <a className="static-button button-link" href="docs/guide/Installation/prerequisites" >
             {/* Link to install page on the docs */}
             Installation
           </a>
@@ -35,13 +32,13 @@ export default function Welcome() {
 
         <div className="hidden-for-mobile">
           <p>
-            llm-d is a well-lit path for anyone to serve at scale, 
-            with the fastest time-to-value and competitive performance per dollar, 
+            llm-d is a well-lit path for anyone to serve at scale,
+            with the fastest time-to-value and competitive performance per dollar,
             for most models across a diverse and comprehensive set of hardware accelerators.
           </p>
 
         </div>
-        
+
       </div>
     </div>
   );
