@@ -207,8 +207,8 @@ Future enhancements will enable the `llm-d-kv-cache-manager` component to proces
 
 ## Examples
 
-- [KV-cache Indexer](https://github.com/llm-d/llm-d-kv-cache-manager/tree/main/examples/kv-cache-index/):
+- [KV-cache Indexer](https://github.com/llm-d/llm-d-kv-cache-manager/tree/main/examples/kv_cache_index):
   - A reference implementation of using the `kvcache.Indexer` module.
-- [KV-cache Aware Scorer](https://github.com/llm-d/llm-d-kv-cache-manager/tree/main/examples/kv-cache-aware-scorer/):
+- [KV-cache Aware Scorer](https://github.com/llm-d/llm-d-kv-cache-manager/tree/main/examples/kv_cache_aware_scorer):
   - A reference implementation of integrating the `kvcache.Indexer` module in
   [llm-d-inference-scheduler](https://github.com/llm-d/llm-d-inference-scheduler) in a KV-cache aware scorer.
