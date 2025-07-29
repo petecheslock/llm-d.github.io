@@ -8,3 +8,10 @@ docs/community/contribute.md
 docs/community/code-of-conduct.md
 docs/community/security.md
 docs/community/sigs.md
+
+# Guide remote content files
+docs/guide/guide.md
+docs/guide/Installation/prerequisites.md
+docs/guide/Installation/inference-scheduling.md
+docs/guide/Installation/pd-disaggregation.md
+docs/guide/Installation/wide-ep-lws.md

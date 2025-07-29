@@ -6,6 +6,13 @@ import codeOfConductSource from './remote-sources/code-of-conduct.js';
 import securitySource from './remote-sources/security.js';
 import sigsSource from './remote-sources/sigs.js';
 
+// Import guide remote content sources
+import guideExamplesSource from './remote-sources/guide-examples.js';
+import guidePrerequisitesSource from './remote-sources/guide-prerequisites.js';
+import guideInferenceSchedulingSource from './remote-sources/guide-inference-scheduling.js';
+import guidePdDisaggregationSource from './remote-sources/guide-pd-disaggregation.js';
+import guideWideEpLwsSource from './remote-sources/guide-wide-ep-lws.js';
+
 /**
  * Remote Content Plugin System
  * 
@@ -29,6 +36,13 @@ const remoteContentPlugins = [
   codeOfConductSource,
   securitySource,
   sigsSource,
+  
+  // Guide remote content sources
+  guideExamplesSource,
+  guidePrerequisitesSource,
+  guideInferenceSchedulingSource,
+  guidePdDisaggregationSource,
+  guideWideEpLwsSource,
   
   // Add more remote sources here
 ];
