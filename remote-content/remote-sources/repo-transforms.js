@@ -6,10 +6,30 @@
  */
 
 /**
- * Apply essential MDX compatibility fixes
+ * Apply essential MDX compatibility fixes and content transformations
+ * Combines all content-only transformations that don't require repository information
  */
 function applyBasicMdxFixes(content) {
   return content
+    // Convert GitHub-style callouts to Docusaurus admonitions
+    .replace(/^> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\n((?:> .*\n?)*)/gm, (match, type, content) => {
+      // Map GitHub callout types to Docusaurus admonition types
+      const typeMap = {
+        'NOTE': 'note',
+        'TIP': 'tip', 
+        'IMPORTANT': 'info',
+        'WARNING': 'warning',
+        'CAUTION': 'danger'
+      };
+      
+      const docusaurusType = typeMap[type] || type.toLowerCase();
+      
+      // Remove the '> ' prefix from each line of content
+      const cleanContent = content.replace(/^> ?/gm, '').trim();
+      
+      return `:::${docusaurusType}\n${cleanContent}\n:::\n`;
+    })
+    // Fix HTML tags for MDX compatibility
     .replace(/<br>/g, '<br />')
     .replace(/<br([^/>]*?)>/g, '<br$1 />')
     .replace(/<picture[^>]*>/g, '')
