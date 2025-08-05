@@ -59,6 +59,17 @@ const config = {
     locales: ["en"],
   },
 
+  // Analytics configuration
+  customFields: {
+    analytics: {
+      matomo: {
+        baseUrl: "//analytics.ossupstream.org/",
+        siteId: "6",
+        enabled: true,
+      },
+    },
+  },
+
   presets: [
     [
       "classic",
@@ -94,6 +105,11 @@ const config = {
         },
       }),
     ],
+  ],
+
+  // Client modules - run on every page
+  clientModules: [
+    require.resolve('./src/clientModules/analytics.js'),
   ],
   
   // Plugins configuration
