@@ -49,6 +49,23 @@ function applyBasicMdxFixes(content) {
 }
 
 /**
+ * Resolve a path based on whether it's root-relative or regular relative
+ */
+function resolvePath(path, sourceDir, repoUrl, branch) {
+  const cleanPath = path.replace(/^\.\//, '');
+  
+  // Handle root-relative paths (starting with /) - these are relative to repo root
+  if (cleanPath.startsWith('/')) {
+    const rootPath = cleanPath.substring(1); // Remove leading slash
+    return `${repoUrl}/blob/${branch}/${rootPath}`;
+  }
+  
+  // Handle regular relative paths - these are relative to the source file's directory
+  const fullPath = sourceDir ? `${sourceDir}/${cleanPath}` : cleanPath;
+  return `${repoUrl}/blob/${branch}/${fullPath}`;
+}
+
+/**
  * Fix all images to point to GitHub raw URLs
  */
 function fixImages(content, repoUrl, branch, sourceDir = '') {
@@ -78,17 +95,14 @@ export function transformRepo(content, { repoUrl, branch, sourcePath = '' }) {
   return fixImages(applyBasicMdxFixes(content), repoUrl, branch, sourceDir)
     // All relative links go to source repository (inline format)
     .replace(/\]\((?!http|https|#|mailto:)([^)]+)\)/g, (match, path) => {
-      const cleanPath = path.replace(/^\]\(/, '').replace(/^\.\//, '');
-      // Resolve relative path relative to the source file's directory
-      const fullPath = sourceDir ? `${sourceDir}/${cleanPath}` : cleanPath;
-      return `](${repoUrl}/blob/${branch}/${fullPath})`;
+      const cleanPath = path.replace(/^\]\(/, '');
+      const resolvedUrl = resolvePath(cleanPath, sourceDir, repoUrl, branch);
+      return `](${resolvedUrl})`;
     })
     // All relative links go to source repository (reference format)
     .replace(/^\[([^\]]+)\]:(?!http|https|#|mailto:)([^\s]+)/gm, (match, label, path) => {
-      const cleanPath = path.replace(/^\.\//, '');
-      // Resolve relative path relative to the source file's directory
-      const fullPath = sourceDir ? `${sourceDir}/${cleanPath}` : cleanPath;
-      return `[${label}]:${repoUrl}/blob/${branch}/${fullPath}`;
+      const resolvedUrl = resolvePath(path, sourceDir, repoUrl, branch);
+      return `[${label}]:${resolvedUrl}`;
     });
 }
 
