@@ -236,6 +236,10 @@ const config = {
                 to: "/blog",
               },
               {
+                label: "Privacy Policy",
+                href: "https://www.redhat.com/en/about/privacy-policy",
+              },
+              {
                 html: `
                 <a href="https://github.com/llm-d/" target="_blank" rel="noreferrer noopener" aria-label="GitHub Icon">
                   <img class="github-footer" 
