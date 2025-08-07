@@ -40,7 +40,7 @@ jobs:
         
     - name: Start the application in background
       run: |
-        npm run start &
+        npm run serve &
         echo $! > server.pid
         
     - name: Wait for application to be ready
