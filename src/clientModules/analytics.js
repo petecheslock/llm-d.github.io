@@ -40,17 +40,65 @@ function ensureMatomoInitialized() {
   isInitialized = true;
 }
 
+function trackAnchorClicks() {
+  if (typeof document === 'undefined') return;
+  
+  // Remove existing listeners to avoid duplicates
+  const links = document.querySelectorAll('a[href*="#"]');
+  links.forEach(link => {
+    link.removeEventListener('click', handleAnchorClick);
+    link.addEventListener('click', handleAnchorClick);
+  });
+}
+
+function handleAnchorClick(event) {
+  if (!window._paq || !isInitialized) return;
+  
+  const href = event.currentTarget.href;
+  const currentPage = window.location.pathname;
+  
+  // Only track same-page anchor clicks (route changes handle cross-page navigation)
+  if (href.includes('#') && href.split('#')[0].endsWith(currentPage)) {
+    const anchor = href.substr(href.lastIndexOf('#'));
+    
+    // Track as virtual page view with enhanced title
+    const enhancedTitle = `${document.title} - ${anchor.replace('#', '')}`;
+    window._paq.push(['setCustomUrl', `${currentPage}${anchor}`]);
+    window._paq.push(['setDocumentTitle', enhancedTitle]);
+    window._paq.push(['trackPageView']);
+  }
+}
+
 export function onRouteDidUpdate({location, previousLocation}) {
   if (!ExecutionEnvironment.canUseDOM) return;
   ensureMatomoInitialized();
   if (!window._paq || !isInitialized) return;
 
-  // Track SPA navigations
+  // Track SPA navigations (handles cross-page navigation with anchors)
   if (previousLocation) {
     const referrer = `${previousLocation.pathname}${previousLocation.search || ''}${previousLocation.hash || ''}`;
     window._paq.push(['setReferrerUrl', referrer]);
   }
-  window._paq.push(['setCustomUrl', window.location.href]);
-  window._paq.push(['setDocumentTitle', document.title]);
+  
+  // Track page with hash - enhanced title only if hash present
+  const fullUrl = `${location.pathname}${location.search || ''}${location.hash || ''}`;
+  const pageTitle = location.hash 
+    ? `${document.title} - ${location.hash.replace('#', '')}` 
+    : document.title;
+    
+  window._paq.push(['setCustomUrl', fullUrl]);
+  window._paq.push(['setDocumentTitle', pageTitle]);
   window._paq.push(['trackPageView']);
+  
+  // Re-attach anchor click listeners after route change
+  setTimeout(trackAnchorClicks, 100);
+}
+
+// Initialize anchor tracking on page load
+if (ExecutionEnvironment.canUseDOM) {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', trackAnchorClicks);
+  } else {
+    trackAnchorClicks();
+  }
 }
