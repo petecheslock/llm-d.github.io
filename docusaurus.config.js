@@ -242,7 +242,7 @@ const config = {
                     </a>
                   </div>
                   <div class="footer-socials-cta">
-                    <a href="https://inviter.co/llm-d-slack" target="_blank" rel="noreferrer noopener" aria-label="Join our Slack">
+                    <a href="/slack" target="_self" rel="noreferrer noopener" aria-label="Join our Slack">
                       <span class="button-link">Join our Slack</span>
                       <img src="/img/new-social/inviter-logo.png" alt="Slack Invite" />
                     </a>

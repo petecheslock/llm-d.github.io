@@ -104,5 +104,5 @@ When you open a pull request, a preview of your changes will be automatically ge
 
 ## Questions?
 
-- For immediate help: Join [llm-d.slack.com](https://llm-d.slack.com) -> [Invite Link](https://inviter.co/llm-d-slack)
+- For immediate help: Join [llm-d.slack.com](https://llm-d.slack.com) -> <a href="/slack" target="_self">Invite Link</a>
 - For issues: Create an issue in [llm-d/llm-d.github.io](https://github.com/llm-d/llm-d.github.io)
