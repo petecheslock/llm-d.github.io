@@ -102,6 +102,6 @@ This project follows the main llm-d [Contributing Guidelines](https://github.com
 
 ## 🆘 Need Help?
 
-- **General questions**: [llm-d Slack](https://inviter.co/llm-d-slack)
+- **General questions**: <a href="/slack" target="_self">Join the llm-d Slack</a>
 - **Website issues**: [Create an issue](https://github.com/llm-d/llm-d.github.io/issues)
 - **Content questions**: Check if content is synced, then edit in appropriate repository 
