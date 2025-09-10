@@ -178,19 +178,19 @@ const config = {
               },
               {
                 label: "Inference Scheduler",
-                to: "docs/architecture/components/inference-scheduler",
+                to: "docs/architecture/Components/inference-scheduler",
               },
               {
                 label: "KV Cache Manager",
-                to: "docs/architecture/components/kv-cache-manager",
+                to: "docs/architecture/Components/kv-cache-manager",
               },
               {
                 label: "Model Service",
-                to: "docs/architecture/components/modelservice",
+                to: "docs/architecture/Components/modelservice",
               },
               {
                 label: "Benchmark Tools",
-                to: "docs/architecture/components/benchmark",
+                to: "docs/architecture/Components/benchmark",
               },
             ],
           },
