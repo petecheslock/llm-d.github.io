@@ -148,7 +148,7 @@ const config = {
             type: "docSidebar",
             sidebarId: "guideSidebar",
             position: "left",
-            label: "User Guide",
+            label: "Guides",
           },
           {
             type: "docSidebar",
@@ -170,22 +170,54 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "User Guide",
-            items: [
-              {
-                label: "How to Use",
-                to: "docs/guide",
-              },
-            ],
-          },
-          {
             title: "Architecture",
             items: [
               {
                 label: "Overview",
                 to: "docs/architecture",
               },
-              ],
+              {
+                label: "Inference Scheduler",
+                to: "docs/architecture/components/inference-scheduler",
+              },
+              {
+                label: "KV Cache Manager",
+                to: "docs/architecture/components/kv-cache-manager",
+              },
+              {
+                label: "Model Service",
+                to: "docs/architecture/components/modelservice",
+              },
+              {
+                label: "Benchmark Tools",
+                to: "docs/architecture/components/benchmark",
+              },
+            ],
+          },
+          {
+            title: "Guides",
+            items: [
+              {
+                label: "Getting Started",
+                to: "docs/guide",
+              },
+              {
+                label: "Prerequisites",
+                to: "docs/guide/Installation/prerequisites",
+              },
+              {
+                label: "Inference Scheduling",
+                to: "docs/guide/Installation/inference-scheduling",
+              },
+              {
+                label: "Prefill/Decode Disaggregation",
+                to: "docs/guide/Installation/pd-disaggregation",
+              },
+              {
+                label: "Wide Expert Parallelism",
+                to: "docs/guide/Installation/wide-ep-lws",
+              },
+            ],
           },
           {
             title: "Community",
