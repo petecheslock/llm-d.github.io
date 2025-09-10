@@ -11,12 +11,7 @@ import architectureMainSource from './remote-sources/architecture/architecture-m
 import componentSources from './remote-sources/architecture/components-generator.js';
 
 // Import guide remote content sources
-import guideExamplesSource from './remote-sources/guide/guide-examples.js';
-import guidePrerequisitesSource from './remote-sources/guide/guide-prerequisites.js';
-import guideInferenceSchedulingSource from './remote-sources/guide/guide-inference-scheduling.js';
-import guidePdDisaggregationSource from './remote-sources/guide/guide-pd-disaggregation.js';
-import guideWideEpLwsSource from './remote-sources/guide/guide-wide-ep-lws.js';
-import guidePrecisePrefixCacheAwareSource from './remote-sources/guide/guide-precise-prefix-cache-aware.js';
+import guideSources from './remote-sources/guide/guide-generator.js';
 
 /**
  * Remote Content Plugin System
@@ -48,12 +43,7 @@ const remoteContentPlugins = [
   ...componentSources,  // Spread all dynamically generated component sources
   
   // Guide remote content sources (docs/guide/)
-  guideExamplesSource,
-  guidePrerequisitesSource,
-  guideInferenceSchedulingSource,
-  guidePdDisaggregationSource,
-  guideWideEpLwsSource,
-  guidePrecisePrefixCacheAwareSource,
+  ...guideSources,  // Spread all dynamically generated guide sources
   
   // Add more remote sources here in the appropriate section above
 ];
