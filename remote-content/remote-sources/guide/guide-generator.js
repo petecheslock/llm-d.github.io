@@ -27,9 +27,9 @@ const SPECIAL_GUIDES = {
   },
   'guide': {
     sourceFile: 'guides/README.md',
-    title: 'llm-d User Guide',
+    title: 'Guides',
     description: 'Getting started with llm-d and exploring well-lit paths for different use cases',
-    sidebarLabel: 'User Guide',
+    sidebarLabel: 'Guides',
     sidebarPosition: 1,
     outputFile: 'guide.md',
     customTransform: contentTransform
