@@ -23,6 +23,7 @@ This page is your gateway to everything you need to know about participating in 
 ## Community Resources
 
 ### Getting Involved
+- 📅 **[Upcoming Events](/docs/community/events)** - Meetups, talks, and conferences
 - 📝 **[Contributing Guidelines](/docs/community/contribute)** - Complete guide to contributing code, docs, and ideas
 - 👥 **[Special Interest Groups (SIGs)](/docs/community/sigs)** - Join focused teams working on specific areas
 - 🤝 **[Code of Conduct](/docs/community/code-of-conduct)** - Our community standards and values
