@@ -9,15 +9,60 @@ sidebar_position: 2
 
 Stay connected with the llm-d community at meetups, conferences, and workshops. All meetings are open to the public unless noted otherwise.
 
-## September 2025
+{(() => {
+  const events = [
+    {
+      month: 'September 2025',
+      title: 'PyTorch ATX: The Future of Inferencing',
+      location: 'Austin, TX',
+      dateText: 'Sep 17, 2025',
+      cost: 'Free',
+      href: 'https://www.meetup.com/pytorch-atx/events/307742180/',
+    },
+    {
+      month: 'September 2025',
+      title: 'Boston vLLM + llm-d Meetup',
+      location: 'Boston, MA',
+      dateText: 'Sep 18, 2025',
+      cost: 'Free',
+      href: 'https://luma.com/vjfelimw',
+    },
+    {
+      month: 'September 2025',
+      title: 'DevConf.US 2025',
+      location: 'Boston, MA',
+      dateText: 'Sep 19–20, 2025',
+      cost: 'Free',
+      href: 'https://www.devconf.info/us/',
+    },
+    {
+      month: 'October 2025',
+      title: 'PyTorch Conference 2025',
+      location: 'San Francisco, CA',
+      dateText: 'Oct 22–23, 2025',
+      cost: 'Paid',
+      href: 'https://events.linuxfoundation.org/pytorch-conference/',
+    },
+    {
+      month: 'November 2025',
+      title: 'KubeCon + CloudNativeCon North America 2025',
+      location: 'Atlanta, GA',
+      dateText: 'Nov 10–13, 2025',
+      cost: 'Paid',
+      href: 'https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/',
+    },
+  ];
 
-<div style={{
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '12px',
-  marginTop: '12px'
-}}>
-  <div style={{
+  const months = Array.from(new Set(events.map((e) => e.month)));
+
+  const containerStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+    marginTop: '12px'
+  };
+
+  const cardStyle = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -27,156 +72,47 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
     border: '1px solid var(--ifm-color-emphasis-200)',
     borderRadius: '8px',
     backgroundColor: 'var(--ifm-background-surface-color)'
-  }}>
+  };
+
+  const buttonStyle = {
+    display: 'inline-block',
+    padding: '10px 16px',
+    backgroundColor: 'var(--ifm-color-primary)',
+    color: 'white',
+    textDecoration: 'none',
+    borderRadius: '6px',
+    fontWeight: 600
+  };
+
+  const sectionStyle = {
+    marginBottom: '28px'
+  };
+
+  return (
     <div>
-      <h4 style={{margin: '0 0 6px 0', color: 'var(--ifm-color-primary)'}}>PyTorch ATX: The Future of Inferencing</h4>
-      <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', margin: '0 0 6px 0'}}>
-        <span style={{fontSize: '12px', padding: '2px 8px', backgroundColor: 'var(--ifm-color-emphasis-100)', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '999px'}}>📍 Austin, TX</span>
-      </div>
-      <p style={{margin: 0, fontSize: '14px'}}>Sep 17, 2025 · <strong>Free</strong></p>
+      {months.map((m) => {
+        const monthEvents = events.filter((e) => e.month === m);
+        if (monthEvents.length === 0) return null;
+        return (
+          <div key={m} style={sectionStyle}>
+            <h2>{m}</h2>
+            <div style={containerStyle}>
+              {monthEvents.map((e) => (
+                <div key={e.title} style={cardStyle}>
+                  <div>
+                    <h4 style={{margin: '0 0 6px 0', color: 'var(--ifm-color-primary)'}}>{e.title}</h4>
+                    <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', margin: '0 0 6px 0'}}>
+                      <span style={{fontSize: '12px', padding: '2px 8px', backgroundColor: 'var(--ifm-color-emphasis-100)', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '999px'}}>📍 {e.location}</span>
+                    </div>
+                    <p style={{margin: 0, fontSize: '14px'}}>{e.dateText} · <strong>{e.cost}</strong></p>
+                  </div>
+                  <a href={e.href} target="_blank" rel="noopener noreferrer" style={buttonStyle}>Register</a>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
-    <a href="https://www.meetup.com/pytorch-atx/events/307742180/" target="_blank" rel="noopener noreferrer" style={{
-      display: 'inline-block',
-      padding: '10px 16px',
-      backgroundColor: 'var(--ifm-color-primary)',
-      color: 'white',
-      textDecoration: 'none',
-      borderRadius: '6px',
-      fontWeight: 600
-    }}>Register</a>
-  </div>
-
-  <div style={{
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    gap: '12px',
-    padding: '16px',
-    border: '1px solid var(--ifm-color-emphasis-200)',
-    borderRadius: '8px',
-    backgroundColor: 'var(--ifm-background-surface-color)'
-  }}>
-    <div>
-      <h4 style={{margin: '0 0 6px 0', color: 'var(--ifm-color-primary)'}}>Boston vLLM + llm-d Meetup</h4>
-      <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', margin: '0 0 6px 0'}}>
-        <span style={{fontSize: '12px', padding: '2px 8px', backgroundColor: 'var(--ifm-color-emphasis-100)', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '999px'}}>📍 Boston, MA</span>
-      </div>
-      <p style={{margin: 0, fontSize: '14px'}}>Sep 18, 2025 · <strong>Free</strong></p>
-    </div>
-    <a href="https://luma.com/vjfelimw" target="_blank" rel="noopener noreferrer" style={{
-      display: 'inline-block',
-      padding: '10px 16px',
-      backgroundColor: 'var(--ifm-color-primary)',
-      color: 'white',
-      textDecoration: 'none',
-      borderRadius: '6px',
-      fontWeight: 600
-    }}>Register</a>
-  </div>
-
-  <div style={{
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    gap: '12px',
-    padding: '16px',
-    border: '1px solid var(--ifm-color-emphasis-200)',
-    borderRadius: '8px',
-    backgroundColor: 'var(--ifm-background-surface-color)'
-  }}>
-    <div>
-      <h4 style={{margin: '0 0 6px 0', color: 'var(--ifm-color-primary)'}}>DevConf.US 2025</h4>
-      <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', margin: '0 0 6px 0'}}>
-        <span style={{fontSize: '12px', padding: '2px 8px', backgroundColor: 'var(--ifm-color-emphasis-100)', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '999px'}}>📍 Boston, MA</span>
-      </div>
-      <p style={{margin: 0, fontSize: '14px'}}>Sep 19–20, 2025 · <strong>Free</strong></p>
-    </div>
-    <a href="https://www.devconf.info/us/" target="_blank" rel="noopener noreferrer" style={{
-      display: 'inline-block',
-      padding: '10px 16px',
-      backgroundColor: 'var(--ifm-color-primary)',
-      color: 'white',
-      textDecoration: 'none',
-      borderRadius: '6px',
-      fontWeight: 600
-    }}>Register</a>
-  </div>
-</div>
-
-## October 2025
-
-<div style={{
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '12px',
-  marginTop: '12px'
-}}>
-  <div style={{
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    gap: '12px',
-    padding: '16px',
-    border: '1px solid var(--ifm-color-emphasis-200)',
-    borderRadius: '8px',
-    backgroundColor: 'var(--ifm-background-surface-color)'
-  }}>
-    <div>
-      <h4 style={{margin: '0 0 6px 0', color: 'var(--ifm-color-primary)'}}>PyTorch Conference 2025</h4>
-      <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', margin: '0 0 6px 0'}}>
-        <span style={{fontSize: '12px', padding: '2px 8px', backgroundColor: 'var(--ifm-color-emphasis-100)', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '999px'}}>📍 San Francisco, CA</span>
-      </div>
-      <p style={{margin: 0, fontSize: '14px'}}>Oct 22–23, 2025 · <strong>Paid</strong></p>
-    </div>
-    <a href="https://events.linuxfoundation.org/pytorch-conference/" target="_blank" rel="noopener noreferrer" style={{
-      display: 'inline-block',
-      padding: '10px 16px',
-      backgroundColor: 'var(--ifm-color-primary)',
-      color: 'white',
-      textDecoration: 'none',
-      borderRadius: '6px',
-      fontWeight: 600
-    }}>Register</a>
-  </div>
-</div>
-
-## November 2025
-
-<div style={{
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '12px',
-  marginTop: '12px'
-}}>
-  <div style={{
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    gap: '12px',
-    padding: '16px',
-    border: '1px solid var(--ifm-color-emphasis-200)',
-    borderRadius: '8px',
-    backgroundColor: 'var(--ifm-background-surface-color)'
-  }}>
-    <div>
-      <h4 style={{margin: '0 0 6px 0', color: 'var(--ifm-color-primary)'}}>KubeCon + CloudNativeCon North America 2025</h4>
-      <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', margin: '0 0 6px 0'}}>
-        <span style={{fontSize: '12px', padding: '2px 8px', backgroundColor: 'var(--ifm-color-emphasis-100)', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '999px'}}>📍 Atlanta, GA</span>
-      </div>
-      <p style={{margin: 0, fontSize: '14px'}}>Nov 10–13, 2025 · <strong>Paid</strong></p>
-    </div>
-    <a href="https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/" target="_blank" rel="noopener noreferrer" style={{
-      display: 'inline-block',
-      padding: '10px 16px',
-      backgroundColor: 'var(--ifm-color-primary)',
-      color: 'white',
-      textDecoration: 'none',
-      borderRadius: '6px',
-      fontWeight: 600
-    }}>Register</a>
-  </div>
-</div>
+  );
+})()}
