@@ -173,7 +173,6 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
   };
 
   // no icon-only button in this variant
-
   return (
     <div>
       {months.map((m) => {
