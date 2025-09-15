@@ -89,6 +89,18 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
           location: 'Building B | Level 4 | B401-402',
           href: 'https://kccncna2025.sched.com/event/27Fee?iframe=no',
         },
+        {
+          title: 'Navigating the Rapid Evolution of Large Model Inference: Where Does Kubernetes Fit?',
+          date: 'Wed, Nov 12, 2025',
+          time: '2:15pm – 2:45pm EST',
+          href: 'https://kccncna2025.sched.com/event/27Nlv?iframe=no',
+        },
+        {
+          title: 'KServe Next: Advancing Generative AI Model Serving',
+          date: 'Mon, Nov 10, 2025',
+          time: '2:05pm – 2:30pm EST',
+          href: 'https://colocatedeventsna2025.sched.com/event/28D4J',
+        },
       ],
     },
   ];
@@ -173,6 +185,35 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
   };
 
   // no icon-only button in this variant
+
+  const getSessionStartEpoch = (s) => {
+    try {
+      const monthMap = {
+        Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+        Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
+      };
+      const dateText = String(s.date || '');
+      const timeText = String(s.time || '');
+
+      const dateMatch = dateText.match(/([A-Za-z]{3})\s+(\d{1,2}),\s*(\d{4})/);
+      if (!dateMatch) return Number.MAX_SAFE_INTEGER;
+      const monthIdx = monthMap[dateMatch[1]];
+      const day = parseInt(dateMatch[2], 10);
+      const year = parseInt(dateMatch[3], 10);
+
+      const timeMatch = timeText.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
+      const hour12 = timeMatch ? parseInt(timeMatch[1] || '0', 10) : 0;
+      const minute = timeMatch && timeMatch[2] ? parseInt(timeMatch[2], 10) : 0;
+      const meridiem = timeMatch ? (timeMatch[3] || '').toLowerCase() : 'am';
+      let hour24 = hour12 % 12;
+      if (meridiem === 'pm') hour24 += 12;
+
+      const dt = new Date(year, monthIdx, day, hour24, minute, 0, 0);
+      return dt.getTime();
+    } catch {
+      return Number.MAX_SAFE_INTEGER;
+    }
+  };
   return (
     <div>
       {months.map((m) => {
@@ -198,7 +239,7 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
                     <div style={sessionSectionStyle}>
                       <p style={{margin: '0 0 8px 0', fontSize: '14px', fontWeight: 700, color: 'var(--ifm-color-primary)'}}>Sessions</p>
                       <ul style={sessionListStyle}>
-                        {e.sessions.map((s) => (
+                        {[...e.sessions].sort((a, b) => getSessionStartEpoch(a) - getSessionStartEpoch(b)).map((s) => (
                           <li key={`${s.title}-${s.date}-${s.time}`} style={sessionItemStyle}>
                             <div>
                               <a href={s.href} target="_blank" rel="noopener noreferrer" style={{fontWeight: 600, color: 'var(--ifm-color-primary)'}}>{s.title}</a>
