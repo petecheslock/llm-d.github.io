@@ -78,7 +78,7 @@ In any multi-turn dialogue, from a customer service bot to a long-form assistant
 
 ![Conversational AI prefix caching diagram](/img/blogs/kv-cache-wins/image1.png)
 
-***FIGURE 1**: A diagram showing the conversational history as a growing prefix that gets cached, with only the new user query requiring prefill.*
+<small>***FIGURE 1**: A diagram showing the conversational history as a growing prefix that gets cached, with only the new user query requiring prefill.*</small>
 
 As the visual shows, effective caching means only the latest turn is processed from scratch. This is what keeps the conversation fluid and responsive, preventing latency from increasing as the dialogue gets longer.
 
@@ -90,7 +90,7 @@ AI agents represent the most extreme case of prefix dominance. These systems ope
 
 ![Agentic workflow prefix caching diagram](/img/blogs/kv-cache-wins/image2.png)
 
-***FIGURE 2**: A visual of an agent loop, showing the massive, static context (tools, step-history) as the cached prefix and the new observation/action as the small suffix.*
+<small>***FIGURE 2**: A visual of an agent loop, showing the massive, static context (tools, step-history) as the cached prefix and the new observation/action as the small suffix.*</small>
 
 Reusing this massive context on each turn is essential for complex agents to be computationally viable and cost-effective.
 
@@ -108,7 +108,7 @@ Let's revisit our multi-turn conversation example to see the direct impact of be
 
 ![KV-cache miss scenario diagram](/img/blogs/kv-cache-wins/image3.png)
 
-***FIGURE 3**: A heartbreaking KV-cache miss scenario.*
+<small>***FIGURE 3**: A heartbreaking KV-cache miss scenario.*</small>
 
 This single routing decision, caused by the failure to manage the disaggregated cache, triggers a cascade of failures:
 
@@ -138,7 +138,7 @@ This two-layered architecture provides a continuously updated, scalable view of 
 
 ![llm-d architecture diagram](/img/blogs/kv-cache-wins/image4.png)
 
-***FIGURE 4**: Simplified architecture diagram. (1) \- (3) show the read path, while (A) \- (B) show the write pipeline.*
+<small>***FIGURE 4**: Simplified architecture diagram. (1) \- (3) show the read path, while (A) \- (B) show the write pipeline.*</small>
 
 The memory overhead for this global index is negligible \- see **Appendix A.3** for the scaling analysis showing a **1,000,000:1** data-to-metadata ratio.
 
@@ -210,7 +210,7 @@ This allows you to handle significantly more traffic on the exact same hardware,
 
 ![Performance benchmark charts](/img/blogs/kv-cache-wins/image5.png)
 
-***FIGURE 5**: A tri-panel of TTFT, TPoT and Throughput measured through progressively rising QPS rates.*
+<small>***FIGURE 5**: A tri-panel of TTFT, TPoT and Throughput measured through progressively rising QPS rates.*</small>
 
 The charts above clearly illustrate these wins. The blue line (`precise-scheduling`) maintains the lowest Mean TTFT (tested for up to 50 QPS) and achieves the highest Total Throughput as the request rate increases.
 
@@ -220,10 +220,10 @@ The dramatic performance gains seen in the benchmarks are a direct result of sys
 
 The following graphs show the number of **vLLM Waiting Requests** and **vLLM Running Requests (decoding)** for each of the **8 pods**. The schedulers are shown in order: `precise-scheduling` *(left)*, `estimated-scheduling` *(center)*, and `random-scheduling` *(right)*.  
 ![vLLM waiting requests metrics](/img/blogs/kv-cache-wins/image6.png)  
-***FIGURE 6**: The number of **waiting requests** **(prefilling)** in vLLM over the course of the benchmark.*
+<small>***FIGURE 6**: The number of **waiting requests** **(prefilling)** in vLLM over the course of the benchmark.*</small>
 
 ![vLLM running requests metrics](/img/blogs/kv-cache-wins/image7.png)  
-***FIGURE 7**: The number of **running requests** **(decoding)** in vLLM over the course of the benchmark.*
+<small>***FIGURE 7**: The number of **running requests** **(decoding)** in vLLM over the course of the benchmark.*</small>
 
 The **`precise-scheduling`** plots on the left show a stable system. By keeping the waiting queue minimal, it maximizes the number of actively running requests. In contrast, the other schedulers are clearly overwhelmed; their growing waiting queues choke the system and prevent work from being done efficiently.
 
@@ -233,7 +233,7 @@ The summary metrics below provide a final, clear picture of this difference, sho
 
 ![Queue size and cache utilization metrics](/img/blogs/kv-cache-wins/image8.png)
 
-***FIGURE 8**: Graphs and distribution-plots showing the average vLLM waiting-queue size and KV-cache-utilization over time, across the different scheduling configurations.*
+<small>***FIGURE 8**: Graphs and distribution-plots showing the average vLLM waiting-queue size and KV-cache-utilization over time, across the different scheduling configurations.*</small>
 
 ### **Adoption**
 
