@@ -12,38 +12,6 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
 {(() => {
   const events = [
     {
-      month: 'September 2025',
-      title: 'PyTorch ATX: The Future of Inferencing',
-      location: 'Austin, TX',
-      dateText: 'Sep 17, 2025',
-      cost: 'Free',
-      href: 'https://www.meetup.com/pytorch-atx/events/307742180/',
-    },
-    {
-      month: 'September 2025',
-      title: 'Boston vLLM + llm-d Meetup',
-      location: 'Boston, MA',
-      dateText: 'Sep 18, 2025',
-      cost: 'Free',
-      href: 'https://luma.com/vjfelimw',
-    },
-    {
-      month: 'September 2025',
-      title: 'DevConf.US 2025',
-      location: 'Boston, MA',
-      dateText: 'Sep 19–20, 2025',
-      cost: 'Free',
-      href: 'https://www.devconf.info/us/',
-      sessions: [
-        {
-          title: 'llm-d: Kubernetes Native Distributed Inferencing',
-          date: 'Fri, Sep 19, 2025',
-          time: '9:15am – 9:50am',
-          href: 'https://pretalx.devconf.info/devconf-us-2025/talk/GF8RJQ/',
-        },
-      ],
-    },
-    {
       month: 'October 2025',
       title: 'PyTorch Conference 2025',
       location: 'San Francisco, CA',
