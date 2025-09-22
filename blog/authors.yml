@@ -55,3 +55,43 @@ vitabortnikov:
   title: IBM Fellow, IBM
   url: https://www.linkedin.com/in/vita-bortnikov/
   image_url: /img/blogs/vitabortnikov.jpg
+
+maroonayoub:
+  name: Maroon Ayoub
+  title: Research Scientist & Architect, IBM
+  url: https://www.linkedin.com/in/v-maroon/
+  image_url: /img/blogs/maroonayoub.jpg
+
+dannyharnik:
+  name: Danny Harnik
+  title: Senior Technical Staff Member, IBM
+  url: https://www.linkedin.com/in/danny-harnik-19a95436/
+  image_url: /img/blogs/dannyharnik.jpg
+
+tylersmith:
+  name: Tyler Smith
+  title: Member of Technical Staff, Red Hat
+  url: https://www.linkedin.com/in/tyler-michael-smith-017b28102/
+  image_url: /img/blogs/tylersmith.jpg
+
+kellenswain:
+  name: Kellen Swain
+  title: Software Engineer, Google
+  url: https://www.linkedin.com/in/kellen-swain/
+  image_url: /img/blogs/kellenswain.jpg
+
+xiningwang:
+  name: Xining Wang
+  title: Senior Technical Expert, Alibaba Cloud
+  image_url: /img/blogs/xiningwang.png
+
+hangyin:
+  name: Hang Yin
+  title: Senior R&D Engineer, Alibaba Cloud
+  image_url: /img/blogs/hangyin.png
+
+kayyan:
+  name: Kay Yan
+  title: Principal Software Engineer, DaoCloud
+  url: https://www.linkedin.com/in/yankay/
+  image_url: /img/blogs/kayyan.jpg
