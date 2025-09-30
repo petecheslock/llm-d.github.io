@@ -87,6 +87,31 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
         },
       ],
     },
+    {
+      month: 'October 2025',
+      title: 'AMD AI Dev Day 2025',
+      location: 'San Francisco, CA',
+      dateText: 'Oct 20, 2025',
+      cost: 'Free',
+      href: 'https://www.amd.com/en/corporate/events/amd-ai-dev-day.html',
+      sessions: [],
+    },
+    {
+      month: 'October 2025',
+      title: 'All Things Open 2025',
+      location: 'Raleigh, NC',
+      dateText: 'Oct 12–14, 2025',
+      cost: 'Paid',
+      href: 'https://2025.allthingsopen.org/register',
+      sessions: [
+        {
+          title: 'llm-d: Open Source Infrastructure for Cost-Efficient LLM Deployment at Scale',
+          date: 'Oct 12–14, 2025',
+          time: 'TBD',
+          href: 'https://2025.allthingsopen.org/sessions/llm-d-open-source-infrastructure-for-cost-efficient-llm-deployment-at-scale',
+        },
+      ],
+    },
   ];
 
   const months = Array.from(new Set(events.map((e) => e.month)));
