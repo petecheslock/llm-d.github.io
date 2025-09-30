@@ -42,6 +42,13 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
           location: 'Room 2009 - 2011',
           href: 'https://pytorchconference.sched.com/event/27QDr',
         },
+        {
+          title: 'Open Source AI Production Stack with PyTorch and Red Hat AI',
+          date: 'Thu, Oct 23, 2025',
+          time: '10:35am – 10:45am PDT',
+          location: 'Exhibit Hall - Booth D2',
+          href: 'https://pytorchconference.sched.com/event/29Xx0?iframe=no',
+        },
       ],
     },
     {
