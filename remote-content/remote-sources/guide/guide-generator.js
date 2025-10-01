@@ -3,6 +3,15 @@
  * 
  * Automatically discovers and generates guide pages from the llm-d repository's guides directory.
  * This replaces the individual guide files and consolidates all guide content management.
+ * 
+ * Future Versioning Support:
+ * - When implementing Docusaurus versioning, this generator can be extended to:
+ *   1. Accept version/branch parameters in the configuration
+ *   2. Generate versioned outDir paths (e.g., 'docs/1.0/guide/Installation')
+ *   3. Update sourceBaseUrl to point to specific tags/releases
+ *   4. Maintain separate guide configurations per version
+ * - The internal link mapping in repo-transforms.js will automatically handle
+ *   version-aware routing between guides within the same version
  */
 
 import { createContentWithSource, createStandardTransform } from '../utils.js';
@@ -18,12 +27,20 @@ const contentTransform = createStandardTransform('llm-d');
  */
 const SPECIAL_GUIDES = {
   'prerequisites': {
-    sourceFile: 'guides/QUICKSTART.md',
+    sourceFile: 'guides/prereq/infrastructure/README.md',
     title: 'Prerequisites',
     description: 'Prerequisites for running the llm-d QuickStart',
     sidebarLabel: 'Prerequisites',
     sidebarPosition: 1,
     outputFile: 'prerequisites.md'
+  },
+  'quickstart': {
+    sourceFile: 'guides/QUICKSTART.md',
+    title: 'QuickStart',
+    description: 'QuickStart guide for llm-d',
+    sidebarLabel: 'QuickStart',
+    sidebarPosition: 2,
+    outputFile: 'quickstart.md'
   },
   'guide': {
     sourceFile: 'guides/README.md',
@@ -46,31 +63,31 @@ const DYNAMIC_GUIDES = [
     dirName: 'inference-scheduling',
     title: 'Intelligent Inference Scheduling',
     description: 'Well-lit path for intelligent inference scheduling with load balancing',
-    sidebarPosition: 2
+    sidebarPosition: 3
   },
   {
     dirName: 'pd-disaggregation', 
     title: 'Prefill/Decode Disaggregation',
     description: 'Well-lit path for separating prefill and decode operations',
-    sidebarPosition: 3
+    sidebarPosition: 4
   },
   {
     dirName: 'precise-prefix-cache-aware',
     title: 'Precise Prefix Cache Aware Routing',
     description: 'Feature guide for precise prefix cache aware routing',
-    sidebarPosition: 4
+    sidebarPosition: 5
   },
   {
     dirName: 'simulated-accelerators',
     title: 'Accelerator Simulation',
     description: 'Feature guide for llm-d accelerator simulation',
-    sidebarPosition: 5
+    sidebarPosition: 6
   },
   {
     dirName: 'wide-ep-lws',
     title: 'Wide Expert Parallelism with LeaderWorkerSet',
     description: 'Well-lit path for wide expert parallelism using LeaderWorkerSet',
-    sidebarPosition: 6
+    sidebarPosition: 7
   }
 ];
 
