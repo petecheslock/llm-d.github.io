@@ -120,15 +120,6 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
         },
       ],
     },
-    {
-      month: 'October 2025',
-      title: 'AMD AI Dev Day 2025',
-      location: 'San Francisco, CA',
-      dateText: 'Oct 20, 2025',
-      cost: 'Free',
-      href: 'https://www.amd.com/en/corporate/events/amd-ai-dev-day.html',
-      sessions: [],
-    },
   ];
 
   const months = Array.from(new Set(events.map((e) => e.month)));
