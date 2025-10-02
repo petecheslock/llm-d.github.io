@@ -96,6 +96,23 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
     },
     {
       month: 'October 2025',
+      title: 'IBM TechXchange 2025',
+      location: 'Las Vegas, NV',
+      dateText: 'Oct 6, 2025',
+      cost: 'Paid',
+      href: 'https://www.ibm.com/community/ibm-techxchange-conference/',
+      sessions: [
+        {
+          title: 'Learn how LLM inference goes distributed with llm-d [4324]',
+          date: 'Mon, Oct 6, 2025',
+          time: '3:00pm – 3:30pm EDT',
+          location: 'Lake Louise, Lobby Level, Hilton',
+          href: 'https://reg.tools.ibm.com/flow/ibm/techxchange25/sessioncatalog/page/sessioncatalog/session/1756952044813001War5',
+        },
+      ],
+    },
+    {
+      month: 'October 2025',
       title: 'AMD AI Dev Day 2025',
       location: 'San Francisco, CA',
       dateText: 'Oct 20, 2025',
