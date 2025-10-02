@@ -166,7 +166,7 @@ function generateComponentsOverviewSource() {
     {
       // Basic configuration  
       name: 'components-overview',
-      sourceBaseUrl: 'https://raw.githubusercontent.com/llm-d/llm-d/dev/', // Dummy URL
+      sourceBaseUrl: 'https://raw.githubusercontent.com/llm-d/llm-d/main/', // Dummy URL
       outDir: 'docs/architecture/Components',
       documents: ['LICENSE'], // Fetch a small file to trigger modifyContent
       
