@@ -13,22 +13,6 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
   const events = [
     {
       month: 'October 2025',
-      title: 'DigitalOcean Deploy London 2025',
-      location: 'London, UK',
-      dateText: 'Oct 2, 2025',
-      cost: 'Free',
-      href: 'https://www.digitalocean.com/deploy#register',
-      sessions: [
-        {
-          title: 'The AI Inference Spectrum: Scale Without Lock-In',
-          date: 'Thu, Oct 2, 2025',
-          time: '12:10pm – 12:50pm',
-          href: 'https://www.digitalocean.com/deploy#agenda',
-        },
-      ],
-    },
-    {
-      month: 'October 2025',
       title: 'PyTorch Conference 2025',
       location: 'San Francisco, CA',
       dateText: 'Oct 22–23, 2025',
