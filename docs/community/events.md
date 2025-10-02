@@ -13,6 +13,48 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
   const events = [
     {
       month: 'October 2025',
+      title: 'IBM TechXchange 2025',
+      location: 'Las Vegas, NV',
+      dateText: 'Oct 6, 2025',
+      cost: 'Paid',
+      href: 'https://www.ibm.com/community/ibm-techxchange-conference/',
+      sessions: [
+        {
+          title: 'Learn how LLM inference goes distributed with llm-d [4324]',
+          date: 'Mon, Oct 6, 2025',
+          time: '3:00pm – 3:30pm EDT',
+          location: 'Lake Louise, Lobby Level, Hilton',
+          href: 'https://reg.tools.ibm.com/flow/ibm/techxchange25/sessioncatalog/page/sessioncatalog/session/1756952044813001War5',
+        },
+      ],
+    },
+    {
+      month: 'October 2025',
+      title: 'All Things Open 2025',
+      location: 'Raleigh, NC',
+      dateText: 'Oct 12–14, 2025',
+      cost: 'Paid',
+      href: 'https://2025.allthingsopen.org/register',
+      sessions: [
+        {
+          title: 'llm-d: Open Source Infrastructure for Cost-Efficient LLM Deployment at Scale',
+          date: 'Oct 12–14, 2025',
+          time: 'TBD',
+          href: 'https://2025.allthingsopen.org/sessions/llm-d-open-source-infrastructure-for-cost-efficient-llm-deployment-at-scale',
+        },
+      ],
+    },
+    {
+      month: 'October 2025',
+      title: 'AMD AI Dev Day 2025',
+      location: 'San Francisco, CA',
+      dateText: 'Oct 20, 2025',
+      cost: 'Free',
+      href: 'https://www.amd.com/en/corporate/events/amd-ai-dev-day.html',
+      sessions: [],
+    },
+    {
+      month: 'October 2025',
       title: 'PyTorch Conference 2025',
       location: 'San Francisco, CA',
       dateText: 'Oct 22–23, 2025',
@@ -80,45 +122,12 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
     },
     {
       month: 'October 2025',
-      title: 'IBM TechXchange 2025',
-      location: 'Las Vegas, NV',
-      dateText: 'Oct 6, 2025',
-      cost: 'Paid',
-      href: 'https://www.ibm.com/community/ibm-techxchange-conference/',
-      sessions: [
-        {
-          title: 'Learn how LLM inference goes distributed with llm-d [4324]',
-          date: 'Mon, Oct 6, 2025',
-          time: '3:00pm – 3:30pm EDT',
-          location: 'Lake Louise, Lobby Level, Hilton',
-          href: 'https://reg.tools.ibm.com/flow/ibm/techxchange25/sessioncatalog/page/sessioncatalog/session/1756952044813001War5',
-        },
-      ],
-    },
-    {
-      month: 'October 2025',
       title: 'AMD AI Dev Day 2025',
       location: 'San Francisco, CA',
       dateText: 'Oct 20, 2025',
       cost: 'Free',
       href: 'https://www.amd.com/en/corporate/events/amd-ai-dev-day.html',
       sessions: [],
-    },
-    {
-      month: 'October 2025',
-      title: 'All Things Open 2025',
-      location: 'Raleigh, NC',
-      dateText: 'Oct 12–14, 2025',
-      cost: 'Paid',
-      href: 'https://2025.allthingsopen.org/register',
-      sessions: [
-        {
-          title: 'llm-d: Open Source Infrastructure for Cost-Efficient LLM Deployment at Scale',
-          date: 'Oct 12–14, 2025',
-          time: 'TBD',
-          href: 'https://2025.allthingsopen.org/sessions/llm-d-open-source-infrastructure-for-cost-efficient-llm-deployment-at-scale',
-        },
-      ],
     },
   ];
 
