@@ -14,8 +14,8 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
     {
       month: 'October 2025',
       title: 'IBM TechXchange 2025',
-      location: 'Las Vegas, NV',
-      dateText: 'Oct 6, 2025',
+      location: 'Orlando, FL',
+      dateText: 'Oct 6-9, 2025',
       cost: 'Paid',
       href: 'https://www.ibm.com/community/ibm-techxchange-conference/',
       sessions: [
