@@ -20,7 +20,7 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
       href: 'https://www.ibm.com/community/ibm-techxchange-conference/',
       sessions: [
         {
-          title: 'Learn how LLM inference goes distributed with llm-d [4324]',
+          title: 'Learn how LLM inference goes distributed with llm-d',
           date: 'Mon, Oct 6, 2025',
           time: '3:00pm – 3:30pm EDT',
           location: 'Lake Louise, Lobby Level, Hilton',
@@ -119,15 +119,6 @@ Stay connected with the llm-d community at meetups, conferences, and workshops. 
           href: 'https://colocatedeventsna2025.sched.com/event/28D4J',
         },
       ],
-    },
-    {
-      month: 'October 2025',
-      title: 'AMD AI Dev Day 2025',
-      location: 'San Francisco, CA',
-      dateText: 'Oct 20, 2025',
-      cost: 'Free',
-      href: 'https://www.amd.com/en/corporate/events/amd-ai-dev-day.html',
-      sessions: [],
     },
   ];
 
