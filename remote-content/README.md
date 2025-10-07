@@ -387,6 +387,53 @@ Different repositories may have different link structures or conventions. The `r
 - Adjusting image paths
 - Handling repository-specific markdown formats
 
+#### Link Transformation Behavior
+
+The system automatically transforms relative links in markdown files to ensure they work correctly in the documentation site:
+
+**Relative Links → GitHub URLs**
+- Links without `./` prefix (e.g., `[file.md](file.md)` or `[PR_SIGNOFF.md](PR_SIGNOFF.md)`)
+- Links with `./` prefix (e.g., `[file.md](./file.md)`)
+- Links with `../` navigation (e.g., `[file.md](../../other/file.md)`)
+- All are transformed to absolute GitHub URLs: `https://github.com/org/repo/blob/main/path/file.md`
+
+**Internal Guide Links → Local Docs**
+- Specific guide files listed in `INTERNAL_GUIDE_MAPPINGS` (in `repo-transforms.js`)
+- These stay within the docs site for better navigation
+- Example: `guides/QUICKSTART.md` → `/docs/guide/Installation/quickstart`
+
+**Images → GitHub Raw URLs**
+- All relative image paths are converted to GitHub raw URLs
+- Example: `![image](./image.png)` → `![image](https://github.com/org/repo/raw/main/path/image.png)`
+
+**Using `createStandardTransform()`**
+
+All content sources should use `createStandardTransform()` to get consistent link handling:
+
+```javascript
+const contentTransform = createStandardTransform('llm-d');
+
+// Then pass it to createContentWithSource:
+createContentWithSource({
+  // ... other options
+  contentTransform  // Apply standard transformations
+})
+```
+
+For special cases where you need to override specific links after transformation:
+
+```javascript
+const contentTransform = (content, sourcePath) => {
+  const standardTransform = createStandardTransform('llm-d');
+  const transformed = standardTransform(content, sourcePath);
+  
+  // Override specific GitHub links to stay local
+  return transformed
+    .replace(/\(https:\/\/github\.com\/llm-d\/llm-d\/blob\/main\/CODE_OF_CONDUCT\.md\)/g, '(code-of-conduct)')
+    .replace(/\(https:\/\/github\.com\/llm-d\/llm-d\/blob\/main\/SIGS\.md\)/g, '(sigs)');
+};
+```
+
 ## 📁 File Structure
 
 ```
@@ -468,7 +515,8 @@ For non-component content:
 | Page not appearing | Check source URL is publicly accessible |
 | Build errors | Verify all `YOUR-...` placeholders are replaced |
 | Wrong sidebar order | Check `sidebarPosition` numbers |
-| Links broken | Use `contentTransform` to fix relative links or add to `repo-transforms.js` |
+| Links broken | Ensure you're using `createStandardTransform()` - it automatically fixes relative links to GitHub URLs |
+| Relative links not working | All relative links (with or without `./`) are automatically converted to GitHub URLs by `createStandardTransform()` |
 | Import errors | Ensure file is imported in `remote-content/remote-content.js` with correct path |
 | Component not showing | Check `component-configs.js` and ensure repository is public |
 | Source banner missing | Verify you're using `createContentWithSource()` from utils.js |
@@ -476,6 +524,7 @@ For non-component content:
 | Import path errors | Use `../` to reference utils from subdirectories (e.g., `../utils.js`) |
 | File in wrong directory | Move to appropriate subdirectory: `architecture/`, `guide/`, or `community/` |
 | Template not working | Ensure you're using the updated template with correct import paths |
+| Need local links | Override specific links after `createStandardTransform()` - see "Using `createStandardTransform()`" section above |
 
 ## 📝 Content Source Banners
 
