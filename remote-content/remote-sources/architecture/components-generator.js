@@ -1,14 +1,14 @@
 /**
  * Dynamic Components Remote Content Generator
  * 
- * Generates remote content configurations for all components listed in the v0.2.0 release
+ * Generates remote content configurations for all components in the latest release
  * This creates a foundation for automatically syncing component documentation
+ * Version information is dynamically fetched from GitHub API during build
  */
 
 import { createContentWithSource, createStandardTransform } from '../utils.js';
 import { COMPONENT_CONFIGS, generateRepoUrls } from '../component-configs.js';
-import fs from 'fs';
-import path from 'path';
+import { getReleaseInfo } from '../github-api-utils.js';
 
 /**
  * Generate a remote content configuration for a single component
@@ -63,25 +63,11 @@ function generateComponentRemoteSource(config) {
 
 /**
  * Generate the components overview page content
- * @returns {string} Markdown content for the overview page
+ * @returns {Promise<string>} Markdown content for the overview page
  */
-function generateComponentsOverviewContent() {
-  // Read version information from release-info.json
-  let versionInfo;
-  try {
-    const releaseInfoPath = path.resolve('./release-info.json');
-    const releaseInfoContent = fs.readFileSync(releaseInfoPath, 'utf8');
-    versionInfo = JSON.parse(releaseInfoContent).current;
-  } catch (error) {
-    console.warn('Could not read release-info.json, using fallback data');
-    versionInfo = {
-      version: 'v0.2.0',
-      releaseDateFormatted: 'July 29, 2024',
-      releaseUrl: 'https://github.com/llm-d/llm-d/releases/tag/v0.2.0',
-      releaseName: 'llm-d v0.2.0'
-    };
-  }
-
+async function generateComponentsOverviewContent() {
+  // Fetch latest release information from GitHub API (build fails if unavailable)
+  const versionInfo = await getReleaseInfo();
   const currentDate = new Date().toISOString().split('T')[0];
   
   // Group components by category
@@ -126,7 +112,7 @@ This page is automatically updated from the latest component repository informat
     const cleanTitle = cleanName.split('-').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1)
     ).join(' ');
-    const docLink = `./${cleanName}.md`;
+    const docLink = `./${cleanName}`;
     
     content += `\n| **[${cleanTitle}](${repoUrl})** | ${component.description} | [${component.org}/${component.name}](${repoUrl}) | [View Docs](${docLink}) |`;
   });
@@ -143,6 +129,14 @@ Each component has its own detailed documentation page accessible from the links
 - [llm-d-incubation Organization](https://github.com/llm-d-incubation) - Experimental and supporting components
 - [Latest Release](${versionInfo.releaseUrl}) - ${versionInfo.releaseName}
 - [All Releases](https://github.com/llm-d/llm-d/releases) - Complete release history
+
+## Previous Releases
+
+For information about previous versions and their features, visit the [GitHub Releases page](https://github.com/llm-d/llm-d/releases).
+
+:::tip Automatic Updates
+This page automatically fetches the latest release information from the [GitHub API](https://api.github.com/repos/llm-d/llm-d/releases/latest) during each build, ensuring you always see the most current version information.
+:::
 
 ## Contributing
 
@@ -175,9 +169,9 @@ function generateComponentsOverviewSource() {
       performCleanup: true,
       
       // Generate the overview content
-      modifyContent(filename, content) {
+      async modifyContent(filename, content) {
         // Always generate the overview page regardless of the downloaded content
-        const overviewContent = generateComponentsOverviewContent();
+        const overviewContent = await generateComponentsOverviewContent();
         
         return {
           filename: 'index.md',

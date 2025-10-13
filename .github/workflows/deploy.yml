@@ -32,6 +32,8 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build website
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
 
       - name: Upload Build Artifact
