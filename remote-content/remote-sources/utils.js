@@ -18,11 +18,12 @@ export function createStandardTransform(repoName) {
     throw new Error(`Repository configuration not found for: ${repoName}`);
   }
   
-  const { org, name, branch } = repoConfig;
-  const { repoUrl } = generateRepoUrls(repoConfig);
+  const { org, name } = repoConfig;
+  const { repoUrl, ref } = generateRepoUrls(repoConfig);
   const transform = getRepoTransform(org, name);
   
-  return (content, sourcePath) => transform(content, { repoUrl, branch, org, name, sourcePath });
+  // Use ref (version or branch) instead of just branch
+  return (content, sourcePath) => transform(content, { repoUrl, branch: ref, org, name, sourcePath });
 }
 
 /**
