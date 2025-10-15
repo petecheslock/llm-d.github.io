@@ -72,15 +72,17 @@ flowchart TD
     🎯 Main entry point - imports all sources`"]
     B --> B2["`**remote-sources/category/name.js**
     ⚙️ Individual content configurations`"]
-    B --> B3["`**component-configs.js**
-    📋 Central repository definitions`"]
-    B --> B4["`**utils.js + repo-transforms.js**
+    B --> B3["`**components-data.yaml**
+    📋 Component and release data (static file)`"]
+    B --> B4["`**component-configs.js**
+    📋 Loads YAML and provides utility functions`"]
+    B --> B5["`**utils.js + repo-transforms.js**
     🔧 Content transformation utilities`"]
     
     B1 --> C["`**🔄 Processing Flow**`"]
     
     C --> C1["`**1. Configuration Resolution**
-    📝 Find repo details from component-configs.js
+    📝 Load repo details from components-data.yaml
     🔗 Generate GitHub URLs (raw & blob)`"]
     
     C1 --> C2["`**2. Content Fetching**
@@ -147,7 +149,7 @@ graph TD
     e.g., architecture/component.js`"]
     
     B --> C["`**Configuration Lookup**
-    component-configs.js`"]
+    Load from components-data.yaml`"]
     
     C --> D["`**Repository Details**
     org: 'llm-d'<br/>
@@ -239,8 +241,13 @@ graph TB
     end
     
     subgraph CONFIG["**Configuration Layer**"]
+        YML["`**components-data.yaml**
+        • Component definitions<br/>
+        • Release information<br/>
+        • Single source of truth`"]
+        
         CC["`**component-configs.js**
-        • COMPONENT_CONFIGS array<br/>
+        • Loads YAML data<br/>
         • COMMON_REPO_CONFIGS<br/>
         • findRepoConfig()<br/>
         • generateRepoUrls()`"]
@@ -332,6 +339,7 @@ graph TB
     RC --> SI
     
     %% Config dependencies
+    CC --> YML
     AM --> CC
     AM --> UT
     AM --> RT
@@ -374,11 +382,14 @@ graph TB
 
 ### Component Auto-Generation
 
-The system automatically generates documentation for all components listed in `component-configs.js`. This includes:
+The system automatically generates documentation for all components defined in `components-data.yaml`. This includes:
+- Loading component configurations from the static YAML file
 - Fetching README files from component repositories
 - Adding consistent frontmatter and navigation
 - Applying repository-specific transformations
 - Creating source attribution banners
+- Generating a components overview page with latest release information
+
 
 ### Repository Transforms
 
@@ -440,6 +451,7 @@ const contentTransform = (content, sourcePath) => {
 remote-content/
 ├── remote-content.js                    # Main system (imports all sources)
 ├── remote-sources/
+│   ├── components-data.yaml            # 🎯 Component and release data (EDIT THIS!)
 │   ├── architecture/                   # → docs/architecture/
 │   │   ├── architecture-main.js        # Main architecture documentation
 │   │   └── components-generator.js     # Auto-generates component documentation
@@ -456,7 +468,7 @@ remote-content/
 │   │   └── sigs.js                    # Special Interest Groups
 │   ├── utils.js                        # Shared utilities (used by all)
 │   ├── repo-transforms.js              # Repository-specific transformations
-│   ├── component-configs.js            # Component repository configurations
+│   ├── component-configs.js            # Loads and exports data from components-data.yaml
 │   └── example-readme.js.template     # Template for new sources
 └── README.md                          # This file
 ```
@@ -474,23 +486,57 @@ The remote-sources directory is organized to mirror the final documentation stru
 
 ### Adding Components
 
-Components are automatically generated from `component-configs.js`. To add a new component:
+Components are automatically generated from `components-data.yaml`. To add a new component:
 
-1. **Add to component-configs.js**:
-   ```javascript
-   export const COMPONENT_CONFIGS = [
-     // ... existing components
-     {
-       name: 'your-component-name',
-       org: 'llm-d',  // or other org
-       branch: 'main', // or 'dev'
-       description: 'Description of your component',
-       sidebarPosition: 10 // adjust as needed
-     }
-   ];
+1. **Edit `remote-sources/components-data.yaml`**:
+   ```yaml
+   components:
+     # ... existing components
+     - name: llm-d-your-component
+       org: llm-d
+       branch: main
+       description: Description of your component
+       category: Core Infrastructure
+       sidebarPosition: 8
    ```
 
 2. **Component will auto-appear** in the next build under `/docs/architecture/Components/`
+
+### Updating Release Information
+
+When a new release is published, update the `release` section in `components-data.yaml`:
+
+```yaml
+release:
+  version: v0.4.0
+  releaseDate: 2025-01-15
+  releaseDateFormatted: January 15, 2025
+  releaseUrl: https://github.com/llm-d/llm-d/releases/tag/v0.4.0
+  releaseName: llm-d v0.4.0
+```
+
+**Quick Update with `yq` CLI:**
+```bash
+# Install yq: brew install yq (macOS) or snap install yq (Linux)
+
+VERSION="v0.4.0"
+DATE="2025-01-15"
+DATE_FORMATTED="January 15, 2025"
+
+yq eval ".release.version = \"$VERSION\" | \
+         .release.releaseDate = \"$DATE\" | \
+         .release.releaseDateFormatted = \"$DATE_FORMATTED\" | \
+         .release.releaseUrl = \"https://github.com/llm-d/llm-d/releases/tag/$VERSION\" | \
+         .release.releaseName = \"llm-d $VERSION\"" \
+         -i remote-content/remote-sources/components-data.yaml
+```
+
+**Manual Update:**
+Simply edit the YAML file directly - it's human-readable and easy to modify:
+1. Open `remote-content/remote-sources/components-data.yaml`
+2. Update the `release` section with new version details
+3. Commit the changes
+4. Next build will automatically use the updated information
 
 ### Adding Other Content
 
@@ -518,7 +564,7 @@ For non-component content:
 | Links broken | Ensure you're using `createStandardTransform()` - it automatically fixes relative links to GitHub URLs |
 | Relative links not working | All relative links (with or without `./`) are automatically converted to GitHub URLs by `createStandardTransform()` |
 | Import errors | Ensure file is imported in `remote-content/remote-content.js` with correct path |
-| Component not showing | Check `component-configs.js` and ensure repository is public |
+| Component not showing | Check `components-data.yaml` and ensure repository is public |
 | Source banner missing | Verify you're using `createContentWithSource()` from utils.js |
 | Banner at wrong location | Source banners now appear at bottom of pages automatically |
 | Import path errors | Use `../` to reference utils from subdirectories (e.g., `../utils.js`) |
