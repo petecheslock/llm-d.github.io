@@ -26,6 +26,33 @@ Many docs pages are automatically synced from source repositories using our remo
 
 Files with remote content show a "Content Source" banner at the bottom with links to edit the original source.
 
+### Cutting a New Release
+
+When a new llm-d release is published, update the documentation site to sync from that release:
+
+**Step 1: Update the release configuration**
+```bash
+cd remote-content/remote-sources
+node sync-release.mjs              # Fetches latest release from GitHub
+git diff components-data.yaml      # Review the changes
+```
+
+**Step 2: Commit and deploy**
+```bash
+git add components-data.yaml
+git commit -m "Update to llm-d vX.Y.Z"
+git push
+```
+
+This updates the static YAML file that controls which release version guides are synced from. The build process reads this file - it never makes API calls.
+
+**What gets updated:**
+- Release version, date, and URLs in the Components page
+- Component descriptions from the release notes
+- Guides are fetched from the specified release tag
+
+See [remote-content/README.md](remote-content/README.md) for detailed documentation on the remote content system.
+
 ### Making Changes to Synced Content
 
 **For synced content (files with "Content Source" banners):**
