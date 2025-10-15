@@ -35,39 +35,7 @@ const INTERNAL_GUIDE_MAPPINGS = {
 };
 
 /**
- * Generate versioned documentation path based on branch/tag
- * Future-ready for Docusaurus versioning best practices
- * 
- * NOTE: Versioning is currently DISABLED - all content goes to current docs paths
- * regardless of the source branch/tag. This allows us to fetch content from
- * release tags while keeping everything in /docs/ (not /docs/version/).
- */
-function getVersionedPath(basePath, branch) {
-  // Current behavior: ALL branches/tags use current docs paths
-  // Versioning will be enabled in the future when Docusaurus versioning is configured
-  return basePath;
-  
-  // Future versioning logic (DISABLED FOR NOW):
-  // When Docusaurus versioning is enabled, uncomment this:
-  /*
-  if (branch === 'main') {
-    return basePath;
-  }
-  
-  // Release tags (e.g., 'v1.0.0', 'v2.1.0') -> /docs/1.0/... or /docs/2.1/...
-  const versionMatch = branch.match(/^v?(\d+\.\d+)(?:\.\d+)?$/);
-  if (versionMatch) {
-    const version = versionMatch[1];
-    return basePath.replace('/docs/', `/docs/${version}/`);
-  }
-  
-  return basePath;
-  */
-}
-
-/**
  * Check if a GitHub URL points to a synced guide and return the local path
- * Supports future versioning by detecting branch/tag from URL
  * ONLY transforms links to files that are actually synced (exist in INTERNAL_GUIDE_MAPPINGS)
  */
 function getInternalGuidePath(githubUrl) {
@@ -75,14 +43,13 @@ function getInternalGuidePath(githubUrl) {
   // More permissive regex to capture the full path, then check if it's a synced guide
   const match = githubUrl.match(/https:\/\/github\.com\/llm-d\/llm-d\/blob\/(.+?)\/(.+\.md)$/);
   if (match) {
-    const branch = match[1];
     const filePath = match[2];
     
     // CRITICAL: Only transform if this exact file path is in our synced mappings
     const basePath = INTERNAL_GUIDE_MAPPINGS[filePath];
     
     if (basePath) {
-      return getVersionedPath(basePath, branch);
+      return basePath;
     }
   }
   return null;
