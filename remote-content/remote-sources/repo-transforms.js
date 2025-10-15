@@ -168,7 +168,19 @@ export function transformRepo(content, { repoUrl, branch, sourcePath = '' }) {
   // Get the directory of the source file to resolve relative paths correctly
   const sourceDir = sourcePath ? sourcePath.split('/').slice(0, -1).join('/') : '';
   
-  return fixImages(applyBasicMdxFixes(content), repoUrl, branch, sourceDir)
+  // Fix known broken upstream links before other transformations
+  // These specific URLs point to a non-existent 'dev' branch, redirect to 'main'
+  let fixedContent = content
+    .replace(
+      /https:\/\/github\.com\/llm-d\/llm-d\/tree\/dev\//g,
+      'https://github.com/llm-d/llm-d/tree/main/'
+    )
+    .replace(
+      /https:\/\/github\.com\/llm-d\/llm-d\/blob\/dev\//g,
+      'https://github.com/llm-d/llm-d/blob/main/'
+    );
+  
+  return fixImages(applyBasicMdxFixes(fixedContent), repoUrl, branch, sourceDir)
     // All relative links go to source repository (inline format)
     .replace(/\]\((?!http|https|#|mailto:)([^)]+)\)/g, (match, path) => {
       const cleanPath = path.replace(/^\]\(/, '');
