@@ -37,27 +37,32 @@ const INTERNAL_GUIDE_MAPPINGS = {
 /**
  * Generate versioned documentation path based on branch/tag
  * Future-ready for Docusaurus versioning best practices
+ * 
+ * NOTE: Versioning is currently DISABLED - all content goes to current docs paths
+ * regardless of the source branch/tag. This allows us to fetch content from
+ * release tags while keeping everything in /docs/ (not /docs/version/).
  */
 function getVersionedPath(basePath, branch) {
-  // Current behavior: main branch uses current docs paths
+  // Current behavior: ALL branches/tags use current docs paths
+  // Versioning will be enabled in the future when Docusaurus versioning is configured
+  return basePath;
+  
+  // Future versioning logic (DISABLED FOR NOW):
+  // When Docusaurus versioning is enabled, uncomment this:
+  /*
   if (branch === 'main') {
     return basePath;
   }
   
-  // Future versioning logic (when implemented):
-  // - Release tags (e.g., 'v1.0.0', 'v2.1.0') -> /docs/1.0/... or /docs/2.1/...
-  // - Development branches -> /docs/next/...
-  // - Legacy branches -> /docs/legacy/...
-  
-  // Version detection patterns for future use:
-  const versionMatch = branch.match(/^v?(\d+\.\d+)(?:\.\d+)?$/); // e.g., v1.0.0 -> 1.0
+  // Release tags (e.g., 'v1.0.0', 'v2.1.0') -> /docs/1.0/... or /docs/2.1/...
+  const versionMatch = branch.match(/^v?(\d+\.\d+)(?:\.\d+)?$/);
   if (versionMatch) {
     const version = versionMatch[1];
     return basePath.replace('/docs/', `/docs/${version}/`);
   }
   
-  // Default: treat as current version for unknown branches
   return basePath;
+  */
 }
 
 /**

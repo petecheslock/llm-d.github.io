@@ -29,21 +29,42 @@ export function createStandardTransform(repoName) {
  * Generate a source callout for remote content
  * @param {string} filename - The original filename
  * @param {string} repoUrl - The GitHub repository URL (without .git)
- * @param {string} branch - The branch name (e.g., 'dev', 'main')
+ * @param {string} branch - The branch/tag name (e.g., 'main', 'v0.3.0')
  * @returns {string} Formatted source callout
  */
 export function createSourceCallout(filename, repoUrl, branch = 'main') {
   const fileUrl = `${repoUrl}/blob/${branch}/${filename}`;
-  const editUrl = `${repoUrl}/edit/${branch}/${filename}`;
   const issuesUrl = `${repoUrl}/issues`;
+  const repoName = repoUrl.split('/').slice(-2).join('/');
   
-  return `:::info Content Source
-This content is automatically synced from [${filename}](${fileUrl}) in the ${repoUrl.split('/').slice(-2).join('/')} repository.
+  // Check if this is a version tag (starts with 'v' followed by numbers)
+  const isVersionTag = /^v\d+\.\d+/.test(branch);
+  
+  if (isVersionTag) {
+    // For release versions, show different message
+    const releaseUrl = `${repoUrl}/releases/tag/${branch}`;
+    const mainFileUrl = `${repoUrl}/blob/main/${filename}`;
+    return `:::info Documentation Version
+This documentation corresponds to **[llm-d ${branch}](${releaseUrl})**, the latest public release. 
+For the most current development changes, see [this file on main](${mainFileUrl}).
+
+📝 To suggest changes or report issues, please [create an issue](${issuesUrl}).
+
+*Source: [${filename}](${fileUrl})*
+:::
+
+`;
+  } else {
+    // For non-release branches (like 'main'), show edit link
+    const editUrl = `${repoUrl}/edit/${branch}/${filename}`;
+    return `:::info Content Source
+This content is automatically synced from [${filename}](${fileUrl}) in the ${repoName} repository.
 
 📝 To suggest changes, please [edit the source file](${editUrl}) or [create an issue](${issuesUrl}).
 :::
 
 `;
+  }
 }
 
 /**
@@ -73,9 +94,14 @@ export function createContentWithSource({
   content,
   contentTransform
 }) {
+  // Escape description for YAML frontmatter (handle quotes and special chars)
+  const escapedDescription = description
+    .replace(/\\/g, '\\\\')  // Escape backslashes first
+    .replace(/"/g, '\\"');   // Escape double quotes
+  
   const frontmatter = `---
 title: ${title}
-description: ${description}
+description: "${escapedDescription}"
 sidebar_label: ${sidebarLabel}
 sidebar_position: ${sidebarPosition}
 ---
@@ -87,8 +113,11 @@ sidebar_position: ${sidebarPosition}
   // Apply any additional content transformations
   const transformedContent = contentTransform ? contentTransform(content, filename) : content;
   
+  // Ensure content ends with a newline before adding the callout
+  const contentWithNewline = transformedContent.endsWith('\n') ? transformedContent : transformedContent + '\n';
+  
   return {
     filename: newFilename,
-    content: frontmatter + transformedContent + sourceCallout
+    content: frontmatter + contentWithNewline + sourceCallout
   };
 } 

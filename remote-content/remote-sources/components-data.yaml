@@ -1,63 +1,56 @@
 # llm-d Components and Release Information
 # This file contains static data for generating the Components documentation page
 # Update this file when there are new releases or component changes
+#
+# Last synced from: https://github.com/llm-d/llm-d/releases/tag/v0.3.0
+# Sync date: 2025-10-15T17:55:27.721Z
 
-# Latest release information
 release:
   version: v0.3.0
-  releaseDate: 2024-10-10
-  releaseDateFormatted: October 10, 2024
+  releaseDate: '2025-10-10'
+  releaseDateFormatted: October 10, 2025
   releaseUrl: https://github.com/llm-d/llm-d/releases/tag/v0.3.0
-  releaseName: llm-d v0.3.0
-
-# Component configurations
+  releaseName: v0.3.0
 components:
   - name: llm-d-inference-scheduler
     org: llm-d
     branch: main
-    description: vLLM-optimized inference scheduler with smart load balancing
+    description: This scheduler that makes optimized routing decisions for inference requests to the llm-d inference framework.
     category: Core Infrastructure
     sidebarPosition: 1
-
   - name: llm-d-modelservice
     org: llm-d-incubation
     branch: main
-    description: Helm chart for declarative LLM deployment management
+    description: '`modelservice` is a Helm chart that simplifies LLM deployment on llm-d by declaratively managing Kubernetes resources for serving base models. It enables reproducible, scalable, and tunable model deployments through modular presets, and clean integration with llm-d ecosystem components (including vLLM, Gateway API Inference Extension, LeaderWorkerSet).'
     category: Infrastructure Tools
     sidebarPosition: 2
-
   - name: llm-d-routing-sidecar
     org: llm-d
     branch: main
-    description: Reverse proxy for prefill and decode worker routing
+    description: A reverse proxy redirecting incoming requests to the prefill worker specified in the x-prefiller-host-port HTTP request header.
     category: Core Infrastructure
     sidebarPosition: 3
-
   - name: llm-d-inference-sim
     org: llm-d
     branch: main
-    description: Lightweight vLLM simulator for testing and development
+    description: A light weight vLLM simulator emulates responses to the HTTP REST endpoints of vLLM.
     category: Development Tools
     sidebarPosition: 4
-
   - name: llm-d-infra
     org: llm-d-incubation
     branch: main
-    description: Examples, Helm charts, and release assets for llm-d infrastructure
+    description: A helm chart for deploying gateway and gateway related infrastructure assets for llm-d.
     category: Infrastructure Tools
     sidebarPosition: 5
-
   - name: llm-d-kv-cache-manager
     org: llm-d
     branch: main
-    description: Pluggable service for KV-Cache aware routing and cross-node coordination
+    description: This repository contains the llm-d-kv-cache-manager, a pluggable service designed to enable KV-Cache Aware Routing and lay the foundation for advanced, cross-node cache coordination in vLLM-based serving platforms.
     category: Core Infrastructure
     sidebarPosition: 6
-
   - name: llm-d-benchmark
     org: llm-d
     branch: main
-    description: Automated workflow for benchmarking LLM inference performance
+    description: This repository provides an automated workflow for benchmarking LLM inference using the llm-d stack. It includes tools for deployment, experiment execution, data collection, and teardown across multiple environments and deployment styles.
     category: Development Tools
     sidebarPosition: 7
-

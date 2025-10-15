@@ -12,7 +12,29 @@ Automatically download and sync content from remote repositories (like GitHub) i
 
 ## 🚀 Quick Start
 
-### 1. Choose Directory & Copy Template
+### Updating for a New Release
+
+**When a new llm-d release is published:**
+
+```bash
+cd remote-content/remote-sources
+node sync-release.mjs              # Sync release info and component descriptions
+npm run build                      # Rebuild the site (guides auto-sync from release version)
+npm run serve                      # Test locally
+```
+
+This automatically:
+- ✅ Updates release version, date, and URLs
+- ✅ Updates component descriptions from release notes
+- ✅ Fetches guides from the release tag (not `main`)
+
+[Jump to detailed release management instructions →](#-managing-releases-and-components)
+
+---
+
+### Adding New Content
+
+#### 1. Choose Directory & Copy Template
 
 Files are organized by their destination in the docs:
 
@@ -31,7 +53,7 @@ cp remote-content/remote-sources/example-readme.js.template remote-content/remot
 cp remote-content/remote-sources/example-readme.js.template remote-content/remote-sources/architecture/my-component.js
 ```
 
-### 2. Edit Configuration
+#### 2. Edit Configuration
 
 Update the copied file and replace these placeholders:
 
@@ -42,7 +64,7 @@ Update the copied file and replace these placeholders:
 | `docs/YOUR-SECTION` | `docs/guide` | Where to put the file |
 | `your-file.md` | `guide.md` | Output filename |
 
-### 3. Add to System
+#### 3. Add to System
 ```javascript
 // remote-content/remote-content.js
 import myContent from './remote-sources/DIRECTORY/my-content.js';
@@ -54,7 +76,7 @@ const remoteContentPlugins = [
 ];
 ```
 
-### 4. Test
+#### 4. Test
 ```bash
 npm start
 ```
@@ -452,15 +474,12 @@ remote-content/
 ├── remote-content.js                    # Main system (imports all sources)
 ├── remote-sources/
 │   ├── components-data.yaml            # 🎯 Component and release data (EDIT THIS!)
+│   ├── sync-release.mjs                # 🚀 Automated release sync script
 │   ├── architecture/                   # → docs/architecture/
 │   │   ├── architecture-main.js        # Main architecture documentation
 │   │   └── components-generator.js     # Auto-generates component documentation
 │   ├── guide/                          # → docs/guide/ & docs/guide/Installation/
-│   │   ├── guide-examples.js           # User guide landing page
-│   │   ├── guide-inference-scheduling.js # Installation guide sections
-│   │   ├── guide-pd-disaggregation.js  # Installation guide sections
-│   │   ├── guide-prerequisites.js      # Installation guide sections
-│   │   └── guide-wide-ep-lws.js        # Installation guide sections
+│   │   └── guide-generator.js          # Auto-generates all guide pages (synced from release version)
 │   ├── community/                      # → docs/community/
 │   │   ├── code-of-conduct.js         # Code of conduct
 │   │   ├── contribute.js              # Contributing guide
@@ -482,11 +501,54 @@ The remote-sources directory is organized to mirror the final documentation stru
 - **`community/`** - Files that generate content for `docs/community/`
 - **Root level** - Shared utilities and configurations used across all directories
 
-## 🔧 Adding New Content
+## 🔧 Managing Releases and Components
 
-### Adding Components
+### 🚀 Updating for a New Release (Recommended)
 
-Components are automatically generated from `components-data.yaml`. To add a new component:
+When a new llm-d release is published, use the automated sync script:
+
+```bash
+cd remote-content/remote-sources
+node sync-release.mjs
+```
+
+**What this does:**
+- ✅ Fetches the latest release from [GitHub Releases](https://github.com/llm-d/llm-d/releases/latest)
+- ✅ Updates the `release` section with version, date, and URL
+- ✅ Extracts component descriptions from the release notes (from `## 🔹` sections)
+- ✅ Updates all matching component descriptions in the YAML
+- ✅ Preserves your existing categories, sidebar positions, and other metadata
+
+**Preview changes first:**
+```bash
+node sync-release.mjs --dry-run
+```
+
+**After syncing:**
+1. Review the changes: `git diff remote-content/remote-sources/components-data.yaml`
+2. Rebuild the site: `npm run build`
+3. Test locally: `npm run serve`
+4. Commit: `git add remote-content/remote-sources/components-data.yaml && git commit -m "Update to release vX.Y.Z"`
+
+**Note:** The sync script will update component descriptions from the release notes, ensuring they match what was documented in the release. It preserves all other component metadata (category, sidebar position, etc.).
+
+### Manual Release Updates
+
+If you prefer to update manually or need to make custom changes:
+
+**Edit `remote-sources/components-data.yaml`:**
+```yaml
+release:
+  version: v0.4.0
+  releaseDate: 2025-01-15
+  releaseDateFormatted: January 15, 2025
+  releaseUrl: https://github.com/llm-d/llm-d/releases/tag/v0.4.0
+  releaseName: llm-d v0.4.0
+```
+
+### Adding New Components
+
+To add a new component to the documentation:
 
 1. **Edit `remote-sources/components-data.yaml`**:
    ```yaml
@@ -502,41 +564,14 @@ Components are automatically generated from `components-data.yaml`. To add a new
 
 2. **Component will auto-appear** in the next build under `/docs/architecture/Components/`
 
-### Updating Release Information
+### Important: Guide Versioning
 
-When a new release is published, update the `release` section in `components-data.yaml`:
+**Guides are synced from the release version**, not from `main`:
+- When you update the `release.version` in the YAML, guides will automatically be fetched from that release tag
+- This ensures documentation matches the released version
+- Example: With `version: v0.3.0`, guides come from the `v0.3.0` tag, not `main` branch
 
-```yaml
-release:
-  version: v0.4.0
-  releaseDate: 2025-01-15
-  releaseDateFormatted: January 15, 2025
-  releaseUrl: https://github.com/llm-d/llm-d/releases/tag/v0.4.0
-  releaseName: llm-d v0.4.0
-```
-
-**Quick Update with `yq` CLI:**
-```bash
-# Install yq: brew install yq (macOS) or snap install yq (Linux)
-
-VERSION="v0.4.0"
-DATE="2025-01-15"
-DATE_FORMATTED="January 15, 2025"
-
-yq eval ".release.version = \"$VERSION\" | \
-         .release.releaseDate = \"$DATE\" | \
-         .release.releaseDateFormatted = \"$DATE_FORMATTED\" | \
-         .release.releaseUrl = \"https://github.com/llm-d/llm-d/releases/tag/$VERSION\" | \
-         .release.releaseName = \"llm-d $VERSION\"" \
-         -i remote-content/remote-sources/components-data.yaml
-```
-
-**Manual Update:**
-Simply edit the YAML file directly - it's human-readable and easy to modify:
-1. Open `remote-content/remote-sources/components-data.yaml`
-2. Update the `release` section with new version details
-3. Commit the changes
-4. Next build will automatically use the updated information
+To update guides to a new release, just update the release version and rebuild.
 
 ### Adding Other Content
 
