@@ -12,21 +12,39 @@ Automatically download and sync content from remote repositories (like GitHub) i
 
 ## 🚀 Quick Start
 
-### Updating for a New Release
+### Cutting a New Release for the Documentation Site
 
-**When a new llm-d release is published:**
+**When a new llm-d release is published, follow these steps to update the documentation:**
 
+**Step 1: Update the YAML file (one-time manual step)**
 ```bash
 cd remote-content/remote-sources
-node sync-release.mjs              # Sync release info and component descriptions
-npm run build                      # Rebuild the site (guides auto-sync from release version)
-npm run serve                      # Test locally
+node sync-release.mjs              # Fetches latest release from GitHub API
+                                   # Updates components-data.yaml file
+git diff components-data.yaml      # Review the changes
 ```
 
-This automatically:
-- ✅ Updates release version, date, and URLs
-- ✅ Updates component descriptions from release notes
-- ✅ Fetches guides from the release tag (not `main`)
+**Step 2: Commit the updated YAML**
+```bash
+git add components-data.yaml
+git commit -m "Update to llm-d vX.Y.Z"
+```
+
+**Step 3: Build and deploy**
+```bash
+cd ../..                           # Back to root
+npm run build                      # Build reads from the committed YAML file
+npm run serve                      # Test locally (optional)
+git push                           # Deploy (triggers CI build)
+```
+
+**What happens:**
+- ✅ `sync-release.mjs` queries GitHub API and updates `components-data.yaml` (manual, one-time)
+- ✅ `components-data.yaml` is committed to the repo
+- ✅ Build process reads from the static YAML file (no API calls during build)
+- ✅ Guides are fetched from the release tag specified in the YAML
+
+**Important:** The YAML file is a static, committed file. The build process never modifies it - only the `sync-release.mjs` script does.
 
 [Jump to detailed release management instructions →](#-managing-releases-and-components)
 
@@ -503,34 +521,54 @@ The remote-sources directory is organized to mirror the final documentation stru
 
 ## 🔧 Managing Releases and Components
 
-### 🚀 Updating for a New Release (Recommended)
+### 🚀 Cutting a Release for the Documentation Site
 
-When a new llm-d release is published, use the automated sync script:
+When a new llm-d release is published, update the documentation using this workflow:
+
+#### Step 1: Run the Sync Script (Manual, One-Time)
+
+The `sync-release.mjs` script is a **one-time manual operation** that updates the static YAML file:
 
 ```bash
 cd remote-content/remote-sources
-node sync-release.mjs
+node sync-release.mjs              # Updates components-data.yaml
 ```
 
-**What this does:**
-- ✅ Fetches the latest release from [GitHub Releases](https://github.com/llm-d/llm-d/releases/latest)
-- ✅ Updates the `release` section with version, date, and URL
+**What this script does:**
+- ✅ Queries [GitHub Releases API](https://github.com/llm-d/llm-d/releases/latest) for the latest release
+- ✅ Updates the `release` section in `components-data.yaml` with version, date, and URL
 - ✅ Extracts component descriptions from the release notes (from `## 🔹` sections)
-- ✅ Updates all matching component descriptions in the YAML
+- ✅ Updates matching component descriptions in the YAML file
 - ✅ Preserves your existing categories, sidebar positions, and other metadata
+- ✅ **Writes changes to `components-data.yaml`** (which you then commit)
 
-**Preview changes first:**
+**Preview changes before writing:**
 ```bash
-node sync-release.mjs --dry-run
+node sync-release.mjs --dry-run    # Preview what would change
 ```
 
-**After syncing:**
-1. Review the changes: `git diff remote-content/remote-sources/components-data.yaml`
-2. Rebuild the site: `npm run build`
-3. Test locally: `npm run serve`
-4. Commit: `git add remote-content/remote-sources/components-data.yaml && git commit -m "Update to release vX.Y.Z"`
+#### Step 2: Review and Commit the YAML
 
-**Note:** The sync script will update component descriptions from the release notes, ensuring they match what was documented in the release. It preserves all other component metadata (category, sidebar position, etc.).
+```bash
+git diff components-data.yaml      # Review the changes
+git add components-data.yaml
+git commit -m "Update to llm-d vX.Y.Z"
+```
+
+#### Step 3: Build and Deploy
+
+```bash
+cd ../..                           # Back to repo root
+npm run build                      # Build reads from components-data.yaml
+npm run serve                      # Test locally (optional)
+git push                           # Deploy (triggers CI/CD)
+```
+
+**Important:** 
+- 🔒 **The YAML file is static and committed to the repo**
+- 🚫 **The build process NEVER modifies the YAML** - it only reads from it
+- 🔄 **Only `sync-release.mjs` updates the YAML** - and only when you run it manually
+- 🏗️ **CI/CD builds have zero external dependencies** - they just read the committed YAML file
 
 ### Manual Release Updates
 
