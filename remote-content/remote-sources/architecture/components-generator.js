@@ -27,8 +27,8 @@ const componentsData = yaml.load(yamlContent);
  * @returns {Array} Remote content plugin configuration
  */
 function generateComponentRemoteSource(config) {
-  const { name, org, branch, description, sidebarPosition } = config;
-  const { repoUrl, sourceBaseUrl } = generateRepoUrls(config);
+  const { name, description, sidebarPosition } = config;
+  const { repoUrl, sourceBaseUrl, ref } = generateRepoUrls(config);
   
   return [
     'docusaurus-plugin-remote-content',
@@ -60,7 +60,7 @@ function generateComponentRemoteSource(config) {
             filename: 'README.md',
             newFilename: `${cleanName}.md`,
             repoUrl,
-            branch,
+            branch: ref, // Use version tag or branch
             content,
             // Transform content to work in docusaurus context
             contentTransform: createStandardTransform(name)

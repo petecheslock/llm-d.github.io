@@ -23,6 +23,16 @@ const yamlContent = fs.readFileSync(yamlPath, 'utf8');
 const componentsData = yaml.load(yamlContent);
 
 /**
+ * Component configurations loaded from YAML
+ */
+export const COMPONENT_CONFIGS = componentsData.components;
+
+/**
+ * Release information loaded from YAML
+ */
+export const RELEASE_INFO = componentsData.release;
+
+/**
  * Common repository configurations for remote content sources
  * These are frequently used repos that don't fit the component pattern
  */
@@ -30,7 +40,7 @@ export const COMMON_REPO_CONFIGS = {
   'llm-d-main': {
     name: 'llm-d',
     org: 'llm-d',
-    branch: 'main',
+    branch: 'main', // Community docs always sync from main
     description: 'Main llm-d repository with core architecture and documentation'
   },
   'llm-d-infra': {
@@ -40,16 +50,6 @@ export const COMMON_REPO_CONFIGS = {
     description: 'Examples, Helm charts, and release assets for llm-d infrastructure'
   }
 };
-
-/**
- * Component configurations loaded from YAML
- */
-export const COMPONENT_CONFIGS = componentsData.components;
-
-/**
- * Release information loaded from YAML
- */
-export const RELEASE_INFO = componentsData.release;
 
 /**
  * Find repository configuration by name from either components or common repos
@@ -69,12 +69,15 @@ export function findRepoConfig(repoName) {
 /**
  * Generate repository URLs from configuration
  * @param {Object} repoConfig - Repository configuration
- * @returns {Object} Object with repoUrl and sourceBaseUrl
+ * @returns {Object} Object with repoUrl, sourceBaseUrl, and ref (version or branch)
  */
 export function generateRepoUrls(repoConfig) {
-  const { org, name, branch } = repoConfig;
+  const { org, name, branch, version } = repoConfig;
+  // Prefer version tag over branch for syncing from releases
+  const ref = version || branch;
   return {
     repoUrl: `https://github.com/${org}/${name}`,
-    sourceBaseUrl: `https://raw.githubusercontent.com/${org}/${name}/${branch}/`
+    sourceBaseUrl: `https://raw.githubusercontent.com/${org}/${name}/${ref}/`,
+    ref // Return the actual ref being used
   };
 } 

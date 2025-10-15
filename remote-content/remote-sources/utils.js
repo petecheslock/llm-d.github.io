@@ -37,8 +37,9 @@ export function createSourceCallout(filename, repoUrl, branch = 'main') {
   const issuesUrl = `${repoUrl}/issues`;
   const repoName = repoUrl.split('/').slice(-2).join('/');
   
-  // Check if this is a version tag (starts with 'v' followed by numbers)
-  const isVersionTag = /^v\d+\.\d+/.test(branch);
+  // Check if this is a version tag (contains 'v' followed by numbers and dots)
+  // Matches: v0.3.0, llm-d-modelservice-v0.2.10, etc.
+  const isVersionTag = /v\d+\.\d+/.test(branch) && !['main', 'master', 'develop'].includes(branch);
   
   if (isVersionTag) {
     // For release versions, show different message

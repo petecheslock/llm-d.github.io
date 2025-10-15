@@ -111,6 +111,21 @@ function extractComponents(releaseBody) {
 }
 
 /**
+ * Transform version tag for special cases
+ * Some repos use non-standard tag formats
+ */
+function transformVersionTag(repoName, version) {
+  if (!version) return version;
+  
+  // llm-d-modelservice uses tags like "llm-d-modelservice-v0.2.10"
+  if (repoName === 'llm-d-modelservice') {
+    return `${repoName}-${version}`;
+  }
+  
+  return version;
+}
+
+/**
  * Update components in YAML data with information from release
  */
 function updateComponentsWithReleaseInfo(yamlComponents, releaseComponents) {
@@ -121,14 +136,22 @@ function updateComponentsWithReleaseInfo(yamlComponents, releaseComponents) {
     
     if (existingIndex >= 0) {
       // Update existing component with latest info from release
-      console.log(`  ✓ Found ${releaseComp.name} - updating description`);
+      console.log(`  ✓ Found ${releaseComp.name} - updating description and version`);
+      
+      // Transform version tag for special cases
+      const transformedVersion = transformVersionTag(releaseComp.name, releaseComp.version);
+      
       updated[existingIndex] = {
         ...updated[existingIndex],
         description: releaseComp.description,
+        // Store version tag if available, otherwise keep branch field
+        ...(transformedVersion && { version: transformedVersion })
       };
       
-      if (releaseComp.version) {
-        console.log(`    Version: ${releaseComp.version}`);
+      // Remove branch field if version is present
+      if (transformedVersion) {
+        delete updated[existingIndex].branch;
+        console.log(`    Version: ${transformedVersion}`);
       }
     } else {
       console.log(`  ⚠ Component ${releaseComp.name} found in release but not in YAML`);

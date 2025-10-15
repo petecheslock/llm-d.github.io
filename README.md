@@ -48,8 +48,12 @@ This updates the static YAML file that controls which release version guides are
 
 **What gets updated:**
 - Release version, date, and URLs in the Components page
-- Component descriptions from the release notes
-- Guides are fetched from the specified release tag
+- Component descriptions and version tags from the release notes
+- **Components** (`/docs/architecture/`) sync from their individual release tags
+- **Guides** (`/docs/guide/`) sync from the llm-d/llm-d release tag
+- **Community docs** (`/docs/community/`) always sync from `main` branch
+
+**Note:** The sync script automatically handles special tag formats. For example, `llm-d-modelservice` uses tags like `llm-d-modelservice-v0.2.10` instead of `v0.2.10`, and this is handled automatically.
 
 See [remote-content/README.md](remote-content/README.md) for detailed documentation on the remote content system.
 
