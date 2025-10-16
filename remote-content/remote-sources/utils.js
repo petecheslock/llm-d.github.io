@@ -31,9 +31,10 @@ export function createStandardTransform(repoName) {
  * @param {string} filename - The original filename
  * @param {string} repoUrl - The GitHub repository URL (without .git)
  * @param {string} branch - The branch/tag name (e.g., 'main', 'v0.3.0')
+ * @param {string} [mainReleaseVersion] - Optional main llm-d release version (e.g., 'v0.3.0')
  * @returns {string} Formatted source callout
  */
-export function createSourceCallout(filename, repoUrl, branch = 'main') {
+export function createSourceCallout(filename, repoUrl, branch = 'main', mainReleaseVersion = null) {
   const fileUrl = `${repoUrl}/blob/${branch}/${filename}`;
   const issuesUrl = `${repoUrl}/issues`;
   const repoName = repoUrl.split('/').slice(-2).join('/');
@@ -43,10 +44,37 @@ export function createSourceCallout(filename, repoUrl, branch = 'main') {
   const isVersionTag = /v\d+\.\d+/.test(branch) && !['main', 'master', 'develop'].includes(branch);
   
   if (isVersionTag) {
-    // For release versions, show different message
+    // ============================================================================
+    // SCENARIO 1 & 2: Content is from a version tag (e.g., v0.3.0, v0.5.1)
+    // Used for: Component docs and guides that reference specific releases
+    // ============================================================================
     const releaseUrl = `${repoUrl}/releases/tag/${branch}`;
     const mainFileUrl = `${repoUrl}/blob/main/${filename}`;
-    return `:::info Documentation Version
+    const mainReleaseUrl = mainReleaseVersion 
+      ? `https://github.com/llm-d/llm-d/releases/tag/${mainReleaseVersion}`
+      : null;
+    
+    // SCENARIO 1: Component documentation with mainReleaseVersion provided
+    // - Used by: Component docs in docs/architecture/Components/
+    // - Example: llm-d-inference-sim v0.5.1 as part of llm-d v0.3.0
+    // - Shows: Both the component's version AND the main llm-d release version
+    if (mainReleaseVersion) {
+      return `:::info Documentation Version
+This documentation corresponds to **[${repoName} ${branch}](${releaseUrl})** as included in **[llm-d ${mainReleaseVersion}](${mainReleaseUrl})**.
+For the most current development changes, see [this file on main](${mainFileUrl}).
+
+📝 To suggest changes or report issues, please [create an issue](${issuesUrl}).
+
+*Source: [${filename}](${fileUrl})*
+:::
+
+`;
+    } else {
+      // SCENARIO 2: Guide documentation using version tag without mainReleaseVersion
+      // - Used by: Installation guides and other guide content
+      // - Example: Content from llm-d v0.3.0 release (guide-generator.js)
+      // - Shows: Only the version tag since it's main llm-d repo content
+      return `:::info Documentation Version
 This documentation corresponds to **[llm-d ${branch}](${releaseUrl})**, the latest public release. 
 For the most current development changes, see [this file on main](${mainFileUrl}).
 
@@ -56,8 +84,14 @@ For the most current development changes, see [this file on main](${mainFileUrl}
 :::
 
 `;
+    }
   } else {
-    // For non-release branches (like 'main'), show edit link
+    // ============================================================================
+    // SCENARIO 3: Content is from a non-version branch (e.g., 'main')
+    // Used for: Community docs, architecture overview, and other main branch content
+    // ============================================================================
+    // - Example: CODE_OF_CONDUCT.md, CONTRIBUTING.md, SECURITY.md from main branch
+    // - Shows: Direct edit link since this is always-current content from main
     const editUrl = `${repoUrl}/edit/${branch}/${filename}`;
     return `:::info Content Source
 This content is automatically synced from [${filename}](${fileUrl}) in the ${repoName} repository.
@@ -82,6 +116,7 @@ This content is automatically synced from [${filename}](${fileUrl}) in the ${rep
  * @param {string} options.branch - Branch name
  * @param {string} options.content - Original content
  * @param {Function} [options.contentTransform] - Optional content transformation function
+ * @param {string} [options.mainReleaseVersion] - Optional main llm-d release version
  * @returns {Object} Transformed content object
  */
 export function createContentWithSource({
@@ -94,7 +129,8 @@ export function createContentWithSource({
   repoUrl,
   branch = 'main',
   content,
-  contentTransform
+  contentTransform,
+  mainReleaseVersion = null
 }) {
   // Escape description for YAML frontmatter (handle quotes and special chars)
   const escapedDescription = description
@@ -110,7 +146,7 @@ sidebar_position: ${sidebarPosition}
 
 `;
 
-  const sourceCallout = createSourceCallout(filename, repoUrl, branch);
+  const sourceCallout = createSourceCallout(filename, repoUrl, branch, mainReleaseVersion);
   
   // Apply any additional content transformations
   const transformedContent = contentTransform ? contentTransform(content, filename) : content;

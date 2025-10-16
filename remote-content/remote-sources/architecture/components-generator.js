@@ -29,6 +29,7 @@ const componentsData = yaml.load(yamlContent);
 function generateComponentRemoteSource(config) {
   const { name, description, sidebarPosition } = config;
   const { repoUrl, sourceBaseUrl, ref } = generateRepoUrls(config);
+  const mainReleaseVersion = componentsData.release.version;
   
   return [
     'docusaurus-plugin-remote-content',
@@ -63,7 +64,8 @@ function generateComponentRemoteSource(config) {
             branch: ref, // Use version tag or branch
             content,
             // Transform content to work in docusaurus context
-            contentTransform: createStandardTransform(name)
+            contentTransform: createStandardTransform(name),
+            mainReleaseVersion // Pass the main llm-d release version
           });
         }
         return undefined;
