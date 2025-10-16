@@ -4,7 +4,33 @@
  * Central location for all llm-d component definitions used across
  * the documentation system. This eliminates duplication and ensures
  * consistency across different generators.
+ * 
+ * Now loads from components-data.yaml for a single source of truth.
  */
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import yaml from 'js-yaml';
+
+// Get the directory of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load components data from YAML file
+const yamlPath = path.join(__dirname, 'components-data.yaml');
+const yamlContent = fs.readFileSync(yamlPath, 'utf8');
+const componentsData = yaml.load(yamlContent);
+
+/**
+ * Component configurations loaded from YAML
+ */
+export const COMPONENT_CONFIGS = componentsData.components;
+
+/**
+ * Release information loaded from YAML
+ */
+export const RELEASE_INFO = componentsData.release;
 
 /**
  * Common repository configurations for remote content sources
@@ -14,7 +40,7 @@ export const COMMON_REPO_CONFIGS = {
   'llm-d-main': {
     name: 'llm-d',
     org: 'llm-d',
-    branch: 'main',
+    branch: 'main', // Community docs always sync from main
     description: 'Main llm-d repository with core architecture and documentation'
   },
   'llm-d-infra': {
@@ -43,71 +69,15 @@ export function findRepoConfig(repoName) {
 /**
  * Generate repository URLs from configuration
  * @param {Object} repoConfig - Repository configuration
- * @returns {Object} Object with repoUrl and sourceBaseUrl
+ * @returns {Object} Object with repoUrl, sourceBaseUrl, and ref (version or branch)
  */
 export function generateRepoUrls(repoConfig) {
-  const { org, name, branch } = repoConfig;
+  const { org, name, branch, version } = repoConfig;
+  // Prefer version tag over branch for syncing from releases
+  const ref = version || branch;
   return {
     repoUrl: `https://github.com/${org}/${name}`,
-    sourceBaseUrl: `https://raw.githubusercontent.com/${org}/${name}/${branch}/`
+    sourceBaseUrl: `https://raw.githubusercontent.com/${org}/${name}/${ref}/`,
+    ref // Return the actual ref being used
   };
-}
-
-export const COMPONENT_CONFIGS = [
-  {
-    name: 'llm-d-inference-scheduler',
-    org: 'llm-d',
-    branch: 'main',
-    description: 'vLLM-optimized inference scheduler with smart load balancing',
-    category: 'Core Infrastructure',
-    sidebarPosition: 1
-  },
-  {
-    name: 'llm-d-modelservice',
-    org: 'llm-d-incubation', 
-    branch: 'main',
-    description: 'Helm chart for declarative LLM deployment management',
-    category: 'Infrastructure Tools',
-    sidebarPosition: 2
-  },
-  {
-    name: 'llm-d-routing-sidecar',
-    org: 'llm-d',
-    branch: 'main', 
-    description: 'Reverse proxy for prefill and decode worker routing',
-    category: 'Core Infrastructure',
-    sidebarPosition: 3
-  },
-  {
-    name: 'llm-d-inference-sim',
-    org: 'llm-d',
-    branch: 'main',
-    description: 'Lightweight vLLM simulator for testing and development',
-    category: 'Development Tools',
-    sidebarPosition: 4
-  },
-  {
-    name: 'llm-d-infra',
-    org: 'llm-d-incubation',
-    branch: 'main',
-    description: 'Examples, Helm charts, and release assets for llm-d infrastructure',
-    category: 'Infrastructure Tools', 
-    sidebarPosition: 5
-  },
-  {
-    name: 'llm-d-kv-cache-manager',
-    org: 'llm-d',
-    branch: 'main',
-    description: 'Pluggable service for KV-Cache aware routing and cross-node coordination',
-    category: 'Core Infrastructure',
-    sidebarPosition: 6
-  },
-  {
-    name: 'llm-d-benchmark', 
-    org: 'llm-d',
-    branch: 'main',
-    description: 'Automated workflow for benchmarking LLM inference performance',
-    category: 'Development Tools',
-    sidebarPosition: 7
-  }
-]; 
+} 

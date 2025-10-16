@@ -4,23 +4,31 @@
  * Automatically discovers and generates guide pages from the llm-d repository's guides directory.
  * This replaces the individual guide files and consolidates all guide content management.
  * 
- * Future Versioning Support:
- * - When implementing Docusaurus versioning, this generator can be extended to:
- *   1. Accept version/branch parameters in the configuration
- *   2. Generate versioned outDir paths (e.g., 'docs/1.0/guide/Installation')
- *   3. Update sourceBaseUrl to point to specific tags/releases
- *   4. Maintain separate guide configurations per version
- * - The internal link mapping in repo-transforms.js will automatically handle
- *   version-aware routing between guides within the same version
+ * Guides are synced from the specific release version defined in components-data.yaml,
+ * not from the main branch. This ensures documentation matches the released version.
  */
 
-import { createContentWithSource, createStandardTransform } from '../utils.js';
-import { findRepoConfig, generateRepoUrls } from '../component-configs.js';
+import { createContentWithSource } from '../utils.js';
+import { findRepoConfig, RELEASE_INFO } from '../component-configs.js';
+import { getRepoTransform } from '../repo-transforms.js';
 
 // Get repository configuration for the main llm-d repo
 const repoConfig = findRepoConfig('llm-d');
-const { repoUrl, sourceBaseUrl } = generateRepoUrls(repoConfig);
-const contentTransform = createStandardTransform('llm-d');
+
+// Use the release version from YAML instead of the branch
+const releaseVersion = RELEASE_INFO.version;
+const repoUrl = `https://github.com/${repoConfig.org}/${repoConfig.name}`;
+const sourceBaseUrl = `https://raw.githubusercontent.com/${repoConfig.org}/${repoConfig.name}/${releaseVersion}/`;
+
+// Create a custom transform that uses the release version instead of 'main'
+const transform = getRepoTransform(repoConfig.org, repoConfig.name);
+const contentTransform = (content, sourcePath) => transform(content, { 
+  repoUrl, 
+  branch: releaseVersion,  // Use release version, not 'main'
+  org: repoConfig.org, 
+  name: repoConfig.name, 
+  sourcePath 
+});
 
 /**
  * Configuration for special guide mappings
@@ -119,7 +127,7 @@ function createGuidePlugins() {
               filename: config.sourceFile,
               newFilename: config.outputFile,
               repoUrl,
-              branch: repoConfig.branch,
+              branch: releaseVersion,
               content,
               contentTransform: config.customTransform || contentTransform
             });
@@ -154,7 +162,7 @@ function createGuidePlugins() {
               filename: sourceFile,
               newFilename: `${guide.dirName}.md`,
               repoUrl,
-              branch: repoConfig.branch,
+              branch: releaseVersion,
               content,
               contentTransform
             });

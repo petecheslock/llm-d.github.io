@@ -2,29 +2,154 @@
 
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
-The site may be previewed at [llm-d.github.io](https://llm-d.github.io/) before it goes live
+Site previews are powered by Netlify and can be viewed in the specific PR.
 
-If you spot any errors or omissions in the site, please open an issue at [github.com/llm-d/llm-d.github.io](https://github.com/llm-d/llm-d.github.io/issues)
+If you spot any errors or omissions in the site, please open an issue at [github.com/llm-d/llm-d.github.io](https://github.com/llm-d/llm-d.github.io/issues).
 
 ## 📋 Documentation Types
 
 This repository contains two types of documentation:
 
-1. **Local Documentation** - Written directly in this repository (blog posts, etc.)
-2. **Remote Synced Content** - Automatically synced from other llm-d repositories (architecture docs, guides, component documentation, community docs.)
+1. **Local Documentation** - Written directly in this repository (blog posts, landing pages, etc.)
+2. **Remote Synced Content** - Automatically synced from other llm-d repositories during build
 
-Most technical documentation is automatically synced from the main [llm-d/llm-d](https://github.com/llm-d/llm-d) repository to ensure accuracy and consistency.
+Most technical documentation is automatically synced from source repositories to ensure accuracy and consistency:
+- **Architecture docs** (`/docs/architecture/`) - Synced from component repositories
+- **User guides** (`/docs/guide/`) - Synced from the main llm-d repository
+- **Component docs** (`/docs/architecture/Components/`) - Auto-generated from individual component repos
+- **Community docs** (`/docs/community/`) - Synced from the main repository
+
+Files with remote content show a "Content Source" banner at the bottom with links to edit the original source.
 
 ## 🔄 Remote Content System
 
-Many docs pages are automatically synced from source repositories using our remote content system:
+### How It Works
 
-- **Architecture Documentation** - Synced from component repositories
-- **User Guides** - Synced from the main llm-d repository  
-- **Component Documentation** - Automatically generated from individual component repos
-- **Contributing Guidelines** - Synced from the main repository
+The remote content system automatically downloads and syncs content from GitHub repositories during the build process:
 
-Files with remote content show a "Content Source" banner at the bottom with links to edit the original source.
+1. **Static Configuration** - `remote-content/remote-sources/components-data.yaml` contains:
+   - Release version information (which tag to sync from)
+   - List of all components with their descriptions and versions
+   - Repository locations and metadata
+
+2. **Content Sources** - Individual files in `remote-content/remote-sources/` define:
+   - Which repositories to sync from
+   - Where to place the content in the docs
+   - How to transform the content (fix links, add frontmatter, etc.)
+
+3. **Build Process** - During `npm run build`:
+   - Downloads content from the configured GitHub repositories
+   - Applies transformations (fixes relative links, images, adds source attribution)
+   - Generates final documentation with proper navigation and styling
+
+**Key Feature:** The build process only reads from the committed YAML file - it never makes write operations or modifies your configuration.
+
+### File Structure
+
+```
+remote-content/
+├── remote-content.js                    # Main entry point
+└── remote-sources/
+    ├── components-data.yaml            # 🎯 Release and component data (edit this!)
+    ├── sync-release.mjs                # Script to update YAML from GitHub
+    ├── component-configs.js            # Utilities to load YAML data
+    ├── utils.js                        # Content transformation helpers
+    ├── repo-transforms.js              # Link/image fixing logic
+    ├── example-readme.js.template     # Template for adding new content
+    ├── architecture/                   # → docs/architecture/
+    │   ├── architecture-main.js
+    │   └── components-generator.js    # Auto-generates component pages
+    ├── guide/                          # → docs/guide/
+    │   └── guide-generator.js         # Auto-generates guide pages
+    └── community/                      # → docs/community/
+        ├── code-of-conduct.js
+        ├── contribute.js
+        ├── security.js
+        └── sigs.js
+```
+
+### Cutting a New Release
+
+When a new llm-d release is published, update the documentation site:
+
+**Step 1: Update the YAML file**
+```bash
+cd remote-content/remote-sources
+node sync-release.mjs              # Fetches latest release from GitHub API
+git diff components-data.yaml      # Review the changes
+```
+
+This script:
+- Queries the [GitHub Releases API](https://github.com/llm-d/llm-d/releases/latest)
+- Updates release version, date, and URL in the YAML
+- Extracts component descriptions from release notes
+- Updates component versions in the YAML
+
+**Step 2: Commit and deploy**
+```bash
+git add components-data.yaml
+git commit -m "Update to llm-d vX.Y.Z"
+git push                           # Triggers automatic deployment
+```
+
+**What gets updated:**
+- Release version, date, and URLs shown on the Components page
+- Component descriptions and version tags
+- **Components** sync from their individual release tags
+- **Guides** sync from the llm-d/llm-d release tag
+- **Community docs** always sync from `main` branch (latest)
+
+**Manual updates:** You can also manually edit `components-data.yaml` if needed.
+
+### Adding New Components
+
+To add a new component to the documentation:
+
+**Edit `remote-content/remote-sources/components-data.yaml`:**
+```yaml
+components:
+  # ... existing components
+  - name: llm-d-your-component
+    org: llm-d
+    branch: main
+    description: Description of your component
+    category: Core Infrastructure
+    sidebarPosition: 8
+```
+
+The component will automatically appear under `/docs/architecture/Components/` on the next build.
+
+### Adding New Content Sources
+
+To add other remote content (non-component):
+
+1. **Copy the template:**
+   ```bash
+   cp remote-content/remote-sources/example-readme.js.template \
+      remote-content/remote-sources/DIRECTORY/your-content.js
+   ```
+   Choose directory: `architecture/`, `guide/`, or `community/`
+
+2. **Edit the configuration** - Update placeholders:
+   - Repository name
+   - Output directory
+   - Page title and description
+   - Sidebar position
+
+3. **Import in `remote-content/remote-content.js`:**
+   ```javascript
+   import yourContent from './remote-sources/DIRECTORY/your-content.js';
+   
+   const remoteContentPlugins = [
+     // ... existing sources
+     yourContent,
+   ];
+   ```
+
+4. **Test:**
+   ```bash
+   npm start
+   ```
 
 ### Making Changes to Synced Content
 
@@ -35,6 +160,16 @@ Files with remote content show a "Content Source" banner at the bottom with link
 
 **For local website content:**
 - Follow the standard pull request process below
+
+### Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| Page not appearing | Check that source URL is publicly accessible |
+| Build errors | Verify all template placeholders are replaced |
+| Links broken | Make sure you're using `createStandardTransform()` |
+| Component not showing | Check `components-data.yaml` and repository accessibility |
+| Wrong sidebar order | Adjust `sidebarPosition` numbers in configuration |
 
 ## BEFORE DOING A PULL REQUEST
 

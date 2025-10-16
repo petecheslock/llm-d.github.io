@@ -35,34 +35,7 @@ const INTERNAL_GUIDE_MAPPINGS = {
 };
 
 /**
- * Generate versioned documentation path based on branch/tag
- * Future-ready for Docusaurus versioning best practices
- */
-function getVersionedPath(basePath, branch) {
-  // Current behavior: main branch uses current docs paths
-  if (branch === 'main') {
-    return basePath;
-  }
-  
-  // Future versioning logic (when implemented):
-  // - Release tags (e.g., 'v1.0.0', 'v2.1.0') -> /docs/1.0/... or /docs/2.1/...
-  // - Development branches -> /docs/next/...
-  // - Legacy branches -> /docs/legacy/...
-  
-  // Version detection patterns for future use:
-  const versionMatch = branch.match(/^v?(\d+\.\d+)(?:\.\d+)?$/); // e.g., v1.0.0 -> 1.0
-  if (versionMatch) {
-    const version = versionMatch[1];
-    return basePath.replace('/docs/', `/docs/${version}/`);
-  }
-  
-  // Default: treat as current version for unknown branches
-  return basePath;
-}
-
-/**
  * Check if a GitHub URL points to a synced guide and return the local path
- * Supports future versioning by detecting branch/tag from URL
  * ONLY transforms links to files that are actually synced (exist in INTERNAL_GUIDE_MAPPINGS)
  */
 function getInternalGuidePath(githubUrl) {
@@ -70,14 +43,13 @@ function getInternalGuidePath(githubUrl) {
   // More permissive regex to capture the full path, then check if it's a synced guide
   const match = githubUrl.match(/https:\/\/github\.com\/llm-d\/llm-d\/blob\/(.+?)\/(.+\.md)$/);
   if (match) {
-    const branch = match[1];
     const filePath = match[2];
     
     // CRITICAL: Only transform if this exact file path is in our synced mappings
     const basePath = INTERNAL_GUIDE_MAPPINGS[filePath];
     
     if (basePath) {
-      return getVersionedPath(basePath, branch);
+      return basePath;
     }
   }
   return null;
@@ -196,7 +168,20 @@ export function transformRepo(content, { repoUrl, branch, sourcePath = '' }) {
   // Get the directory of the source file to resolve relative paths correctly
   const sourceDir = sourcePath ? sourcePath.split('/').slice(0, -1).join('/') : '';
   
-  return fixImages(applyBasicMdxFixes(content), repoUrl, branch, sourceDir)
+  // Fix known broken upstream links before other transformations
+  // These specific URLs point to a non-existent 'dev' branch, redirect to 'main'
+  // TODO: Remove these after the next llm-d release where component repos have fixes
+  let fixedContent = content
+    .replace(
+      /https:\/\/github\.com\/llm-d\/llm-d\/tree\/dev\//g,
+      'https://github.com/llm-d/llm-d/tree/main/'
+    )
+    .replace(
+      /https:\/\/github\.com\/llm-d\/llm-d\/blob\/dev\//g,
+      'https://github.com/llm-d/llm-d/blob/main/'
+    );
+  
+  return fixImages(applyBasicMdxFixes(fixedContent), repoUrl, branch, sourceDir)
     // All relative links go to source repository (inline format)
     .replace(/\]\((?!http|https|#|mailto:)([^)]+)\)/g, (match, path) => {
       const cleanPath = path.replace(/^\]\(/, '');

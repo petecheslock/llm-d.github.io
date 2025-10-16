@@ -1,14 +1,25 @@
 /**
- * Dynamic Components Remote Content Generator
+ * Components Remote Content Generator
  * 
- * Generates remote content configurations for all components listed in the v0.2.0 release
- * This creates a foundation for automatically syncing component documentation
+ * Generates remote content configurations for all components from a static YAML file
+ * This eliminates the complexity of GitHub API calls and makes updates easier
  */
 
 import { createContentWithSource, createStandardTransform } from '../utils.js';
-import { COMPONENT_CONFIGS, generateRepoUrls } from '../component-configs.js';
+import { generateRepoUrls } from '../component-configs.js';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import yaml from 'js-yaml';
+
+// Get the directory of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load components data from YAML file
+const yamlPath = path.join(__dirname, '..', 'components-data.yaml');
+const yamlContent = fs.readFileSync(yamlPath, 'utf8');
+const componentsData = yaml.load(yamlContent);
 
 /**
  * Generate a remote content configuration for a single component
@@ -16,8 +27,9 @@ import path from 'path';
  * @returns {Array} Remote content plugin configuration
  */
 function generateComponentRemoteSource(config) {
-  const { name, org, branch, description, sidebarPosition } = config;
-  const { repoUrl, sourceBaseUrl } = generateRepoUrls(config);
+  const { name, description, sidebarPosition } = config;
+  const { repoUrl, sourceBaseUrl, ref } = generateRepoUrls(config);
+  const mainReleaseVersion = componentsData.release.version;
   
   return [
     'docusaurus-plugin-remote-content',
@@ -49,10 +61,11 @@ function generateComponentRemoteSource(config) {
             filename: 'README.md',
             newFilename: `${cleanName}.md`,
             repoUrl,
-            branch,
+            branch: ref, // Use version tag or branch
             content,
             // Transform content to work in docusaurus context
-            contentTransform: createStandardTransform(name)
+            contentTransform: createStandardTransform(name),
+            mainReleaseVersion // Pass the main llm-d release version
           });
         }
         return undefined;
@@ -66,33 +79,8 @@ function generateComponentRemoteSource(config) {
  * @returns {string} Markdown content for the overview page
  */
 function generateComponentsOverviewContent() {
-  // Read version information from release-info.json
-  let versionInfo;
-  try {
-    const releaseInfoPath = path.resolve('./release-info.json');
-    const releaseInfoContent = fs.readFileSync(releaseInfoPath, 'utf8');
-    versionInfo = JSON.parse(releaseInfoContent).current;
-  } catch (error) {
-    console.warn('Could not read release-info.json, using fallback data');
-    versionInfo = {
-      version: 'v0.2.0',
-      releaseDateFormatted: 'July 29, 2024',
-      releaseUrl: 'https://github.com/llm-d/llm-d/releases/tag/v0.2.0',
-      releaseName: 'llm-d v0.2.0'
-    };
-  }
-
-  const currentDate = new Date().toISOString().split('T')[0];
+  const versionInfo = componentsData.release;
   
-  // Group components by category
-  const categorizedComponents = COMPONENT_CONFIGS.reduce((acc, component) => {
-    if (!acc[component.category]) {
-      acc[component.category] = [];
-    }
-    acc[component.category].push(component);
-    return acc;
-  }, {});
-
   let content = `---
 title: llm-d Components
 description: Overview of all llm-d ecosystem components and their documentation
@@ -108,17 +96,13 @@ The llm-d ecosystem consists of multiple interconnected components that work tog
 
 **Released**: ${versionInfo.releaseDateFormatted}
 
-:::info Auto-Generated Content
-This page is automatically updated from the latest component repository information and release data. Last updated: ${currentDate}
-:::
-
 ## Components
 
 | Component | Description | Repository | Documentation |
 |-----------|-------------|------------|---------------|`;
 
   // Generate single table with all components (sorted by sidebarPosition)
-  const sortedComponents = COMPONENT_CONFIGS.sort((a, b) => a.sidebarPosition - b.sidebarPosition);
+  const sortedComponents = [...componentsData.components].sort((a, b) => a.sidebarPosition - b.sidebarPosition);
   
   sortedComponents.forEach((component) => {
     const { repoUrl } = generateRepoUrls(component);
@@ -126,7 +110,7 @@ This page is automatically updated from the latest component repository informat
     const cleanTitle = cleanName.split('-').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1)
     ).join(' ');
-    const docLink = `./${cleanName}.md`;
+    const docLink = `./Components/${cleanName}`;
     
     content += `\n| **[${cleanTitle}](${repoUrl})** | ${component.description} | [${component.org}/${component.name}](${repoUrl}) | [View Docs](${docLink}) |`;
   });
@@ -144,13 +128,13 @@ Each component has its own detailed documentation page accessible from the links
 - [Latest Release](${versionInfo.releaseUrl}) - ${versionInfo.releaseName}
 - [All Releases](https://github.com/llm-d/llm-d/releases) - Complete release history
 
+## Previous Releases
+
+For information about previous versions and their features, visit the [GitHub Releases page](https://github.com/llm-d/llm-d/releases).
+
 ## Contributing
 
 To contribute to any of these components, visit their respective repositories and follow their contribution guidelines. Each component maintains its own development workflow and contribution process.
-
----
-
-*This page is automatically updated from the component configurations and stays up to date with the latest release information.*
 `;
 
   return content;
@@ -195,9 +179,9 @@ function generateComponentsOverviewSource() {
 function generateAllComponentSources() {
   return [
     generateComponentsOverviewSource(), // Overview page first
-    ...COMPONENT_CONFIGS.map(generateComponentRemoteSource) // Individual components
+    ...componentsData.components.map(generateComponentRemoteSource) // Individual components
   ];
 }
 
 // Export the generated component sources
-export default generateAllComponentSources(); 
+export default generateAllComponentSources();
