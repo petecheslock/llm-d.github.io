@@ -75,20 +75,21 @@ To sync new content from repositories:
 
 5. **Test** with `npm start`
 
-See [remote-content/README.md](remote-content/README.md) for detailed instructions.
+See the "Remote Content System" section in the main [README.md](README.md) for detailed instructions.
 
 ### ⚙️ Adding New Components
 
-Components are auto-generated! Just add to `remote-content/remote-sources/component-configs.js`:
+Components are auto-generated! Just add to `remote-content/remote-sources/components-data.yaml`:
 
-```javascript
-{
-  name: 'your-component-name',
-  org: 'llm-d',
-  branch: 'main',
-  description: 'Component description',
-  sidebarPosition: 10
-}
+```yaml
+components:
+  # ... existing components
+  - name: your-component-name
+    org: llm-d
+    branch: main
+    description: Component description
+    category: Core Infrastructure
+    sidebarPosition: 10
 ```
 
 ## 📋 General Guidelines

@@ -170,6 +170,7 @@ export function transformRepo(content, { repoUrl, branch, sourcePath = '' }) {
   
   // Fix known broken upstream links before other transformations
   // These specific URLs point to a non-existent 'dev' branch, redirect to 'main'
+  // TODO: Remove these after the next llm-d release where component repos have fixes
   let fixedContent = content
     .replace(
       /https:\/\/github\.com\/llm-d\/llm-d\/tree\/dev\//g,
