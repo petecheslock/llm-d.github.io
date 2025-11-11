@@ -20,4 +20,8 @@ docs/community/sigs.md
 
 # Guide content (from llm-d-incubation/llm-d-infra repo)
 docs/guide/guide.md
-docs/guide/Installation/
+docs/guide/Installation/*.md
+docs/guide/InfraProviders/*.md
+# Keep category files for sidebar configuration
+!docs/guide/Installation/_category_.json
+!docs/guide/InfraProviders/_category_.json

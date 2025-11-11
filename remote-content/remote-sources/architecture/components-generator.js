@@ -98,8 +98,8 @@ The llm-d ecosystem consists of multiple interconnected components that work tog
 
 ## Components
 
-| Component | Description | Repository | Documentation |
-|-----------|-------------|------------|---------------|`;
+| Component | Description | Repository | Version | Documentation |
+|-----------|-------------|------------|---------|---------------|`;
 
   // Generate single table with all components (sorted by sidebarPosition)
   const sortedComponents = [...componentsData.components].sort((a, b) => a.sidebarPosition - b.sidebarPosition);
@@ -112,7 +112,12 @@ The llm-d ecosystem consists of multiple interconnected components that work tog
     ).join(' ');
     const docLink = `./Components/${cleanName}`;
     
-    content += `\n| **[${cleanTitle}](${repoUrl})** | ${component.description} | [${component.org}/${component.name}](${repoUrl}) | [View Docs](${docLink}) |`;
+    // Create version link to GitHub releases
+    const versionTag = component.version || 'latest';
+    const versionUrl = `${repoUrl}/releases/tag/${versionTag}`;
+    const versionLink = `[${versionTag}](${versionUrl})`;
+    
+    content += `\n| **[${cleanTitle}](${repoUrl})** | ${component.description} | [${component.org}/${component.name}](${repoUrl}) | ${versionLink} | [View Docs](${docLink}) |`;
   });
 
   content += `
