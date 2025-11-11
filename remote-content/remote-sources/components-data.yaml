@@ -2,15 +2,15 @@
 # This file contains static data for generating the Components documentation page
 # Update this file when there are new releases or component changes
 #
-# Last synced from: https://github.com/llm-d/llm-d/releases/tag/v0.3.0
-# Sync date: 2025-10-15T19:26:57.592Z
+# Last synced from: https://github.com/llm-d/llm-d/releases/tag/v0.3.1
+# Sync date: 2025-11-11T15:13:04.200Z
 
 release:
-  version: v0.3.0
-  releaseDate: '2025-10-10'
-  releaseDateFormatted: October 10, 2025
-  releaseUrl: https://github.com/llm-d/llm-d/releases/tag/v0.3.0
-  releaseName: v0.3.0
+  version: v0.3.1
+  releaseDate: '2025-11-06'
+  releaseDateFormatted: November 6, 2025
+  releaseUrl: https://github.com/llm-d/llm-d/releases/tag/v0.3.1
+  releaseName: v0.3.1 Release
 components:
   - name: llm-d-inference-scheduler
     org: llm-d
@@ -35,7 +35,7 @@ components:
     description: A light weight vLLM simulator emulates responses to the HTTP REST endpoints of vLLM.
     category: Development Tools
     sidebarPosition: 4
-    version: v0.5.1
+    version: v0.6.1
   - name: llm-d-infra
     org: llm-d-incubation
     description: A helm chart for deploying gateway and gateway related infrastructure assets for llm-d.
