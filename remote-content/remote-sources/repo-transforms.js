@@ -79,9 +79,13 @@ function applyBasicMdxFixes(content) {
       
       return `:::${docusaurusType}\n${cleanContent}\n:::\n`;
     })
-    // Fix HTML comments for MDX compatibility
-    .replace(/<!--\s*/g, '{/* ')
-    .replace(/\s*-->/g, ' */}')
+    // Fix HTML comments for MDX compatibility (without breaking Mermaid arrows)
+    .replace(/<!--([\s\S]*?)-->/g, (_match, comment) => {
+      const normalized = comment
+        .replace(/^\s*/, ' ')
+        .replace(/\s*$/, ' ');
+      return `{/*${normalized}*/}`;
+    })
     // Fix HTML tags for MDX compatibility
     .replace(/<br>/g, '<br />')
     .replace(/<br([^/>]*?)>/g, '<br$1 />')
