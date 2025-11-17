@@ -99,6 +99,10 @@ git push                           # Triggers automatic deployment
 - **Guides** sync from the llm-d/llm-d release tag
 - **Community docs** always sync from `main` branch (latest)
 
+### Testing content from a feature branch
+
+To preview remote docs from a work-in-progress branch (for example `liu-cong-debug`), temporarily set `release.version` in `remote-content/remote-sources/components-data.yaml` to that branch name. Run `npm start` or `npm run build` to pull the branch content into the site. When testing is done, change `release.version` back to the released tag so production remains on the official docs.
+
 **Manual updates:** You can also manually edit `components-data.yaml` if needed.
 
 ### Adding New Components
