@@ -77,14 +77,15 @@ const DYNAMIC_GUIDES = [
     dirName: 'prefix-cache-storage',
     title: 'Prefix Cache Storage',
     description: 'Well-lit path for separating prefill and decode operations',
-    sidebarPosition: 4
+    sidebarPosition: 4,
+    targetFilename: 'prefix-cache-storage/index.md'
   },
   {
     dirName: 'prefix-cache-storage/cpu',
     title: 'Prefix Cache Storage - CPU',
     description: 'Well-lit path for separating prefill and decode operations',
     sidebarPosition: 5,
-    targetFilename: 'prefix-cache-storage-cpu.md'
+    targetFilename: 'prefix-cache-storage/cpu.md'
   },
   {
     dirName: 'pd-disaggregation', 
