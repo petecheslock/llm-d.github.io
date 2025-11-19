@@ -61,6 +61,8 @@ function getInternalGuidePath(githubUrl) {
  */
 function applyBasicMdxFixes(content) {
   return content
+    // Strip markdownlint directives at the top of the file (they break MDX import placement)
+    .replace(/^<!--\s*markdownlint-disable[^>]*-->\s*\n?/i, '')
     // Convert GitHub-style callouts to Docusaurus admonitions
     .replace(/^> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\n((?:> .*\n?)*)/gm, (match, type, content) => {
       // Map GitHub callout types to Docusaurus admonition types
