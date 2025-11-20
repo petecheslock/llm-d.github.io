@@ -297,8 +297,8 @@ const config = {
         ],
       },
       prism: {
-        theme: prismThemes.vsLight,
-        darkTheme: prismThemes.vsDark,
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
         additionalLanguages: ['yaml'],
       },
     }),

@@ -32,6 +32,10 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
   --ifm-font-family-base: "Red Hat Display", Arial, Helvetica, sans-serif;
   --ifm-font-family-monospace: "Red Hat Mono", "Courier New", monospace;
+  /* Light mode code block styling for better contrast */
+  --ifm-pre-background: #f6f8fa;
+  --ifm-pre-color: #24292f;
+  --ifm-code-background: #f6f8fa;
   background-color: white;
 }
 
@@ -45,7 +49,6 @@
   --ifm-color-primary-lighter: #e3bbe3;
   --ifm-color-primary-lightest: #f3e1f3;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-  --ifm-pre-background: #7f317f;
   background-color: #262626;
 }
 
@@ -534,4 +537,40 @@ img.llm-d-logo {
 
 [data-theme="dark"] .language-yaml .prism-code .token.boolean {
   color: #79c0ff !important; /* Consistent light blue */
+}
+
+/* Improve light mode code block visibility with border and shadow - LIGHT MODE ONLY */
+html:not([data-theme="dark"]) pre {
+  border: 1px solid #d0d7de;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Override Prism inline styles for better contrast - LIGHT MODE ONLY */
+html:not([data-theme="dark"]) .prism-code {
+  background-color: #f6f8fa !important;
+}
+
+html:not([data-theme="dark"]) .codeBlockContainer_Ckt0 {
+  --prism-background-color: #f6f8fa !important;
+}
+
+html:not([data-theme="dark"]) pre.prism-code {
+  background-color: #f6f8fa !important;
+}
+
+/* Dark mode code block text - use original blue color from vsDark theme */
+[data-theme="dark"] .prism-code {
+  --prism-color: #9CDCFE !important;
+}
+
+[data-theme="dark"] pre.prism-code {
+  color: #9CDCFE !important;
+}
+
+[data-theme="dark"] .token-line {
+  color: #9CDCFE !important;
+}
+
+[data-theme="dark"] .token.plain {
+  color: #9CDCFE !important;
 }
