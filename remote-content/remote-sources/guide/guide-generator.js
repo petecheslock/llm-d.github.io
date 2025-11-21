@@ -74,18 +74,18 @@ const DYNAMIC_GUIDES = [
     sidebarPosition: 3
   },
   {
-    dirName: 'prefix-cache-storage',
-    title: 'Prefix Cache Storage',
+    dirName: 'tiered-prefix-cache',
+    title: 'Prefix Cache Offloading',
     description: 'Well-lit path for separating prefill and decode operations',
     sidebarPosition: 4,
-    targetFilename: 'prefix-cache-storage/index.md'
+    targetFilename: 'tiered-prefix-cache/index.md'
   },
   {
-    dirName: 'prefix-cache-storage/cpu',
-    title: 'Prefix Cache Storage - CPU',
+    dirName: 'tiered-prefix-cache/cpu',
+    title: 'Prefix Cache Offloading - CPU',
     description: 'Well-lit path for separating prefill and decode operations',
     sidebarPosition: 5,
-    targetFilename: 'prefix-cache-storage/cpu.md'
+    targetFilename: 'tiered-prefix-cache/cpu.md'
   },
   {
     dirName: 'pd-disaggregation', 
