@@ -67,16 +67,22 @@ function convertTabsToDocusaurus(content) {
   const tabBlockRegex = /<!-- TABS:START -->\n([\s\S]*?)<!-- TABS:END -->/g;
   
   const transformedContent = content.replace(tabBlockRegex, (match, tabsContent) => {
-    // Extract individual tabs
-    const tabRegex = /<!-- TAB:([^:]+)(?::default)? -->\n([\s\S]*?)(?=<!-- TAB:|<!-- TABS:END)/g;
+    // Split content by TAB markers to extract individual tabs
+    const tabSections = tabsContent.split(/<!-- TAB:/);
     const tabs = [];
-    let tabMatch;
     
-    while ((tabMatch = tabRegex.exec(tabsContent)) !== null) {
-      const label = tabMatch[1].trim();
-      const content = tabMatch[2].trim();
-      const isDefault = match.includes(`<!-- TAB:${label}:default -->`);
-      tabs.push({ label, content, isDefault });
+    // Skip first element (empty or content before first tab)
+    for (let i = 1; i < tabSections.length; i++) {
+      const section = tabSections[i];
+      
+      // Extract label and check for :default marker
+      const labelMatch = section.match(/^([^:]+?)(?::default)?\s*-->\n([\s\S]*?)$/);
+      if (labelMatch) {
+        const label = labelMatch[1].trim();
+        const content = labelMatch[2].trim();
+        const isDefault = section.includes(':default -->');
+        tabs.push({ label, content, isDefault });
+      }
     }
     
     if (tabs.length === 0) return match;
@@ -115,14 +121,15 @@ function applyBasicMdxFixes(content) {
   // Then apply other MDX fixes
   return transformed
     // Convert GitHub-style callouts to Docusaurus admonitions
-    .replace(/^> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\n((?:> .*\n?)*)/gm, (match, type, content) => {
+    .replace(/^> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|REQUIREMENTS)\]\s*\n((?:> .*\n?)*)/gm, (match, type, content) => {
       // Map GitHub callout types to Docusaurus admonition types
       const typeMap = {
         'NOTE': 'note',
         'TIP': 'tip', 
         'IMPORTANT': 'info',
         'WARNING': 'warning',
-        'CAUTION': 'danger'
+        'CAUTION': 'danger',
+        'REQUIREMENTS': 'info'  // Map to info admonition
       };
       
       const docusaurusType = typeMap[type] || type.toLowerCase();

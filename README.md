@@ -171,19 +171,14 @@ When writing documentation in source repositories (like llm-d/llm-d) that will b
 
 <!-- TABS:START -->
 <!-- TAB:GKE (H200):default -->
-```bash
 kubectl apply -k ./manifests/modelserver/gke -n ${NAMESPACE}
-```
 
 <!-- TAB:GKE (B200) -->
-```bash
 kubectl apply -k ./manifests/modelserver/gke-a4 -n ${NAMESPACE}
-```
 
 <!-- TAB:CoreWeave -->
-```bash
 kubectl apply -k ./manifests/modelserver/coreweave -n ${NAMESPACE}
-```
+
 <!-- TABS:END -->
 ```
 
@@ -197,6 +192,32 @@ kubectl apply -k ./manifests/modelserver/coreweave -n ${NAMESPACE}
 
 **Result on Docusaurus:**
 The content will automatically be transformed with the proper Tabs imports and components, creating an interactive tabbed interface.
+
+### GitHub Callouts Support
+
+The transformation system also automatically converts GitHub-style callouts to Docusaurus admonitions:
+
+```markdown
+> [!NOTE]
+> This is a note
+
+> [!TIP]
+> This is a tip
+
+> [!IMPORTANT]
+> This is important
+
+> [!WARNING]
+> This is a warning
+
+> [!CAUTION]
+> This is dangerous
+
+> [!REQUIREMENTS]
+> These are requirements
+```
+
+These will be automatically converted to the appropriate Docusaurus `:::note`, `:::tip`, `:::info`, `:::warning`, and `:::danger` admonitions during the build.
 
 ### Troubleshooting
 
