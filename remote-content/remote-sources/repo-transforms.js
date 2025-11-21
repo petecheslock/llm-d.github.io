@@ -56,11 +56,64 @@ function getInternalGuidePath(githubUrl) {
 }
 
 /**
+ * Convert GitHub-friendly tab markers to Docusaurus Tabs components
+ */
+function convertTabsToDocusaurus(content) {
+  // Check if there are any tab blocks
+  const hasTabBlocks = /<!-- TABS:START -->/.test(content);
+  if (!hasTabBlocks) return content;
+  
+  // Pattern to match tab blocks
+  const tabBlockRegex = /<!-- TABS:START -->\n([\s\S]*?)<!-- TABS:END -->/g;
+  
+  const transformedContent = content.replace(tabBlockRegex, (match, tabsContent) => {
+    // Extract individual tabs
+    const tabRegex = /<!-- TAB:([^:]+)(?::default)? -->\n([\s\S]*?)(?=<!-- TAB:|<!-- TABS:END)/g;
+    const tabs = [];
+    let tabMatch;
+    
+    while ((tabMatch = tabRegex.exec(tabsContent)) !== null) {
+      const label = tabMatch[1].trim();
+      const content = tabMatch[2].trim();
+      const isDefault = match.includes(`<!-- TAB:${label}:default -->`);
+      tabs.push({ label, content, isDefault });
+    }
+    
+    if (tabs.length === 0) return match;
+    
+    // Generate Docusaurus Tabs component (without imports here)
+    let result = `<Tabs>\n`;
+    
+    tabs.forEach(tab => {
+      const defaultAttr = tab.isDefault ? ' default' : '';
+      result += `  <TabItem value="${tab.label.toLowerCase().replace(/[^a-z0-9]/g, '-')}" label="${tab.label}"${defaultAttr}>\n\n`;
+      result += `${tab.content}\n\n`;
+      result += `  </TabItem>\n`;
+    });
+    
+    result += `</Tabs>`;
+    
+    return result;
+  });
+  
+  // Add imports at the top of the file if tabs were found
+  if (transformedContent !== content) {
+    return `import Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';\n\n${transformedContent}`;
+  }
+  
+  return transformedContent;
+}
+
+/**
  * Apply essential MDX compatibility fixes and content transformations
  * Combines all content-only transformations that don't require repository information
  */
 function applyBasicMdxFixes(content) {
-  return content
+  // First convert tabs to Docusaurus format
+  let transformed = convertTabsToDocusaurus(content);
+  
+  // Then apply other MDX fixes
+  return transformed
     // Convert GitHub-style callouts to Docusaurus admonitions
     .replace(/^> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\n((?:> .*\n?)*)/gm, (match, type, content) => {
       // Map GitHub callout types to Docusaurus admonition types

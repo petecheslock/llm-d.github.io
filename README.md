@@ -161,6 +161,43 @@ To add other remote content (non-component):
 **For local website content:**
 - Follow the standard pull request process below
 
+### Creating Tabs in Remote Content
+
+When writing documentation in source repositories (like llm-d/llm-d) that will be synced to this Docusaurus site, you can create tabbed content using HTML comment markers. These are invisible in GitHub but will be transformed into Docusaurus tabs during the build.
+
+**In your GitHub README:**
+```markdown
+### Deploy Model Servers
+
+<!-- TABS:START -->
+<!-- TAB:GKE (H200):default -->
+```bash
+kubectl apply -k ./manifests/modelserver/gke -n ${NAMESPACE}
+```
+
+<!-- TAB:GKE (B200) -->
+```bash
+kubectl apply -k ./manifests/modelserver/gke-a4 -n ${NAMESPACE}
+```
+
+<!-- TAB:CoreWeave -->
+```bash
+kubectl apply -k ./manifests/modelserver/coreweave -n ${NAMESPACE}
+```
+<!-- TABS:END -->
+```
+
+**Key points:**
+- Use `<!-- TABS:START -->` and `<!-- TABS:END -->` to wrap the entire tabbed section
+- Use `<!-- TAB:Label -->` before each tab's content
+- Add `:default` after the label to make it the default selected tab (e.g., `<!-- TAB:GKE:default -->`)
+- **No imports needed** - the transformation automatically adds them
+- On GitHub, the HTML comments are invisible, showing clean markdown
+- On Docusaurus, these are transformed into proper `<Tabs>` components
+
+**Result on Docusaurus:**
+The content will automatically be transformed with the proper Tabs imports and components, creating an interactive tabbed interface.
+
 ### Troubleshooting
 
 | Problem | Solution |
@@ -170,6 +207,7 @@ To add other remote content (non-component):
 | Links broken | Make sure you're using `createStandardTransform()` |
 | Component not showing | Check `components-data.yaml` and repository accessibility |
 | Wrong sidebar order | Adjust `sidebarPosition` numbers in configuration |
+| Tabs not rendering | Check that you have both `TABS:START` and `TABS:END` markers |
 
 ## BEFORE DOING A PULL REQUEST
 
