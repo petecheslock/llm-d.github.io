@@ -56,20 +56,80 @@ function getInternalGuidePath(githubUrl) {
 }
 
 /**
+ * Convert GitHub-friendly tab markers to Docusaurus Tabs components
+ */
+function convertTabsToDocusaurus(content) {
+  // Check if there are any tab blocks
+  const hasTabBlocks = /<!-- TABS:START -->/.test(content);
+  if (!hasTabBlocks) return content;
+  
+  // Pattern to match tab blocks
+  const tabBlockRegex = /<!-- TABS:START -->\n([\s\S]*?)<!-- TABS:END -->/g;
+  
+  const transformedContent = content.replace(tabBlockRegex, (match, tabsContent) => {
+    // Split content by TAB markers to extract individual tabs
+    const tabSections = tabsContent.split(/<!-- TAB:/);
+    const tabs = [];
+    
+    // Skip first element (empty or content before first tab)
+    for (let i = 1; i < tabSections.length; i++) {
+      const section = tabSections[i];
+      
+      // Extract label and check for :default marker
+      const labelMatch = section.match(/^([^:]+?)(?::default)?\s*-->\n([\s\S]*?)$/);
+      if (labelMatch) {
+        const label = labelMatch[1].trim();
+        const content = labelMatch[2].trim();
+        const isDefault = section.includes(':default -->');
+        tabs.push({ label, content, isDefault });
+      }
+    }
+    
+    if (tabs.length === 0) return match;
+    
+    // Generate Docusaurus Tabs component (without imports here)
+    let result = `<Tabs>\n`;
+    
+    tabs.forEach(tab => {
+      const defaultAttr = tab.isDefault ? ' default' : '';
+      result += `  <TabItem value="${tab.label.toLowerCase().replace(/[^a-z0-9]/g, '-')}" label="${tab.label}"${defaultAttr}>\n\n`;
+      result += `${tab.content}\n\n`;
+      result += `  </TabItem>\n`;
+    });
+    
+    result += `</Tabs>`;
+    
+    return result;
+  });
+  
+  // Add imports at the top of the file if tabs were found
+  if (transformedContent !== content) {
+    return `import Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';\n\n${transformedContent}`;
+  }
+  
+  return transformedContent;
+}
+
+/**
  * Apply essential MDX compatibility fixes and content transformations
  * Combines all content-only transformations that don't require repository information
  */
 function applyBasicMdxFixes(content) {
-  return content
+  // First convert tabs to Docusaurus format
+  let transformed = convertTabsToDocusaurus(content);
+  
+  // Then apply other MDX fixes
+  return transformed
     // Convert GitHub-style callouts to Docusaurus admonitions
-    .replace(/^> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\n((?:> .*\n?)*)/gm, (match, type, content) => {
+    .replace(/^> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|REQUIREMENTS)\]\s*\n((?:> .*\n?)*)/gm, (match, type, content) => {
       // Map GitHub callout types to Docusaurus admonition types
       const typeMap = {
         'NOTE': 'note',
         'TIP': 'tip', 
         'IMPORTANT': 'info',
         'WARNING': 'warning',
-        'CAUTION': 'danger'
+        'CAUTION': 'danger',
+        'REQUIREMENTS': 'info'  // Map to info admonition
       };
       
       const docusaurusType = typeMap[type] || type.toLowerCase();
