@@ -39,7 +39,7 @@ const INFRA_PROVIDERS = [
   {
     dirName: 'aks',
     title: 'Azure Kubernetes Service',
-    description: 'Deploy llm-d on Azure Kubernetes Service',
+    description: 'Deploy llm-d on Azure Kubernetes Service (AKS)',
     sidebarPosition: 1
   },
   {
@@ -47,6 +47,12 @@ const INFRA_PROVIDERS = [
     title: 'DigitalOcean Kubernetes Service (DOKS)',
     description: 'Deploy llm-d on DigitalOcean Kubernetes Service (DOKS)',
     sidebarPosition: 2
+  },
+  {
+    dirName: 'gke',
+    title: 'Google Kubernetes Engine (GKE)',
+    description: 'Deploy llm-d on Google Kubernetes Engine (GKE)',
+    sidebarPosition: 3
   }
 ];
 

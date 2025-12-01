@@ -89,7 +89,7 @@ function extractComponents(releaseBody) {
     // Extract version from diff if available
     let version = null;
     if (diff) {
-      const versionMatch = diff.match(/→\s*(v[\d.]+)/);
+      const versionMatch = diff.match(/→\s*(v[\d.]+(?:-[a-zA-Z0-9.]+)?)/);
       if (versionMatch) {
         version = versionMatch[1];
       }
