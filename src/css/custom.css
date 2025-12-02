@@ -258,12 +258,12 @@ img.llm-d-logo {
 
 .button-group {
   display: flex;
-  justify-content: space-between;
-  margin: 0 10%;
-  @media screen and (max-width: 1024px) {
-    flex-direction: column;
-    align-items: center;
-  }
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 100%;
+  padding: 0 1rem;
 }
 
 .static-button,
@@ -273,23 +273,18 @@ img.llm-d-logo {
   justify-content: center;
   border-radius: 15px;
   border: 1px solid transparent;
-  margin: 12.5px 12.5px;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   font-size: 1rem;
   font-weight: 700;
   font-family: inherit;
   background-color: #7f317f;
   cursor: pointer;
-  transition: border-color 0.25s;
-  width: 100%;
+  transition: border-color 0.25s, background-color 0.25s;
   text-decoration: none;
   color: #fff;
-  @media screen and (max-width: 1024px) {
-    margin: 5% 0;
-    @media screen and (max-width: 768px) {
-      padding: 5%;
-    }
-  }
+  min-width: 160px;
+  white-space: nowrap;
+  flex: 0 1 auto;
 }
 
 .static-button:hover {
@@ -505,7 +500,8 @@ img.llm-d-logo {
 }
 
 .install-button {
-  width: 100%;
+  min-width: 160px;
+  max-width: 280px;
 }
 
 /* ul li {
