@@ -7,22 +7,27 @@ const videos = [
   {
     id: 'lvzMLf6wXlY',
     title: 'Kubernetes Native Distributed Inferencing',
-    description: 'Introduction to llm-d at DevConf.US 2025 — learn the fundamentals of distributed LLM inference on Kubernetes.',
+    description: 'Introduction to llm-d at DevConf.US 2025 — learn the fundamentals of distributed LLM inference on Kubernetes from Rob Shaw (Red Hat).',
   },
   {
     id: 'mfXIe_S53vA',
     title: 'Serving PyTorch LLMs at Scale',
-    description: 'Disaggregated inference with Kubernetes and llm-d — presented by M. Ayoub & C. Liu at PyTorch Conference.',
+    description: 'Disaggregated inference with Kubernetes and llm-d — presented by Maroon Ayoub (IBM) & Cong Liu (Google) at PyTorch Conference.',
   },
   {
     id: '_xAXb70d4-0',
     title: 'Distributed Inference with Well-Lit Paths',
-    description: 'Explore llm-d\'s "well-lit paths" approach to simplified, production-ready distributed inference.',
+    description: 'Watch Rob Shaw (Red Hat) explore llm-d\'s "well-lit paths" and its approach to simplified, production-ready distributed inference.',
   },
   {
     id: 'g8_snJA_ESU',
     title: 'Multi-Accelerator LLM Inference',
-    description: 'Deep dive into multi-accelerator LLM inference on Kubernetes — presented by Erwan Gallen at KubeCon.',
+    description: 'Deep dive into multi-accelerator LLM inference on Kubernetes — presented by Erwan Gallen (Red Hat) at KubeCon.',
+  },
+  {
+    id: '-C76naL3PRc',
+    title: 'Routing Stateful AI Workloads in Kubernetes',
+    description: 'Maroon Ayoub (IBM) & Michey Mehta (Red Hat) explore cache-aware routing strategies for LLM workloads using llm-d and the K8s Gateway API Inference Extension.',
   },
 ];
 
