@@ -82,14 +82,32 @@
 
 /* Video Grid */
 .videoGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 2.5rem;
 }
 
+/* Video Card */
+.videoCard {
+  flex: 0 1 calc(50% - 1.25rem);
+  max-width: calc(50% - 1.25rem);
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 
+    0 4px 6px rgba(127, 49, 127, 0.06),
+    0 12px 24px rgba(127, 49, 127, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
 @media screen and (max-width: 900px) {
+  .videoCard {
+    flex: 0 1 100%;
+    max-width: 100%;
+  }
+  
   .videoGrid {
-    grid-template-columns: 1fr;
     gap: 2rem;
   }
   
@@ -100,17 +118,6 @@
   .heroSubtitle {
     font-size: 1.1rem;
   }
-}
-
-/* Video Card */
-.videoCard {
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 
-    0 4px 6px rgba(127, 49, 127, 0.06),
-    0 12px 24px rgba(127, 49, 127, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .videoCard:hover {
