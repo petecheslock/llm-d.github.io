@@ -167,6 +167,7 @@ const config = {
             label: "Community",
           },
           { to: "/blog", label: "Blog", position: "left" },
+          { to: "/videos", label: "Videos", position: "left" },
           {
             type: 'html',
             position: 'right',
