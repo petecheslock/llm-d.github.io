@@ -11,6 +11,7 @@ docs/architecture/architecture.mdx
 
 # Component documentation (from all component repos in component-configs.js)  
 docs/architecture/Components/
+docs/architecture/latest-release.md
 
 # Community content (from llm-d/llm-d main repo)
 docs/community/contribute.md
