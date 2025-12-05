@@ -193,6 +193,10 @@ const config = {
                 to: "docs/architecture",
               },
               {
+                label: "Latest Release",
+                to: "docs/architecture/latest-release",
+              },
+              {
                 label: "Inference Scheduler",
                 to: "docs/architecture/Components/inference-scheduler",
               },
