@@ -31,7 +31,9 @@ const INTERNAL_GUIDE_MAPPINGS = {
   'guides/pd-disaggregation/README.md': '/docs/guide/Installation/pd-disaggregation',
   'guides/precise-prefix-cache-aware/README.md': '/docs/guide/Installation/precise-prefix-cache-aware',
   'guides/simulated-accelerators/README.md': '/docs/guide/Installation/simulated-accelerators',
-  'guides/wide-ep-lws/README.md': '/docs/guide/Installation/wide-ep-lws'
+  'guides/wide-ep-lws/README.md': '/docs/guide/Installation/wide-ep-lws',
+  'guides/tiered-prefix-cache/README.md': '/docs/guide/Installation/tiered-prefix-cache',
+  'guides/tiered-prefix-cache/cpu/README.md': '/docs/guide/Installation/tiered-prefix-cache/cpu'
 };
 
 /**
