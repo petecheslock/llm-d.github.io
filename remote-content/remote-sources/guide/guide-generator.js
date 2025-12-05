@@ -4,27 +4,22 @@
  * Automatically discovers and generates guide pages from the llm-d repository's guides directory.
  * This replaces the individual guide files and consolidates all guide content management.
  * 
- * Guides are synced from the specific release version defined in components-data.yaml,
- * not from the main branch. This ensures documentation matches the released version.
+ * Guides are synced from the main branch to always show the latest development content.
  */
 
 import { createContentWithSource } from '../utils.js';
-import { findRepoConfig, RELEASE_INFO } from '../component-configs.js';
+import { findRepoConfig, generateRepoUrls } from '../component-configs.js';
 import { getRepoTransform } from '../repo-transforms.js';
 
 // Get repository configuration for the main llm-d repo
 const repoConfig = findRepoConfig('llm-d');
+const { repoUrl, sourceBaseUrl, ref } = generateRepoUrls(repoConfig);
 
-// Use the release version from YAML instead of the branch
-const releaseVersion = RELEASE_INFO.version;
-const repoUrl = `https://github.com/${repoConfig.org}/${repoConfig.name}`;
-const sourceBaseUrl = `https://raw.githubusercontent.com/${repoConfig.org}/${repoConfig.name}/${releaseVersion}/`;
-
-// Create a custom transform that uses the release version instead of 'main'
+// Create a content transform using main branch
 const transform = getRepoTransform(repoConfig.org, repoConfig.name);
 const contentTransform = (content, sourcePath) => transform(content, { 
   repoUrl, 
-  branch: releaseVersion,  // Use release version, not 'main'
+  branch: ref,  // Always 'main'
   org: repoConfig.org, 
   name: repoConfig.name, 
   sourcePath 
@@ -141,7 +136,7 @@ function createGuidePlugins() {
               filename: config.sourceFile,
               newFilename: config.outputFile,
               repoUrl,
-              branch: releaseVersion,
+              branch: ref,  // Always 'main'
               content,
               contentTransform: config.customTransform || contentTransform
             });
@@ -177,7 +172,7 @@ function createGuidePlugins() {
               filename: sourceFile,
               newFilename: targetFilename,
               repoUrl,
-              branch: releaseVersion,
+              branch: ref,  // Always 'main'
               content,
               contentTransform
             });
