@@ -16,27 +16,14 @@ const config = {
   tagline: "Powered by Docusaurus",
   favicon: "img/llm-d-favicon.png",
 
-  // Set the production url of your site here
-  //url: "https://kproche.github.io/",
-  // url: "https://jessicachitas.github.io/",
   url: "https://llm-d.ai/",
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  //baseUrl: "/llm-d.github.io/",
   baseUrl: "/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
 
-  //IF YOU ARE DEPLOYING PREVIEW PAGES via GITHUB PAGES FOR THE MAIN REPO
-  // UNCOMMENT THE NEXT TWO LINES AND COMMENT OUT THE FORK SECTION BELOW
   organizationName: "llm-d", // Usually your GitHub org/user name.
-  //projectName: "webdocs", // Usually your repo name.
 
-  //IF YOU ARE DEPLOYING PREVIEW PAGES VIA GITHUB PAGES FOR A BRANCH OF A FORK IN YOUR ACCOUNT
-  //EDIT THESE LINES APPROPRIATELY
-  //organizationName: "jessicachitas", // Usually your GitHub org/user name.
-  //organizationName: "kproche", // Usually your GitHub org/user name.
   projectName: "llm-d.github.io", // Usually your repo name.
   deploymentBranch: "gh-pages",
 
@@ -59,10 +46,6 @@ const config = {
         docs: {
           sidebarPath: "./sidebars.js",
           sidebarCollapsible: false,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          //  editUrl:
-          //    "https://github.com/llm-d/llm-d-website.github.io/tree/main/",
         },
         blog: {
           showReadingTime: true,
