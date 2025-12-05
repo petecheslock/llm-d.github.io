@@ -68,16 +68,19 @@ export function findRepoConfig(repoName) {
 
 /**
  * Generate repository URLs from configuration
+ * Always syncs content from 'main' branch.
+ * Note: Version tags in YAML are used to render the Latest Release page, not for content syncing.
  * @param {Object} repoConfig - Repository configuration
- * @returns {Object} Object with repoUrl, sourceBaseUrl, and ref (version or branch)
+ * @returns {Object} Object with repoUrl, sourceBaseUrl, and ref (always 'main')
  */
 export function generateRepoUrls(repoConfig) {
-  const { org, name, branch, version } = repoConfig;
-  // Prefer version tag over branch for syncing from releases
-  const ref = version || branch;
+  const { org, name } = repoConfig;
+  // Always sync content from main branch
+  // Version tags in YAML are rendered on the Latest Release page to show release versions
+  const ref = 'main';
   return {
     repoUrl: `https://github.com/${org}/${name}`,
     sourceBaseUrl: `https://raw.githubusercontent.com/${org}/${name}/${ref}/`,
-    ref // Return the actual ref being used
+    ref // Always 'main' for content syncing
   };
 } 

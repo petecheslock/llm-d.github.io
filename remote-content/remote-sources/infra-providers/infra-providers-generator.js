@@ -4,27 +4,22 @@
  * Automatically discovers and generates infrastructure provider pages from the llm-d repository.
  * This syncs provider-specific documentation for deploying llm-d on different infrastructure.
  * 
- * Infra provider docs are synced from the specific release version defined in components-data.yaml,
- * not from the main branch. This ensures documentation matches the released version.
+ * Infra provider docs are synced from the main branch to always show the latest development content.
  */
 
 import { createContentWithSource } from '../utils.js';
-import { findRepoConfig, RELEASE_INFO } from '../component-configs.js';
+import { findRepoConfig, generateRepoUrls } from '../component-configs.js';
 import { getRepoTransform } from '../repo-transforms.js';
 
 // Get repository configuration for the main llm-d repo
 const repoConfig = findRepoConfig('llm-d');
+const { repoUrl, sourceBaseUrl, ref } = generateRepoUrls(repoConfig);
 
-// Use the release version from YAML instead of the branch
-const releaseVersion = RELEASE_INFO.version;
-const repoUrl = `https://github.com/${repoConfig.org}/${repoConfig.name}`;
-const sourceBaseUrl = `https://raw.githubusercontent.com/${repoConfig.org}/${repoConfig.name}/${releaseVersion}/`;
-
-// Create a custom transform that uses the release version instead of 'main'
+// Create a content transform using main branch
 const transform = getRepoTransform(repoConfig.org, repoConfig.name);
 const contentTransform = (content, sourcePath) => transform(content, { 
   repoUrl, 
-  branch: releaseVersion,  // Use release version, not 'main'
+  branch: ref,  // Always 'main'
   org: repoConfig.org, 
   name: repoConfig.name, 
   sourcePath 
@@ -86,7 +81,7 @@ function createInfraProviderPlugins() {
               filename: sourceFile,
               newFilename: `${provider.dirName}.md`,
               repoUrl,
-              branch: releaseVersion,
+              branch: ref,  // Always 'main'
               content,
               contentTransform
             });
