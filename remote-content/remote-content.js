@@ -46,7 +46,7 @@ const remoteContentPlugins = [
   
   // Architecture remote content sources (docs/architecture/)
   architectureMainSource,
-  ...componentSources,  // Spread all dynamically generated component sources
+  ...componentSources,  // Spread all dynamically generated component sources (includes Latest Release page)
   
   // Guide remote content sources (docs/guide/)
   ...guideSources,  // Spread all dynamically generated guide sources
@@ -60,4 +60,4 @@ const remoteContentPlugins = [
   // Add more remote sources here in the appropriate section above
 ];
 
-export default remoteContentPlugins; 
+export default remoteContentPlugins;

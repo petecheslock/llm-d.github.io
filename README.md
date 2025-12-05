@@ -13,11 +13,12 @@ This repository contains two types of documentation:
 1. **Local Documentation** - Written directly in this repository (blog posts, landing pages, etc.)
 2. **Remote Synced Content** - Automatically synced from other llm-d repositories during build
 
-Most technical documentation is automatically synced from source repositories to ensure accuracy and consistency:
-- **Architecture docs** (`/docs/architecture/`) - Synced from component repositories
+Most technical documentation is automatically synced from the `main` branch of source repositories to ensure accuracy and consistency:
+- **Architecture docs** (`/docs/architecture/`) - Synced from llm-d/llm-d repository
 - **User guides** (`/docs/guide/`) - Synced from the main llm-d repository
-- **Component docs** (`/docs/architecture/Components/`) - Auto-generated from individual component repos
+- **Component docs** (`/docs/architecture/Components/`) - Synced from individual component repos
 - **Community docs** (`/docs/community/`) - Synced from the main repository
+- **Latest Release page** (`/docs/architecture/latest-release.md`) - Generated from `components-data.yaml`
 
 Files with remote content show a "Content Source" banner at the bottom with links to edit the original source.
 
@@ -28,9 +29,10 @@ Files with remote content show a "Content Source" banner at the bottom with link
 The remote content system automatically downloads and syncs content from GitHub repositories during the build process:
 
 1. **Static Configuration** - `remote-content/remote-sources/components-data.yaml` contains:
-   - Release version information (which tag to sync from)
-   - List of all components with their descriptions and versions
+   - Release version information (displayed on the Latest Release page)
+   - List of all components with their descriptions and version tags
    - Repository locations and metadata
+   - **Note:** All content syncs from `main` branch; version tags are only used for display on the Latest Release page
 
 2. **Content Sources** - Individual files in `remote-content/remote-sources/` define:
    - Which repositories to sync from
@@ -93,40 +95,46 @@ git push                           # Triggers automatic deployment
 ```
 
 **What gets updated:**
-- Release version, date, and URLs shown on the Components page
-- Component descriptions and version tags
-- **Components** sync from their individual release tags
-- **Guides** sync from the llm-d/llm-d release tag
-- **Architecture docs** sync from the llm-d/llm-d release tag
-- **Community docs** always sync from `main` branch (latest)
+- Release version, date, and URLs shown on the **Latest Release** page
+- Component descriptions and version tags displayed in the component table
+- **Note:** All documentation content (architecture, guides, components, community) syncs from the `main` branch
+- The version tags in YAML are only used to render the Latest Release page showing what versions are in the release
 
-### Understanding Versioned vs. Always-Current Content
+### Content Syncing Strategy
 
-The remote content system supports two sync strategies:
+**All documentation syncs from the `main` branch** of source repositories. This ensures documentation always reflects the latest development state.
 
-**Versioned Content** (syncs from release tags):
-- **Guides** (`docs/guide/`) - Uses `RELEASE_INFO.version` from `components-data.yaml`
-- **Architecture** (`docs/architecture/`) - Uses `RELEASE_INFO.version` from `components-data.yaml`
-- **Components** (`docs/architecture/Components/`) - Each component uses its own `version` field from `components-data.yaml`
-- **Infrastructure Providers** (`docs/guide/InfraProviders/`) - Uses `RELEASE_INFO.version` from `components-data.yaml`
-
-These docs are pinned to specific release tags (e.g., `v0.3.1`) to ensure documentation matches the released code. When you update `release.version` in `components-data.yaml`, all versioned content automatically syncs from the new tag.
-
-**Always-Current Content** (syncs from `main` branch):
+**Content synced from `main`:**
+- **Architecture** (`docs/architecture/architecture.mdx`) - Main llm-d README
+- **Component docs** (`docs/architecture/Components/*.md`) - Individual component READMEs
+- **Guides** (`docs/guide/`) - Installation and usage guides
 - **Community docs** (`docs/community/`) - Contributing guidelines, Code of Conduct, Security Policy, SIGs
-- These are configured via `COMMON_REPO_CONFIGS['llm-d-main'].branch = 'main'` in `component-configs.js`
+- **Infrastructure Providers** (`docs/guide/InfraProviders/`)
+- **Usage docs** (`docs/usage/`)
 
-Community documentation stays current with the latest policies and processes, independent of releases. The `branch` field in `COMMON_REPO_CONFIGS` controls this behavior.
+**Generated from YAML (not synced):**
+- **Latest Release page** (`docs/architecture/latest-release.md`) - Generated from `components-data.yaml`
+  - Shows release version, date, and link to GitHub release
+  - Displays component version table with links to specific release tags
+  - This is the only place version tags from YAML are used
 
 **How it works:**
-- `generateRepoUrls()` in `component-configs.js` prefers `version` over `branch` when both exist
-- Versioned content sources call `findRepoConfig('llm-d')` and use `RELEASE_INFO.version`
-- Community sources call `findRepoConfig('llm-d')` and use `repoConfig.branch` (which is `'main'`)
-- This separation lets you cut releases without worrying about stale community policies
+- `generateRepoUrls()` in `component-configs.js` always returns `main` as the branch for content syncing
+- Version tags in `components-data.yaml` are used by `components-generator.js` to render the Latest Release page
+- The `sync-release.mjs` script updates YAML with release metadata from GitHub, but this doesn't affect which branch content syncs from
 
 ### Testing content from a feature branch
 
-To preview remote docs from a work-in-progress branch (for example `liu-cong-debug`), temporarily set `release.version` in `remote-content/remote-sources/components-data.yaml` to that branch name. Run `npm start` or `npm run build` to pull the branch content into the site. When testing is done, change `release.version` back to the released tag so production remains on the official docs.
+Since all content syncs from `main`, to test content from a different branch you need to temporarily modify the `generateRepoUrls()` function in `remote-content/remote-sources/component-configs.js`:
+
+```javascript
+// Change this line temporarily:
+const ref = 'main';
+// To your feature branch:
+const ref = 'your-feature-branch';
+```
+
+Run `npm start` or `npm run build` to pull the branch content. **Remember to change it back to `'main'` before committing.**
 
 ### Supporting remote guides from nested directories
 
@@ -158,13 +166,13 @@ components:
   # ... existing components
   - name: llm-d-your-component
     org: llm-d
-    branch: main
+    sidebarLabel: Your Component    # Display name in sidebar
     description: Description of your component
-    category: Core Infrastructure
     sidebarPosition: 8
+    version: v1.0.0                 # Version tag shown on Latest Release page
 ```
 
-The component will automatically appear under `/docs/architecture/Components/` on the next build.
+The component README will be synced from `main` branch and appear at `/docs/architecture/Components/your-component.md` on the next build. The version tag is only used for display on the Latest Release page.
 
 ### Adding New Content Sources
 
