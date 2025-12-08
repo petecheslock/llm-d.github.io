@@ -120,9 +120,9 @@ This is precisely what llm-d provides (pun intended). It creates a **global view
 
 ### **How It Works: A Global Cache View via KVEvents**
 
-The global cache view is built upon a continuous stream of [**`KVEvents`**](https://docs.vllm.ai/en/latest/api/vllm/config/kv_events.html) from each vLLM pod, which are processed efficiently by the open-source [**`llm-d-kv-cache-manager`**](https://github.com/llm-d/llm-d-kv-cache-manager) library.
+The global cache view is built upon a continuous stream of [**`KVEvents`**](https://docs.vllm.ai/en/latest/api/vllm/config/kv_events.html) from each vLLM pod, which are processed efficiently by the open-source [**`llm-d-kv-cache`**](https://github.com/llm-d/llm-d-kv-cache) library.
 
-The `KVEvents` provide a live feed of all physical cache changes across the cluster, firing every time a cache block is created or evicted. This stream is then ingested and organized by the llm-d-kv-cache-manager library's components:
+The `KVEvents` provide a live feed of all physical cache changes across the cluster, firing every time a cache block is created or evicted. This stream is then ingested and organized by the llm-d-kv-cache library's components:
 
 1. **`kvevents.Pool`**: This component consumes the high-throughput stream of events. As it digests them, it continuously updates a low-level **KV-Block Index**, which maintains a simple, real-time map of block-hashes to the pod and memory-medium (GPU/CPU) it resides on.  
 2. **`kvcache.Index`**: This is the higher-level index used by the scheduler. It uses the underlying KV-Block Index to map logical sequences of tokens (i.e., prefixes) to the pods that hold them. This provides the direct answer to the question, "what percentage of this request's prefix is on the accessible Pods?"
@@ -316,7 +316,7 @@ For this workload, in an ideal state, caching the shared prefixes for all active
 
 This benchmark, therefore, tests the scheduler's ability to efficiently manage the disaggregated KV-cache. In a real-world scenario, if the total cache demand were to exceed the cluster's capacity, an autoscaling system would be responsible for spinning up more replicas to maintain SLOs. Here, we focus on **maximizing the performance of the existing hardware** \- a task where cache-blind configurations create massive queues and high latency.
 
-The tools and specifics of the experiment are captured in this [llm-d-kv-cache-manager benchmarking report](https://github.com/llm-d/llm-d-kv-cache-manager/blob/main/benchmarking/73-capacity/README.md).
+The tools and specifics of the experiment are captured in this [llm-d-kv-cache benchmarking report](https://github.com/llm-d/llm-d-kv-cache/blob/main/benchmarking/73-capacity/README.md).
 
 ### **A.3: Indexing Scale Analysis**
 
