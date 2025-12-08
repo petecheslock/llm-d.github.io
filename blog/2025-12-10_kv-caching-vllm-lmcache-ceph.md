@@ -594,7 +594,7 @@ python3 ~/LMCache/benchmarks/long_doc_qa/long_doc_qa.py \
 
 ### Intel Gaudi3 Results
 
-![Gaudi3 TP1 Sweep](/img/blogs/kv-caching-ceph/gaudi3-tp1-sweep.png)
+<!-- ![Gaudi3 TP1 Sweep](/img/blogs/kv-caching-ceph/gaudi3-tp1-sweep.png) -->
 
 ![Gaudi3 TP Qwen](/img/blogs/kv-caching-ceph/gaudi3-tp-qwen.png)
 
