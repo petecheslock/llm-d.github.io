@@ -37,6 +37,7 @@ components:
     sidebarPosition: 5
     version: v1.3.4
   - name: llm-d-kv-cache-manager
+    # note: this is renamed to llm-d-kv-cache in > v0.4.0
     org: llm-d
     sidebarLabel: KV Cache Manager
     description: This repository contains the llm-d-kv-cache-manager, a pluggable service designed to enable KV-Cache Aware Routing and lay the foundation for advanced, cross-node cache coordination in vLLM-based serving platforms.
