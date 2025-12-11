@@ -553,6 +553,27 @@ img.llm-d-logo {
   --ifm-footer-background-color: #262626 !important;
 }
 
+/* ----------------------------- Announcement Bar ---------------------------- */
+
+/* Override Docusaurus fixed height on desktop */
+@media (min-width: 997px) {
+  :root {
+    --docusaurus-announcement-bar-height: auto !important;
+  }
+}
+
+/* Main announcement bar container - allow height to grow */
+.theme-announcement-bar {
+  height: auto !important;
+  min-height: 30px;
+  padding: 8px 16px;
+}
+
+/* Content styling - allow wrapping */
+[class*="announcementBarContent"] {
+  white-space: normal !important;
+}
+
 /* Improved YAML syntax highlighting site-wide */
 /* Fix YAML code blocks to avoid red/green diff-like appearance */
 
