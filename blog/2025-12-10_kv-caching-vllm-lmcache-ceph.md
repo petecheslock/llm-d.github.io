@@ -11,6 +11,12 @@ authors:
 tags: [blog, ceph, rgw, s3, kv-cache]
 ---
 
+import Head from '@docusaurus/Head';
+
+<Head>
+  <link rel="canonical" href="https://ceph.io/en/news/blog/2025/vllm-kv-caching/" />
+</Head>
+
 Inference accounts for [90% of the machine learning
 costs](https://www.sciencedirect.com/science/article/pii/S2210537923000124) for deployed AI
 systems, and it is no surprise that inference optimization is a burgeoning topic
@@ -622,4 +628,3 @@ scenarios like PD disaggregation and cache blending.
 Finally, we'd like to thank Supermicro for providing the environment for these
 testing efforts. If you have any questions about Data or AI workloads for Ceph,
 please [reach out](mailto:kbader@ibm.com).
-

@@ -113,6 +113,23 @@ display: none !important;
   transform: scale(1.05);
 }
 
+/* Tighten spacing for right-side navbar items */
+.navbar-github-stars,
+.navbar-slack-item {
+  padding: 0 !important;
+  margin: 0 2px !important;
+}
+
+/* Make GitHub stars iframe fit tightly */
+.navbar-github-stars {
+  display: flex !important;
+  align-items: center;
+}
+
+.navbar-github-stars iframe {
+  width: 150px !important;
+}
+
 /* Navbar Slack button */
 .navbar-slack-button {
   display: inline-flex;
@@ -127,7 +144,7 @@ display: none !important;
   font-size: 1rem;
   font-weight: var(--ifm-font-weight-semibold);
   vertical-align: middle;
-  margin-left: 8px;
+  margin-left: 0;
   transition: background-color 0.2s ease;
 }
 
@@ -139,6 +156,24 @@ display: none !important;
 
 [data-theme="dark"] .navbar-slack-button:hover {
   background-color: #3a3a3a;
+}
+
+/* Hide GitHub stars in top navbar below 1105px (they appear in hamburger menu instead) */
+@media screen and (max-width: 1105px) {
+  .navbar__inner .navbar-github-stars {
+    display: none !important;
+  }
+}
+
+/* Style GitHub stars in mobile sidebar */
+.navbar-sidebar .navbar-github-stars {
+  display: flex !important;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+}
+
+.navbar-sidebar .navbar-github-stars iframe {
+  width: 150px !important;
 }
 
 .header {
@@ -516,6 +551,27 @@ img.llm-d-logo {
 
 .footer--dark {
   --ifm-footer-background-color: #262626 !important;
+}
+
+/* ----------------------------- Announcement Bar ---------------------------- */
+
+/* Override Docusaurus fixed height on desktop */
+@media (min-width: 997px) {
+  :root {
+    --docusaurus-announcement-bar-height: auto !important;
+  }
+}
+
+/* Main announcement bar container - allow height to grow */
+.theme-announcement-bar {
+  height: auto !important;
+  min-height: 30px;
+  padding: 8px 16px;
+}
+
+/* Content styling - allow wrapping */
+[class*="announcementBarContent"] {
+  white-space: normal !important;
 }
 
 /* Improved YAML syntax highlighting site-wide */
