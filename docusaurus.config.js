@@ -281,7 +281,6 @@ const config = {
                   <div class="footer-socials-cta">
                     <a href="/slack" target="_self" rel="noreferrer noopener" aria-label="Join our Slack">
                       <span class="button-link">Join our Slack</span>
-                      <img src="/img/new-social/inviter-logo.png" alt="Slack Invite" />
                     </a>
                   </div>
                 </div>
