@@ -169,6 +169,7 @@ const config = {
       // Config for footer here
       footer: {
         style: "dark",
+        copyright: `<div style="position: relative;"><span style="position: absolute; right: 10px; bottom: -20px; opacity: 0.3; font-size: 0.8em;"><a href="https://youtu.be/88l9tjkTBwQ" target="_blank" style="color: inherit; text-decoration: none;">π</a></span></div>`,
         links: [
           {
             title: "Architecture",
