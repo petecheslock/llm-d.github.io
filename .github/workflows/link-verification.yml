@@ -34,8 +34,8 @@ jobs:
         
     - name: Download and setup link verifier
       run: |
-        curl -o requirements.txt https://raw.githubusercontent.com/jjasghar/link-verifier-llm-d.ai/9930050b977f00f78dbe8d361814f359115df492/requirements.txt
-        curl -o link_verifier.py https://raw.githubusercontent.com/jjasghar/link-verifier-llm-d.ai/9930050b977f00f78dbe8d361814f359115df492/link_verifier.py
+        curl -o requirements.txt https://raw.githubusercontent.com/jjasghar/link-verifier-llm-d.ai/4857ce75decc793151c78211973a65bf18a22d7a/requirements.txt
+        curl -o link_verifier.py https://raw.githubusercontent.com/jjasghar/link-verifier-llm-d.ai/4857ce75decc793151c78211973a65bf18a22d7a/link_verifier.py
         pip install -r requirements.txt
         
     - name: Start the application in background
