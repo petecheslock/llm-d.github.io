@@ -117,10 +117,17 @@ const DYNAMIC_GUIDES = [
     keywords: ['llm-d', 'expert parallelism', 'LeaderWorkerSet', 'wide EP', 'distributed inference']
   },
   {
+    dirName: 'asynchronous-processing',
+    title: 'Asynchronous Processing',
+    description: 'Leverage a message queue (such as Redis or GCP Pub/Sub) for async-processing to decouple request submission from execution, optimize spare capacity, and manage latency-tolerant workloads.',
+    sidebarPosition: 10,
+    keywords: ['llm-d', 'async processing', 'queue', 'background jobs', 'GCP Pub/Sub', 'Redis']
+  },
+  {
     dirName: 'simulated-accelerators',
     title: 'Accelerator Simulation',
     description: 'Test llm-d at scale without GPUs using the inference simulator to validate autoscaling, scheduling, and system behavior',
-    sidebarPosition: 10,
+    sidebarPosition: 11,
     keywords: ['llm-d', 'accelerator simulation', 'GPU simulation', 'testing', 'development']
   }
 ];
