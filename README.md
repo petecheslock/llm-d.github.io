@@ -24,6 +24,18 @@ Files with remote content show a "Content Source" banner at the bottom with link
 
 ## 🔄 Remote Content System
 
+### Quick Reference: Adding New Content
+
+There are **three different approaches** based on content type:
+
+| Content Type | Configuration File | Documentation |
+|--------------|-------------------|---------------|
+| **Components** | Edit `components-data.yaml` | Auto-generated from component repos |
+| **Guides** | Edit `guide-generator.js` | Configured in `DYNAMIC_GUIDES` array |
+| **Other Content** | Copy template + edit `remote-content.js` | Manual configuration |
+
+See the sections below and [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions.
+
 ### How It Works
 
 The remote content system automatically downloads and syncs content from GitHub repositories during the build process:
@@ -50,25 +62,39 @@ The remote content system automatically downloads and syncs content from GitHub 
 
 ```
 remote-content/
-├── remote-content.js                    # Main entry point
+├── remote-content.js                    # 📦 Main entry point (imports all sources)
 └── remote-sources/
-    ├── components-data.yaml            # 🎯 Release and component data (edit this!)
+    ├── components-data.yaml            # 🎯 EDIT THIS: Component/release data
     ├── sync-release.mjs                # Script to update YAML from GitHub
     ├── component-configs.js            # Utilities to load YAML data
     ├── utils.js                        # Content transformation helpers
     ├── repo-transforms.js              # Link/image fixing logic
-    ├── example-readme.js.template     # Template for adding new content
+    ├── example-readme.js.template     # Template for "Other Content"
+    │
     ├── architecture/                   # → docs/architecture/
-    │   ├── architecture-main.js
-    │   └── components-generator.js    # Auto-generates component pages
+    │   ├── architecture-main.js       # Main architecture doc
+    │   └── components-generator.js    # 🤖 AUTO: Generates from YAML
+    │
     ├── guide/                          # → docs/guide/
-    │   └── guide-generator.js         # Auto-generates guide pages
-    └── community/                      # → docs/community/
-        ├── code-of-conduct.js
-        ├── contribute.js
-        ├── security.js
-        └── sigs.js
+    │   └── guide-generator.js         # 🎯 EDIT THIS: Guide configs
+    │
+    ├── community/                      # → docs/community/
+    │   ├── code-of-conduct.js         # 📄 Template-based
+    │   ├── contribute.js              # 📄 Template-based
+    │   ├── security.js                # 📄 Template-based
+    │   └── sigs.js                    # 📄 Template-based
+    │
+    ├── usage/                          # → docs/usage/
+    │   └── usage-generator.js         # 🤖 AUTO: Generates from inline configs
+    │
+    └── infra-providers/                # → docs/guide/InfraProviders/
+        └── infra-providers-generator.js  # 🤖 AUTO: Generates from repos
 ```
+
+**Legend:**
+- 🎯 **EDIT THIS**: Files you typically edit to add new content
+- 🤖 **AUTO**: Generators that read from YAML or repo configs
+- 📄 **Template-based**: Individual files created from template
 
 ### Cutting a New Release
 
@@ -82,10 +108,12 @@ git diff components-data.yaml      # Review the changes
 ```
 
 This script:
-- Queries the [GitHub Releases API](https://github.com/llm-d/llm-d/releases/latest)
+- Queries the [GitHub Releases API](https://api.github.com/repos/llm-d/llm-d/releases/latest)
+- Parses the "LLM-D Component Summary" table from release notes
 - Updates release version, date, and URL in the YAML
-- Extracts component descriptions from release notes
-- Updates component versions in the YAML
+- Updates component version tags
+- Updates container image versions
+- Adds new/re-enabled images
 
 **Step 2: Commit and deploy**
 ```bash
@@ -96,13 +124,18 @@ git push                           # Triggers automatic deployment
 
 **What gets updated:**
 - Release version, date, and URLs shown on the **Latest Release** page
-- Component descriptions and version tags displayed in the component table
+- Component version tags displayed in the component table
+- Container image versions
 - **Note:** All documentation content (architecture, guides, components, community) syncs from the `main` branch
 - The version tags in YAML are only used to render the Latest Release page showing what versions are in the release
 
+**For detailed information** about the update process, troubleshooting, and manual updates, see the "Component Version Management" section below.
+
 ### Content Syncing Strategy
 
-**All documentation syncs from the `main` branch** of source repositories. This ensures documentation always reflects the latest development state.
+#### All Content Syncs from `main` Branch
+
+**Important:** All documentation syncs from the **`main` branch** of source repositories, not from release tags. This ensures documentation always reflects the latest development state.
 
 **Content synced from `main`:**
 - **Architecture** (`docs/architecture/architecture.mdx`) - Main llm-d README
@@ -116,88 +149,627 @@ git push                           # Triggers automatic deployment
 - **Latest Release page** (`docs/architecture/latest-release.md`) - Generated from `components-data.yaml`
   - Shows release version, date, and link to GitHub release
   - Displays component version table with links to specific release tags
-  - This is the only place version tags from YAML are used
+  - **This is the ONLY place version tags from YAML are used**
+
+#### Why This Matters
+
+**Version tags in YAML** (`v0.6.0`, `v0.7.1`, etc.) are **for display only** on the Latest Release page:
+- They show users which versions are in a release
+- They create links to specific release tags on GitHub
+- They do NOT affect which content gets synced
+
+**Content syncing** is controlled by `generateRepoUrls()` in `component-configs.js`:
+- Always returns `main` as the branch reference
+- The `sync-release.mjs` script updates version numbers in YAML but doesn't change sync behavior
+- To sync from a different branch, you must temporarily edit `component-configs.js` (see below)
+
+**Example:**
+```yaml
+# components-data.yaml
+components:
+  - name: llm-d-kv-cache
+    version: v0.6.0           # ← Displayed on Latest Release page ONLY
+                              #   Content syncs from main branch
+```
+
+### Component Version Management
+
+This section provides detailed information about how component versions are managed and updated on the website.
+
+#### How Component Versioning Works
+
+**Two separate systems:**
+
+1. **Display Versions** (in `components-data.yaml`):
+   - Shown on the Latest Release page
+   - Link to specific GitHub release tags
+   - Updated when new releases are published
+
+2. **Content Syncing** (always from `main`):
+   - README files synced from `main` branch
+   - Transformations applied during build
+   - Independent of version tags
+
+**Why this separation?**
+- Documentation on the website always reflects latest development
+- Latest Release page shows which versions were in each release
+- Users can see component docs while knowing which version is current
+
+#### The sync-release.mjs Script
+
+**Purpose:** Automates updating `components-data.yaml` when a new llm-d release is published.
+
+**What it does:**
+
+1. **Fetches release data from GitHub API**
+   ```bash
+   GET https://api.github.com/repos/llm-d/llm-d/releases/latest
+   ```
+
+2. **Parses the "LLM-D Component Summary" table** from release notes:
+   ```markdown
+   ## LLM-D Component Summary
+
+   | Component | Version | Previous Version | Type |
+   | --- | --- | --- | --- |
+   | llm-d/llm-d-inference-scheduler | `v0.7.1` | `v0.7.0` | Image |
+   | llm-d/llm-d-kv-cache | `v0.6.0` | `v0.5.0` | Image |
+   | llm-d/llm-d-new-component | `v0.1.0` | NA | Image (New) |
+   ```
+
+3. **Updates `components-data.yaml`:**
+   - Release metadata (version, date, URL)
+   - Component version tags
+   - Container image versions
+   - Adds new components marked as "(New)"
+   - Re-enables components marked as "(Re-enabled)"
+
+4. **Provides a summary:**
+   ```
+   Summary:
+   ============================================================
+   Release Version:          v0.6.0
+   Release Date:             April 3, 2026
+   Table entries parsed:     15
+   Components updated:       8
+   Container images updated: 12
+   New/re-enabled images:    2
+   ============================================================
+   ```
+
+**Usage:**
+
+```bash
+# Preview changes without writing
+node sync-release.mjs --dry-run
+
+# Apply changes
+node sync-release.mjs
+
+# With authentication (higher rate limits)
+GITHUB_TOKEN=ghp_xxxxx node sync-release.mjs
+```
+
+**Authentication:** The script supports `GITHUB_TOKEN` or `GH_TOKEN` environment variables for authenticated GitHub API requests (avoids rate limits).
+
+#### Component Matching Logic
+
+The script intelligently matches components from the release table to entries in the YAML:
+
+**Name variations handled:**
+- `llm-d-inference-scheduler` → matches YAML entry `llm-d-inference-scheduler`
+- `llm-d-workload-variant-autoscaler` → matches `workload-variant-autoscaler` (strips prefix)
+- `llm-d-modelservice` → applies special version tag format: `llm-d-modelservice-v0.4.9`
+- Variants: `llm-d-cuda (debug)` → `llm-d-cuda-debug`
+
+**What gets updated:**
+- Existing components: version updated in place
+- New images: appended to `containerImages` array
+- Re-enabled images: moved from `deprecatedImages` to `containerImages`
+
+#### Generated Latest Release Page
+
+The `components-generator.js` creates the Latest Release page from YAML data:
+
+**Generated content includes:**
+- Release version and date
+- Link to GitHub release notes
+- Component table with:
+  - Component name (linked to docs page)
+  - Description
+  - Repository link
+  - Version tag (linked to GitHub release)
+- Container images table with pull commands
+- Deprecation notices for removed images
+
+**Example output structure:**
+
+```markdown
+# llm-d v0.6.0
+
+**Released**: April 3, 2026
+
+**Full Release Notes**: [View on GitHub](...)
+
+## Components
+
+| Component | Description | Repository | Version |
+|-----------|-------------|------------|---------|
+| **[Inference Scheduler](./Components/inference-scheduler)** | The scheduler... | [llm-d/llm-d-inference-scheduler](...) | [v0.7.1](...) |
+
+## Container Images
+
+| Image | Description | Version | Pull Command |
+|-------|-------------|---------|--------------|
+| llm-d-cuda | CUDA runtime image | v0.6.0 | `ghcr.io/llm-d/llm-d-cuda:v0.6.0` |
+```
+
+#### Updating Component READMEs
+
+**Important:** Component READMEs are **NOT** updated by the sync script. They are synced during the build process.
 
 **How it works:**
-- `generateRepoUrls()` in `component-configs.js` always returns `main` as the branch for content syncing
-- Version tags in `components-data.yaml` are used by `components-generator.js` to render the Latest Release page
-- The `sync-release.mjs` script updates YAML with release metadata from GitHub, but this doesn't affect which branch content syncs from
+
+1. **During build** (`npm run build`):
+   - `components-generator.js` reads `components-data.yaml`
+   - For each component (without `skipSync: true`):
+     - Downloads README.md from `main` branch
+     - Applies transformations (links, images, etc.)
+     - Writes to `docs/architecture/Components/{name}.md`
+
+2. **Build happens:**
+   - On every push to `main` branch
+   - Nightly via cron schedule
+   - Manually via GitHub Actions
+
+3. **Component pages update automatically** with latest content from upstream repos
+
+**To manually update a single component's docs:**
+```bash
+# Force rebuild (re-downloads all READMEs)
+npm run build
+```
+
+#### Manual YAML Edits
+
+You can manually edit `components-data.yaml` if needed (e.g., adding a component not in the release table):
+
+```yaml
+components:
+  - name: llm-d-your-component
+    org: llm-d
+    sidebarLabel: Your Component
+    description: Description for the Latest Release page
+    sidebarPosition: 9
+    version: v1.0.0                    # Version tag for display
+    keywords:
+      - llm-d
+      - keywords
+      - for seo
+```
+
+**After manual edits:**
+1. Test locally: `npm run build`
+2. Review: `git diff components-data.yaml`
+3. Commit: `git commit -m "Add llm-d-your-component"`
+4. Deploy: `git push`
+
+#### Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| **Script can't find component table** | Verify release notes have "## LLM-D Component Summary" header with proper markdown table format |
+| **Component not updating** | Check name matching - script tries multiple variations but may need YAML name adjustment |
+| **Rate limit errors** | Set `GITHUB_TOKEN` environment variable for authenticated requests |
+| **Version not showing on Latest Release page** | Verify YAML was committed and pushed, then check build logs |
+| **Component README not updating** | READMEs sync from `main` branch during build, not from version tags. Check that README exists in upstream repo |
+| **New component not appearing** | Add entry to `components` array in YAML (script only updates existing entries from release table) |
+| **Dry run shows no changes** | Check release notes format - table must match expected structure exactly |
+
+#### Component skipSync Flag
+
+Some components should **NOT** have their READMEs synced (e.g., external repos):
+
+```yaml
+components:
+  - name: gateway-api-inference-extension
+    org: kubernetes-sigs
+    skipSync: true                     # Don't sync README
+    sidebarLabel: Gateway API Extension
+    description: Kubernetes Gateway API extension for inference
+    sidebarPosition: 8
+    version: v0.1.0
+```
+
+**Effect:**
+- Component appears on Latest Release page
+- No README synced to website
+- Component name links to GitHub instead of docs page
 
 ### Testing content from a feature branch
 
-Since all content syncs from `main`, to test content from a different branch you need to temporarily modify the `generateRepoUrls()` function in `remote-content/remote-sources/component-configs.js`:
+Since all content syncs from `main`, testing changes from a feature branch requires temporarily modifying the sync configuration.
+
+**⚠️ Warning:** This approach modifies code and is easy to accidentally commit. Only use when necessary.
+
+**Option 1: Temporarily Change Branch Reference (Quick Testing)**
+
+Modify `generateRepoUrls()` in `remote-content/remote-sources/component-configs.js`:
 
 ```javascript
-// Change this line temporarily:
-const ref = 'main';
-// To your feature branch:
-const ref = 'your-feature-branch';
-```
+export function generateRepoUrls(repoConfig) {
+  const { org, name } = repoConfig;
+  // Change this line temporarily:
+  const ref = 'main';
+  // To your feature branch:
+  // const ref = 'your-feature-branch';
 
-Run `npm start` or `npm run build` to pull the branch content. **Remember to change it back to `'main'` before committing.**
-
-### Supporting remote guides from nested directories
-
-Dynamic guides are configured in `remote-content/remote-sources/guide/guide-generator.js`. Each entry in `DYNAMIC_GUIDES` points at a `README.md` inside `guides/<dirName>/` in the main repo. By default, the generator mirrors the directory structure when it creates docs: `dirName: 'some-folder/sub-guide'` produces `some-folder/sub-guide.md` under `docs/guide/Installation`, and the sidebar groups pages under a folder.
-
-If you want to surface a nested source as a top-level page, add an optional `targetFilename` to the guide definition. Example:
-
-```javascript
-{
-  dirName: 'prefix-cache-storage/cpu',
-  title: 'Prefix Cache Storage - CPU',
-  description: '…',
-  sidebarPosition: 5,
-  targetFilename: 'prefix-cache-storage-cpu.md'
+  return {
+    repoUrl: `https://github.com/${org}/${name}`,
+    sourceBaseUrl: `https://raw.githubusercontent.com/${org}/${name}/${ref}/`,
+    ref
+  };
 }
 ```
 
-With `targetFilename`, the generator still reads `guides/prefix-cache-storage/cpu/README.md`, but it writes the output to `docs/guide/Installation/prefix-cache-storage-cpu.md`, letting the page appear alongside other top-level guides. Leave `targetFilename` out to keep the default nested behavior.
+Then run:
+```bash
+npm start  # or npm run build
+```
+
+**⚠️ CRITICAL:** Remember to change it back to `'main'` before committing! Consider adding a reminder:
+```bash
+# Add a reminder to git status
+git commit --allow-empty -m "WIP: Testing feature branch - REVERT component-configs.js before merging"
+```
+
+**Option 2: Fork and Point to Your Fork (For Longer Testing)**
+
+If you need to test changes over multiple sessions:
+
+1. Fork the source repository
+2. Create your feature branch in your fork
+3. Temporarily modify the repo config to point to your fork:
+   ```javascript
+   // In components-data.yaml or generator file
+   org: 'your-github-username'  // Instead of 'llm-d'
+   // Keep branch as 'main' or your feature branch name
+   ```
+4. Test your changes
+5. Revert the config changes before committing
+
+**Option 3: Local Testing (Recommended for Major Changes)**
+
+For substantial changes, consider:
+1. Make changes directly to remote-synced files in the `docs/` folder locally
+2. Test the rendered output with `npm start`
+3. Once satisfied, implement the changes in the actual source repository
+4. The next build will sync the changes from the source repo
+
+**Note:** Remote-synced content under `docs/` (listed in `.gitignore`) is generated during build and not committed. However, some files like `_category_.json` are source-controlled.
+
+### Adding and Configuring Guides
+
+**Important:** Guides are NOT added via templates. They are configured in the generator file.
+
+#### How Guides Work
+
+Guides are dynamically configured in `remote-content/remote-sources/guide/guide-generator.js`. The generator reads from the `llm-d/llm-d` repository's `guides/` directory (always from `main` branch) and creates documentation pages.
+
+#### Default Behavior (Nested Structure)
+
+By default, `dirName` mirrors the source directory structure:
+
+```javascript
+{
+  dirName: 'workload-autoscaling',           // Source: guides/workload-autoscaling/README.md
+  title: 'Workload Autoscaling',
+  description: 'Guide description',
+  sidebarPosition: 11
+  // Output: docs/guide/Installation/workload-autoscaling.md
+}
+```
+
+For nested directories, the structure is preserved:
+
+```javascript
+{
+  dirName: 'tiered-prefix-cache/cpu',        // Source: guides/tiered-prefix-cache/cpu/README.md
+  title: 'CPU Cache Guide',
+  description: 'Guide description',
+  sidebarPosition: 5
+  // Output: docs/guide/Installation/tiered-prefix-cache/cpu.md (nested in sidebar)
+}
+```
+
+#### Flattening Nested Guides (targetFilename)
+
+To surface a nested source as a **top-level page**, use `targetFilename`:
+
+```javascript
+{
+  dirName: 'workload-autoscaling/wva',
+  sourceFile: 'guides/workload-autoscaling/README.wva.md',  // Explicit source file
+  title: 'Workload Variant Autoscaler (WVA)',
+  description: 'WVA-specific autoscaling guide',
+  sidebarPosition: 12,
+  targetFilename: 'wva.md'                    // Flatten to top-level
+  // Output: docs/guide/Installation/wva.md (appears alongside other top-level guides)
+}
+```
+
+**Key Points:**
+- **`dirName`**: Source directory path in the upstream repo (`guides/workload-autoscaling/wva/`)
+- **`sourceFile`**: (Optional) Explicit source file, defaults to `guides/<dirName>/README.md`
+- **`targetFilename`**: (Optional) Output filename to flatten nested content to top-level
+- **Without `targetFilename`**: Output preserves directory structure (`workload-autoscaling/wva.md`)
+- **With `targetFilename`**: Output is flattened (`wva.md`)
+
+#### Real-World Example
+
+The current configuration shows this pattern:
+
+```javascript
+const DYNAMIC_GUIDES = [
+  // Top-level guide (default behavior)
+  {
+    dirName: 'quickstart',                    // guides/quickstart/README.md
+    title: 'QuickStart',
+    sidebarPosition: 2
+    // Output: docs/guide/Installation/quickstart.md
+  },
+
+  // Nested guide with index
+  {
+    dirName: 'workload-autoscaling',
+    title: 'Workload Autoscaling',
+    sidebarPosition: 11,
+    targetFilename: 'workload-autoscaling/index.md'
+    // Output: docs/guide/Installation/workload-autoscaling/index.md
+  },
+
+  // Nested guide with custom filename
+  {
+    dirName: 'workload-autoscaling/wva',
+    sourceFile: 'guides/workload-autoscaling/README.wva.md',
+    title: 'Workload Variant Autoscaler (WVA)',
+    sidebarPosition: 12,
+    targetFilename: 'workload-autoscaling/wva.md'  // Custom nested path
+    // Output: docs/guide/Installation/workload-autoscaling/wva.md
+  }
+];
+```
+
+This allows you to:
+1. Organize guides hierarchically in the source repo
+2. Present them in any structure on the website
+3. Keep related content together in source while separating it in docs
 
 **Manual updates:** You can also manually edit `components-data.yaml` if needed.
 
-### Adding New Components
+### Adding New Architecture Documentation
 
-To add a new component to the documentation:
+The architecture section (`/docs/architecture/`) contains:
+- Main architecture overview (from llm-d/llm-d README)
+- Latest Release page (generated from YAML)
+- Component pages (auto-generated from YAML)
+- Additional architecture docs (template-based)
 
-**Edit `remote-content/remote-sources/components-data.yaml`:**
+#### Adding Component Documentation (Auto-generated - Easiest)
+
+Components are the easiest to add - just edit the YAML file:
+
+**1. Edit `remote-content/remote-sources/components-data.yaml`:**
 ```yaml
 components:
   # ... existing components
   - name: llm-d-your-component
-    org: llm-d
-    sidebarLabel: Your Component    # Display name in sidebar
+    org: llm-d                       # GitHub organization (llm-d, llm-d-incubation, etc.)
+    sidebarLabel: Your Component     # Display name in sidebar
     description: Description of your component
-    sidebarPosition: 8
-    version: v1.0.0                 # Version tag shown on Latest Release page
+    sidebarPosition: 8               # Order in sidebar (lower = higher)
+    version: v1.0.0                  # Version tag shown on Latest Release page
+    keywords:                        # SEO keywords (added to HTML meta tags)
+      - llm-d
+      - your component
+      - keywords
 ```
 
-The component README will be synced from `main` branch and appear at `/docs/architecture/Components/your-component.md` on the next build. The version tag is only used for display on the Latest Release page.
+**Field explanations:**
+- `name`: Repository name (used to construct GitHub URL)
+- `org`: GitHub organization (can be `llm-d`, `llm-d-incubation`, or any org)
+- `sidebarLabel`: Display name in sidebar and on Latest Release page
+- `description`: Used in component table and meta description tag
+- `sidebarPosition`: Lower numbers appear first in sidebar
+- `version`: Display-only version tag for Latest Release page
+- `keywords`: Array of SEO keywords → rendered as `<meta name="keywords">` tags
 
-### Adding New Content Sources
+**2. Test:**
+```bash
+npm start
+```
 
-To add other remote content (non-component):
+**What happens:**
+- The component's README.md is automatically synced from `https://raw.githubusercontent.com/{org}/{name}/main/README.md`
+- Appears at `/docs/architecture/Components/your-component.md`
+- Added to the component navigation
+- Listed on the Latest Release page
+- Version tag is displayed on the Latest Release page (content always syncs from `main`)
+- Keywords added to HTML `<meta name="keywords">` tags for SEO
+
+**No additional configuration needed!** The `components-generator.js` automatically creates the plugin configuration from the YAML data.
+
+**Example repos currently synced:**
+- `llm-d/llm-d-inference-scheduler` (llm-d org)
+- `llm-d-incubation/llm-d-modelservice` (llm-d-incubation org)
+- `llm-d-incubation/llm-d-infra` (llm-d-incubation org)
+
+**For external components** (not in llm-d org):
+```yaml
+components:
+  - name: gateway-api-inference-extension
+    org: kubernetes-sigs             # External organization
+    skipSync: true                   # Don't sync README (stays on GitHub)
+    sidebarLabel: Gateway API Extension
+    description: Kubernetes Gateway API extension for inference
+    sidebarPosition: 8
+    version: v0.1.0
+```
+
+With `skipSync: true`, the component appears on Latest Release page but doesn't create a docs page (links to GitHub instead).
+
+#### Adding Other Architecture Documentation (Template-based)
+
+For architecture documentation that isn't a component README (e.g., design docs, patterns, overviews):
+
+**1. Copy the template:**
+```bash
+cp remote-content/remote-sources/example-readme.js.template \
+   remote-content/remote-sources/architecture/your-doc.js
+```
+
+**2. Edit the configuration:**
+```javascript
+import { createContentWithSource } from '../utils.js';
+import { findRepoConfig, generateRepoUrls } from '../component-configs.js';
+import { getRepoTransform } from '../repo-transforms.js';
+
+// Option 1: Use an existing repo config
+const repoConfig = findRepoConfig('llm-d');  // or your repo name
+const { repoUrl, sourceBaseUrl, ref } = generateRepoUrls(repoConfig);
+const transform = getRepoTransform(repoConfig.org, repoConfig.name);
+const contentTransform = (content, sourcePath) => transform(content, {
+  repoUrl,
+  branch: ref,
+  org: repoConfig.org,
+  name: repoConfig.name,
+  sourcePath
+});
+
+export default [
+  'docusaurus-plugin-remote-content',
+  {
+    name: 'architecture-your-doc',
+    sourceBaseUrl,
+    outDir: 'docs/architecture',
+    documents: ['path/to/your-doc.md'],  // Path in the repo
+
+    noRuntimeDownloads: false,
+    performCleanup: true,
+
+    modifyContent(filename, content) {
+      if (filename === 'path/to/your-doc.md') {
+        return createContentWithSource({
+          title: 'Your Architecture Doc Title',
+          description: 'Description for SEO',
+          sidebarLabel: 'Your Doc',
+          sidebarPosition: 5,           // Position in architecture sidebar
+          filename: 'path/to/your-doc.md',
+          newFilename: 'your-doc.md',   // Output filename
+          repoUrl,
+          branch: ref,
+          content,
+          contentTransform,
+          keywords: ['llm-d', 'architecture', 'your-keywords']
+        });
+      }
+      return undefined;
+    },
+  },
+];
+```
+
+**3. Import in `remote-content/remote-content.js`:**
+```javascript
+import yourDoc from './remote-sources/architecture/your-doc.js';
+
+const remoteContentPlugins = [
+  // ... existing sources
+  yourDoc,  // Add your architecture doc
+];
+```
+
+**4. Test:**
+```bash
+npm start
+```
+
+**Example use cases:**
+- Design documents from the main repo
+- Architecture decision records (ADRs)
+- Integration guides
+- System overviews from related repositories
+
+### Adding New Guides (Generator-based)
+
+**Important:** Guides use a generator, NOT the template approach.
+
+**1. Edit `remote-content/remote-sources/guide/guide-generator.js`:**
+
+Add an entry to the `DYNAMIC_GUIDES` array:
+
+```javascript
+const DYNAMIC_GUIDES = [
+  // ... existing guides
+  {
+    dirName: 'your-guide-folder',           // Source: guides/your-guide-folder/README.md
+    title: 'Your Guide Title',
+    description: 'Brief description for SEO and preview',
+    sidebarPosition: 15,
+    keywords: ['llm-d', 'your', 'guide', 'keywords']
+    // Output: docs/guide/Installation/your-guide-folder.md
+  }
+];
+```
+
+**2. For nested guides with custom paths:**
+
+```javascript
+{
+  dirName: 'parent/nested-guide',
+  sourceFile: 'guides/parent/nested-guide/README.md',  // Explicit source
+  title: 'Nested Guide',
+  description: 'Guide description',
+  sidebarPosition: 16,
+  targetFilename: 'parent/nested-guide.md',  // Custom path (can be nested or flat)
+  keywords: ['llm-d', 'nested']
+  // Output: docs/guide/Installation/parent/nested-guide.md
+  // Note: To flatten to top-level, use targetFilename: 'nested-guide.md'
+}
+```
+
+**3. Test:**
+```bash
+npm start
+```
+
+See "Adding and Configuring Guides" section above for detailed examples of `targetFilename` usage.
+
+### Adding Other Content (Template-based)
+
+For content that doesn't fit the component or guide pattern (e.g., community docs, standalone architecture pages):
 
 1. **Copy the template:**
    ```bash
    cp remote-content/remote-sources/example-readme.js.template \
       remote-content/remote-sources/DIRECTORY/your-content.js
    ```
-   Choose directory: `architecture/`, `guide/`, or `community/`
+   Choose directory: `architecture/` or `community/`
 
 2. **Edit the configuration** - Update placeholders:
-   - Repository name
-   - Output directory
-   - Page title and description
-   - Sidebar position
+   - Repository name (or use manual config)
+   - Output directory and filename
+   - Page title, description, sidebar label/position
+   - Keywords for SEO
+   - Note: Use `../` imports since you're in a subdirectory
 
 3. **Import in `remote-content/remote-content.js`:**
    ```javascript
    import yourContent from './remote-sources/DIRECTORY/your-content.js';
-   
+
    const remoteContentPlugins = [
-     // ... existing sources
-     yourContent,
+     // ... existing sources (community, architecture, etc.)
+     yourContent,  // Add your new source
    ];
    ```
 
@@ -205,6 +777,8 @@ To add other remote content (non-component):
    ```bash
    npm start
    ```
+
+**Example:** See `remote-content/remote-sources/community/contribute.js` for a working example of this pattern.
 
 ### Making Changes to Synced Content
 
@@ -248,31 +822,63 @@ kubectl apply -k ./manifests/modelserver/coreweave -n ${NAMESPACE}
 **Result on Docusaurus:**
 The content will automatically be transformed with the proper Tabs imports and components, creating an interactive tabbed interface.
 
-### GitHub Callouts Support
+### Content Transformation Pipeline
 
-The transformation system also automatically converts GitHub-style callouts to Docusaurus admonitions:
+The build system automatically transforms GitHub-flavored markdown to work with Docusaurus (MDX). This happens during the build process and **does not modify your source files**.
 
-```markdown
-> [!NOTE]
-> This is a note
+**Transformations applied:**
 
-> [!TIP]
-> This is a tip
+1. **GitHub Callouts → Docusaurus Admonitions**
+   ```markdown
+   > [!NOTE]           →    :::note
+   > This is a note         This is a note
+                            :::
 
-> [!IMPORTANT]
-> This is important
+   > [!TIP]            →    :::tip
+   > [!IMPORTANT]      →    :::info
+   > [!WARNING]        →    :::warning
+   > [!CAUTION]        →    :::danger
+   ```
 
-> [!WARNING]
-> This is a warning
+2. **HTML Tab Markers → Docusaurus Tabs**
+   ```markdown
+   <!-- TABS:START -->              →    <Tabs>
+   <!-- TAB:GKE (H200):default -->        <TabItem value="gke-h200" label="GKE (H200)" default>
+   Content for GKE H200                    Content for GKE H200
+   <!-- TAB:CoreWeave -->                  </TabItem>
+   Content for CoreWeave                   <TabItem value="coreweave" label="CoreWeave">
+   <!-- TABS:END -->                       Content for CoreWeave
+                                           </TabItem>
+                                         </Tabs>
+   ```
 
-> [!CAUTION]
-> This is dangerous
+3. **Relative Links → GitHub URLs**
+   - Prevents broken links when content is moved to website
+   - Exception: Internal guide links mapped to website paths
+   ```markdown
+   [Guide](./guides/example.md)  →  [Guide](https://github.com/llm-d/llm-d/blob/main/guides/example.md)
+   ```
 
-> [!REQUIREMENTS]
-> These are requirements
-```
+4. **Relative Images → GitHub Raw URLs**
+   ```markdown
+   ![Diagram](./images/arch.png)  →  ![Diagram](https://github.com/llm-d/llm-d/raw/main/images/arch.png)
+   ```
 
-These will be automatically converted to the appropriate Docusaurus `:::note`, `:::tip`, `:::info`, `:::warning`, and `:::danger` admonitions during the build.
+5. **HTML/MDX Compatibility**
+   - Self-closing tags: `<br>` → `<br />`
+   - HTML comments → JSX comments (where needed)
+   - Escape curly braces in code blocks
+
+6. **Source Attribution Banner**
+   - Adds "Content Source" callout at bottom of page
+   - Links to original source file
+   - Provides edit and issue links
+
+**Technical Details:**
+- Implementation: `remote-content/remote-sources/repo-transforms.js`
+- Uses regex-based transformations (order-dependent)
+- Special handling for different link types and edge cases
+- For more details, see [GitHub Issue #220](https://github.com/llm-d/llm-d.github.io/issues/220)
 
 ### Troubleshooting
 

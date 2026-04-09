@@ -18,7 +18,7 @@ Thank you for your interest in contributing to the llm-d website! This repositor
 |--------------|----------|-------------|
 | **Synced Content** | Architecture docs, guides, component docs | Edit in source repo (follow banner link) |
 | **Local Content** | Blog posts, community pages, website config | Edit in this repository |
-| **Component Documentation** | Auto-generated from component repos | Add to `component-configs.js` |
+| **Component Documentation** | Auto-generated from component repos | Add to `components-data.yaml` |
 
 ### 🚀 Making Local Changes
 
@@ -52,30 +52,148 @@ For content **without** "Content Source" banners:
 
 ### 🔧 Adding Remote Content
 
-To sync new content from repositories:
+There are **three different approaches** for adding remote content, depending on the content type:
+
+| Content Type | How to Add | Configuration File |
+|--------------|-----------|-------------------|
+| **Components** | Edit YAML file | `components-data.yaml` |
+| **Guides** | Edit generator file | `guide-generator.js` |
+| **Other Content** | Copy template + import | `example-readme.js.template` → `remote-content.js` |
+
+**Quick Decision Tree:**
+- Adding a component README? → Edit `components-data.yaml`
+- Adding a guide from the main repo? → Edit `guide-generator.js`
+- Adding other documentation? → Copy template, edit, and import
+
+#### Option 1: Adding Component Documentation (Easiest - Auto-generated)
+
+Components are automatically generated from `components-data.yaml`:
+
+1. **Edit the YAML file:**
+   ```bash
+   # Edit remote-content/remote-sources/components-data.yaml
+   ```
+
+2. **Add your component entry:**
+   ```yaml
+   components:
+     # ... existing components
+     - name: llm-d-your-component
+       org: llm-d                       # GitHub organization
+       sidebarLabel: Your Component     # Display name in sidebar
+       description: Description of your component
+       sidebarPosition: 8
+       version: v1.0.0                  # Version tag for Latest Release page
+       keywords:
+         - llm-d
+         - keywords
+   ```
+
+3. **Test:** `npm start`
+
+**What happens:**
+- Component README.md from `main` branch → `/docs/architecture/Components/your-component.md`
+- Appears in sidebar under "Components"
+- Listed on Latest Release page
+
+**For external projects** (outside llm-d org):
+```yaml
+components:
+  - name: gateway-api-inference-extension
+    org: kubernetes-sigs               # External organization
+    skipSync: true                     # Don't sync README, link to GitHub instead
+    sidebarLabel: Gateway API Extension
+    description: Description
+    sidebarPosition: 8
+    version: v0.1.0
+```
+
+**For other architecture documentation** (design docs, patterns, ADRs):
+- Use Option 3 (template-based) and place in `remote-content/remote-sources/architecture/`
+- See README.md ["Adding Other Architecture Documentation"](README.md#adding-other-architecture-documentation-template-based) section
+
+#### Option 2: Adding New Guides (Generator-based)
+
+Guides are configured in the `guide-generator.js` file, **not via templates**:
+
+1. **Edit the generator file:**
+   ```bash
+   # Edit remote-content/remote-sources/guide/guide-generator.js
+   ```
+
+2. **Add your guide to the `DYNAMIC_GUIDES` array:**
+   ```javascript
+   const DYNAMIC_GUIDES = [
+     // ... existing guides
+     {
+       dirName: 'your-guide-folder',           // Directory in llm-d/llm-d/guides/
+       title: 'Your Guide Title',
+       description: 'Brief description for SEO',
+       sidebarPosition: 15,
+       keywords: ['llm-d', 'your', 'keywords']
+     }
+   ];
+   ```
+
+   This will sync `guides/your-guide-folder/README.md` → `docs/guide/Installation/your-guide-folder.md`
+
+3. **For nested guides with custom paths**, use `sourceFile` and `targetFilename`:
+   ```javascript
+   {
+     dirName: 'parent-folder/nested-guide',      // Source directory path
+     sourceFile: 'guides/parent-folder/nested-guide/README.md',  // Explicit source
+     title: 'Nested Guide Title',
+     description: 'Guide description',
+     sidebarPosition: 16,
+     targetFilename: 'parent-folder/nested-guide.md',  // Custom output path
+     keywords: ['llm-d', 'nested', 'guide']
+   }
+   ```
+
+   **Example:** `guides/workload-autoscaling/README.wva.md` → `docs/guide/Installation/workload-autoscaling/wva.md`
+
+4. **Test:** `npm start`
+
+**Note:** Guides always sync from the `main` branch of the `llm-d/llm-d` repository.
+
+#### Option 3: Other Content (Template-based)
+
+For content that doesn't fit the component or guide pattern (e.g., community docs, architecture overviews):
 
 1. **Choose the right directory** based on content type:
    - `architecture/` → `docs/architecture/`
-   - `guide/` → `docs/guide/`
    - `community/` → `docs/community/`
 
 2. **Copy the template:**
    ```bash
    # Choose appropriate directory
-   cp remote-content/remote-sources/example-readme.js.template remote-content/remote-sources/DIRECTORY/my-content.js
-   
-   # Examples:
-   cp remote-content/remote-sources/example-readme.js.template remote-content/remote-sources/guide/my-guide.js
-   cp remote-content/remote-sources/example-readme.js.template remote-content/remote-sources/architecture/my-arch-doc.js
+   cp remote-content/remote-sources/example-readme.js.template \
+      remote-content/remote-sources/DIRECTORY/my-content.js
+
+   # Example:
+   cp remote-content/remote-sources/example-readme.js.template \
+      remote-content/remote-sources/community/my-doc.js
    ```
 
-3. **Edit configuration** in the new file (note the `../` imports for utils)
+3. **Edit configuration** in the new file:
+   - Update repository name
+   - Set output directory and filename
+   - Configure title, description, sidebar position
+   - Note the `../` imports for utils (since you're in a subdirectory)
 
-4. **Add to system** in `remote-content/remote-content.js`
+4. **Import in `remote-content/remote-content.js`:**
+   ```javascript
+   import myContentSource from './remote-sources/DIRECTORY/my-content.js';
 
-5. **Test** with `npm start`
+   const remoteContentPlugins = [
+     // ... existing sources
+     myContentSource,  // Add your source
+   ];
+   ```
 
-See the "Remote Content System" section in the main [README.md](README.md) for detailed instructions.
+5. **Test:** `npm start`
+
+See the "Remote Content System" section in the main [README.md](README.md) for detailed technical information.
 
 ### ⚙️ Adding New Components
 
@@ -84,13 +202,23 @@ Components are auto-generated! Just add to `remote-content/remote-sources/compon
 ```yaml
 components:
   # ... existing components
-  - name: your-component-name
+  - name: llm-d-your-component
     org: llm-d
-    branch: main
+    sidebarLabel: Your Component
     description: Component description
-    category: Core Infrastructure
     sidebarPosition: 10
+    version: v1.0.0                    # For Latest Release page display
+    keywords:
+      - llm-d
+      - your keywords
 ```
+
+**Important Notes:**
+- The `version` field is for **display only** on the Latest Release page
+- Component README content is **always synced from the `main` branch**
+- Version tags do NOT affect which content gets synced
+
+For details on how component versioning works and how to update for new releases, see the [Component Version Management](README.md#component-version-management) section in README.md.
 
 ## 📋 General Guidelines
 
@@ -302,8 +430,96 @@ If you're converting content from Google Docs:
 5. **Add frontmatter** and `<!-- truncate -->` tag as described above
 6. **Review and test** locally before submitting
 
+## ❓ Frequently Asked Questions
+
+### Why are there different approaches for adding content?
+
+The website uses an optimized system based on content type:
+- **Components**: Auto-generated from YAML for consistency
+- **Guides**: Generator-based for flexible directory mapping
+- **Other content**: Template-based for maximum customization
+
+### Do keywords in the YAML actually do anything?
+
+**Yes!** Keywords are rendered as HTML meta keywords tags for SEO:
+```html
+<meta name="keywords" content="llm-d,inference scheduler,request routing">
+```
+
+This helps search engines understand page content and improve discoverability. While modern search engines don't rely heavily on keywords meta tags, they're still used by some search engines and can help with content categorization.
+
+### Can I add components from organizations outside llm-d?
+
+**Yes!** The YAML supports any GitHub organization via the `org` field:
+```yaml
+components:
+  - name: llm-d-modelservice
+    org: llm-d-incubation          # Different org
+```
+
+The system automatically constructs the URL:
+`https://raw.githubusercontent.com/llm-d-incubation/llm-d-modelservice/main/README.md`
+
+Currently synced orgs:
+- `llm-d` (main org)
+- `llm-d-incubation` (experimental components)
+- `kubernetes-sigs` (external, with `skipSync: true`)
+
+### What happens to my markdown when it's synced?
+
+The build system automatically transforms GitHub markdown to work with Docusaurus:
+- GitHub callouts (e.g., `> [!NOTE]`) → Docusaurus admonitions (`:::note`)
+- HTML tab markers (`<!-- TABS:START -->`) → Docusaurus Tabs components
+- Relative links → Absolute GitHub links (to prevent broken links)
+- Relative images → GitHub raw URLs
+- HTML tags → MDX-compatible format
+
+**Your source files remain unchanged** - transformations only apply to the synced copy.
+
+### Why does all content sync from `main` branch?
+
+This ensures the documentation always reflects the latest development state. Version tags in `components-data.yaml` are for display on the Latest Release page only and don't affect which content gets synced.
+
+### Can I preview my changes before they go live?
+
+Yes! When you open a pull request, Netlify automatically creates a preview deployment. The preview URL is posted as a comment on your PR.
+
+For synced content from other repositories, you'll need to test changes locally (see README.md "Testing content from a feature branch" section).
+
+### How do I update the website for a new release?
+
+When a new llm-d release is published:
+
+1. Run the sync script: `node remote-content/remote-sources/sync-release.mjs`
+2. Review changes: `git diff remote-content/remote-sources/components-data.yaml`
+3. Commit and push: `git add remote-content/remote-sources/components-data.yaml && git commit -m "Update to llm-d vX.Y.Z"`
+
+The script automatically updates:
+- Release version and date
+- Component version tags (for Latest Release page display)
+- Container image versions
+
+**Note:** This only updates version numbers for display. Component READMEs always sync from the `main` branch during the build process.
+
+For detailed information, see [Component Version Management](README.md#component-version-management) in README.md.
+
+### What's the difference between version tags and synced content?
+
+**Version tags** (in `components-data.yaml`):
+- Displayed on the Latest Release page
+- Show which versions were included in a release
+- Updated by the `sync-release.mjs` script
+
+**Synced content** (READMEs, guides, docs):
+- Always pulled from the `main` branch
+- Updated during each build
+- Independent of version tags
+
+**Example:** A component with `version: v0.6.0` in YAML will show "v0.6.0" on the Latest Release page, but its README content comes from the `main` branch, not from the `v0.6.0` release tag.
+
 ## 🆘 Need Help?
 
 - **General questions**: <a href="/slack" target="_self">Join the llm-d Slack</a>
 - **Website issues**: [Create an issue](https://github.com/llm-d/llm-d.github.io/issues)
-- **Content questions**: Check if content is synced, then edit in appropriate repository 
+- **Content questions**: Check if content is synced, then edit in appropriate repository
+- **Technical details**: See [README.md](README.md) for architecture and transformation details
