@@ -84,7 +84,7 @@ cp "$WIP/architecture/core/epp/request-handling.md"  "$DOCS_DIR/architecture/cor
 cp "$WIP/architecture/core/epp/configuration.md"     "$DOCS_DIR/architecture/core/epp/configuration.md"
 
 # Architecture / Advanced
-cp "$WIP/architecture/advanced/disaggregation.md"   "$DOCS_DIR/architecture/advanced/disaggregation.md"
+cp "$WIP/architecture/advanced/disaggregation/README.md"   "$DOCS_DIR/architecture/advanced/disaggregation.md"
 cp "$WIP/architecture/advanced/kv-indexer.md"       "$DOCS_DIR/architecture/advanced/kv-indexer.md"
 cp "$WIP/architecture/advanced/kv-offloader.md"     "$DOCS_DIR/architecture/advanced/kv-offloading.md"
 cp "$WIP/architecture/advanced/latency-predictor.md" "$DOCS_DIR/architecture/advanced/latency-predictor.md"
