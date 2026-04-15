@@ -29,15 +29,6 @@ const contentTransform = (content, sourcePath) => transform(content, {
  * Configuration for special guide mappings
  */
 const SPECIAL_GUIDES = {
-  'prerequisites': {
-    sourceFile: 'guides/prereq/infrastructure/README.md',
-    title: 'Prerequisites',
-    description: 'Infrastructure and cluster requirements for llm-d: Kubernetes 1.29+, datacenter accelerators, fast networking, and vLLM configuration',
-    sidebarLabel: 'Prerequisites',
-    sidebarPosition: 1,
-    outputFile: 'prerequisites.md',
-    keywords: ['llm-d', 'prerequisites', 'installation', 'setup', 'requirements']
-  },
   'guide': {
     sourceFile: 'guides/README.md',
     title: 'Guides',
@@ -155,7 +146,7 @@ const DYNAMIC_GUIDES = [
 function createGuidePlugins() {
   const plugins = [];
   
-  // Add special guides (prerequisites and main guide)
+  // Add special guides (main guide)
   Object.entries(SPECIAL_GUIDES).forEach(([name, config]) => {
     plugins.push([
       'docusaurus-plugin-remote-content',
