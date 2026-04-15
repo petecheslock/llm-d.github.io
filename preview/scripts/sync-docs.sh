@@ -113,14 +113,20 @@ echo "    Copying image assets..."
 mkdir -p "$STATIC_DIR"
 cp "$ASSETS/basic-architecture.svg"   "$STATIC_DIR/" 2>/dev/null || true
 cp "$ASSETS/epp-design.svg"           "$STATIC_DIR/" 2>/dev/null || true
+cp "$ASSETS/standalone-design.svg"    "$STATIC_DIR/" 2>/dev/null || true
+cp "$ASSETS/gateway-design.svg"       "$STATIC_DIR/" 2>/dev/null || true
 cp "$WIP/guides/rdma/networking-stack.svg" "$STATIC_DIR/" 2>/dev/null || true
+cp "$WIP/architecture/core/images/flow_control_dashboard.png" "$STATIC_DIR/" 2>/dev/null || true
 
 # === Fix image paths for Docusaurus ===
 echo "    Fixing image references..."
 find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
     sed_inplace \
         -e 's|../../assets/basic-architecture.svg|/img/docs/basic-architecture.svg|g' \
+        -e 's|../../../assets/standalone-design.svg|/img/docs/standalone-design.svg|g' \
+        -e 's|../../../assets/gateway-design.svg|/img/docs/gateway-design.svg|g' \
         -e 's|../../../../assets/epp-design.svg|/img/docs/epp-design.svg|g' \
+        -e 's|../images/flow_control_dashboard.png|/img/docs/flow_control_dashboard.png|g' \
         -e 's|networking-stack.svg|/img/docs/networking-stack.svg|g' \
         "$file"
 done
