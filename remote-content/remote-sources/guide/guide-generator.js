@@ -38,15 +38,6 @@ const SPECIAL_GUIDES = {
     outputFile: 'prerequisites.md',
     keywords: ['llm-d', 'prerequisites', 'installation', 'setup', 'requirements']
   },
-  'quickstart': {
-    sourceFile: 'guides/QUICKSTART.md',
-    title: 'QuickStart',
-    description: 'Step-by-step guide to install and deploy llm-d on Kubernetes with vLLM, configure gateways, and validate your deployment',
-    sidebarLabel: 'QuickStart',
-    sidebarPosition: 2,
-    outputFile: 'quickstart.md',
-    keywords: ['llm-d', 'quickstart', 'getting started', 'tutorial', 'installation']
-  },
   'guide': {
     sourceFile: 'guides/README.md',
     title: 'Guides',

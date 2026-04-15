@@ -3,7 +3,6 @@ import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 
 import Welcome from '@site/src/components/Welcome'
-import Install from '@site/src/components/Install'
 import VideoEmbed from '@site/src/components/VideoEmbed'
 
 export default function Home() {
@@ -41,7 +40,6 @@ export default function Home() {
         </div>
         
         {/* <About /> */}
-        <Install />
         {/* <Demo /> */}
       </main>
       </Layout>

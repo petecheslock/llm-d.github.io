@@ -9,9 +9,8 @@ export default function Install() {
       <div className="install viewport" id="install">
         <div className="install-info">
           <div className="install-header">
-            <h1 className="install-h1">Try the Quickstart Demo </h1>
+            <h2 className="install-h1">Explore the Installation Guides</h2>
           </div>
-          <h2 className="install-h2">It's as easy as 1...2...llm-d!</h2>
 
           {/* ----------- Modular Section (copy and paste as many as needed) ---------- */}
           <h3 className="install-h3">
@@ -34,8 +33,8 @@ export default function Install() {
               alt="2. "
               src={require('/docs/assets/counting-02.png').default}
               ></img>
-            <a className="link" href="docs/guide/Installation/quickstart">
-              Run the Quickstart
+            <a className="link" href="docs/guide/Installation">
+              Browse Installation Guides
             </a>
           </h3>
           <h3 className="install-h3">
@@ -46,11 +45,8 @@ export default function Install() {
               alt="3. "
               src={require('/docs/assets/counting-03.png').default}
               ></img>
-              <a className="link" href="docs/guide#our-well-lit-paths">Explore llm-d!</a></h3>
+              <a className="link" href="docs/guide">Explore llm-d!</a></h3>
           {/* -------------------------------------------------------------------------- */}
-          <a className="static-button install-button button-link" href="docs/guide">
-            Install Guides
-          </a>
         </div>
       </div>
     </>
