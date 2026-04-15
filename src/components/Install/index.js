@@ -34,8 +34,8 @@ export default function Install() {
               alt="2. "
               src={require('/docs/assets/counting-02.png').default}
               ></img>
-            <a className="link" href="docs/guide/Installation/quickstart">
-              Run the Quickstart
+            <a className="link" href="docs/guide">
+              Browse Installation Guides
             </a>
           </h3>
           <h3 className="install-h3">
