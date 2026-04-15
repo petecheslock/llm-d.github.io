@@ -23,7 +23,6 @@
 const INTERNAL_GUIDE_MAPPINGS = {
   // Main guides
   'guides/README.md': '/docs/guide',
-  'guides/prereq/infrastructure/README.md': '/docs/guide/Installation/prerequisites',
   
   // Dynamic guides (Installation section)
   'guides/inference-scheduling/README.md': '/docs/guide/Installation/inference-scheduling',
