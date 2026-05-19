@@ -38,7 +38,6 @@ jobs:
           cp -r preview/build/img/docs/* build/img/docs/
 
       - name: Check links
-        id: check-links
         run: npm run check-links
 
       - name: Add broken links to job summary
