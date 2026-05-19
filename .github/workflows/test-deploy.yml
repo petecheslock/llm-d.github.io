@@ -40,6 +40,15 @@ jobs:
       - name: Check links
         run: npm run check-links
 
+      - name: Add broken links to job summary
+        if: always()
+        run: |
+          if [ -f broken-links-report.md ]; then
+            cat broken-links-report.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ No broken links found" >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Upload broken links report
         if: always()
         uses: actions/upload-artifact@v7
@@ -47,10 +56,3 @@ jobs:
           name: broken-links-report
           path: broken-links-report.md
           if-no-files-found: ignore
-
-      - name: Post broken links report to PR
-        if: always() && github.event_name == 'pull_request' && hashFiles('broken-links-report.md') != ''
-        uses: marocchino/sticky-pull-request-comment@v3.0.4
-        with:
-          header: broken-links-report
-          path: broken-links-report.md
