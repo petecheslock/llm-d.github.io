@@ -46,8 +46,6 @@ jobs:
         run: |
           if [ -f broken-links-report.md ]; then
             cat broken-links-report.md >> "$GITHUB_STEP_SUMMARY"
-          elif [ "${{ steps.check-links.outcome }}" == "success" ]; then
-            echo "✅ No broken links found" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "⚠️ Link check failed - no report generated" >> "$GITHUB_STEP_SUMMARY"
           fi
