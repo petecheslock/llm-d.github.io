@@ -38,15 +38,18 @@ jobs:
           cp -r preview/build/img/docs/* build/img/docs/
 
       - name: Check links
+        id: check-links
         run: npm run check-links
 
       - name: Add broken links to job summary
         if: always()
         run: |
           if [ -f broken-links-report.md ]; then
-            cat broken-links-report.md >> $GITHUB_STEP_SUMMARY
+            cat broken-links-report.md >> "$GITHUB_STEP_SUMMARY"
+          elif [ "${{ steps.check-links.outcome }}" == "success" ]; then
+            echo "✅ No broken links found" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "✅ No broken links found" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ Link check failed - no report generated" >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Upload broken links report
