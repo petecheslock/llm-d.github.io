@@ -51,29 +51,29 @@ apply_transformations() {
     sed_inplace '/^|.*|$/ s|{|(|g' "$file"
     sed_inplace '/^|.*|$/ s|}|)|g' "$file"
 
-    # Fix well-lit-paths links (convert to /docs/guides for Docusaurus)
+    # Fix well-lit-paths links (convert to /guides for Docusaurus)
     # Source files use ../well-lit-paths/*.md for GitHub compatibility
-    # Convert to /docs/guides/* for Docusaurus
+    # Convert to /guides/* for Docusaurus (baseUrl will be prepended)
     sed_inplace \
-        -E 's|\(\.\./well-lit-paths/([^)]+)\.md\)|(/docs/guides/\1)|g' \
+        -E 's|\(\.\./well-lit-paths/([^)]+)\.md\)|(/guides/\1)|g' \
         "$file"
 
     # Also handle paths with multiple ../ and any path to well-lit-paths
     sed_inplace \
-        -e 's|\](.*\/well-lit-paths/\([^)]*\)\.md)|\](/docs/guides/\1)|g' \
+        -e 's|\](.*\/well-lit-paths/\([^)]*\)\.md)|\](/guides/\1)|g' \
         "$file"
 
     # Fix README.md links to index pages
-    # Convert paths like ../architecture/core/router/epp/README.md to /docs/architecture/core/router/epp
+    # Convert paths like ../architecture/core/router/epp/README.md to /architecture/core/router/epp
     sed_inplace \
-        -e 's|\](.*\/accelerators/README\.md)|\](/docs/accelerators)|g' \
-        -e 's|\](.*\/architecture/core/router/epp/README\.md)|\](/docs/architecture/core/router/epp)|g' \
-        -e 's|\](.*\/architecture/advanced/kv-management/README\.md)|\](/docs/architecture/advanced/kv-management)|g' \
+        -e 's|\](.*\/accelerators/README\.md)|\](/accelerators)|g' \
+        -e 's|\](.*\/architecture/core/router/epp/README\.md)|\](/architecture/core/router/epp)|g' \
+        -e 's|\](.*\/architecture/advanced/kv-management/README\.md)|\](/architecture/advanced/kv-management)|g' \
         "$file"
 
-    # Fix /docs/guides/README (without .md extension)
+    # Fix /guides/README (without .md extension)
     sed_inplace \
-        -e 's|\](/docs/guides/README)|\](/docs/guides)|g' \
+        -e 's|\](/guides/README)|\](/guides)|g' \
         "$file"
 
     # Fix deployment guide links to GitHub URLs

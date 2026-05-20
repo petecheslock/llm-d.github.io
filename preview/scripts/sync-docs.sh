@@ -176,7 +176,7 @@ cp_doc "$WIP/accelerators/README.md"                 "$DOCS_DIR/accelerators/ind
 # Fix accelerators links to infra-providers
 if [[ -f "$DOCS_DIR/accelerators/index.md" ]]; then
     sed_inplace \
-        -e 's|\.\./infra-providers/gke/README\.md|/docs/resources/infra-providers/gke|g' \
+        -e 's|\.\./infra-providers/gke/README\.md|/resources/infra-providers/gke|g' \
         "$DOCS_DIR/accelerators/index.md"
 fi
 
@@ -217,14 +217,14 @@ find "$DOCS_DIR/resources/infra-providers" -name "*.md" -print0 | while IFS= rea
     sed_inplace \
         -e 's|\./images/\([^)]*\)|/img/docs/\1|g' \
         -e 's|](images/\([^)]*\))|](/img/docs/\1)|g' \
-        -e 's|\.\./\.\./\.\./guides/optimized-baseline/README\.md|/docs/guides/optimized-baseline|g' \
-        -e 's|\.\./\.\./\.\./guides/precise-prefix-cache-aware/README\.md|/docs/guides/precise-prefix-cache-aware|g' \
-        -e 's|\.\./\.\./\.\./guides/pd-disaggregation/README\.md|/docs/guides/pd-disaggregation|g' \
+        -e 's|\.\./\.\./\.\./guides/optimized-baseline/README\.md|/guides/optimized-baseline|g' \
+        -e 's|\.\./\.\./\.\./guides/precise-prefix-cache-aware/README\.md|/guides/precise-prefix-cache-aware|g' \
+        -e 's|\.\./\.\./\.\./guides/pd-disaggregation/README\.md|/guides/pd-disaggregation|g' \
         -e 's|\.\./\.\./\.\./guides/wide-ep-lws/README\.md|https://github.com/llm-d/llm-d/tree/main/guides/wide-ep-lws|g' \
         -e 's|\.\./\.\./\.\./guides/tiered-prefix-cache/README\.md|https://github.com/llm-d/llm-d/tree/main/guides/tiered-prefix-cache|g' \
-        -e 's|\.\./\.\./\.\./guides/index\.md|/docs/guides|g' \
-        -e 's|\.\./\.\./\.\./guides/)|/docs/guides)|g' \
-        -e 's|\.\./\.\./\.\./guides)|/docs/guides)|g' \
+        -e 's|\.\./\.\./\.\./guides/index\.md|/guides|g' \
+        -e 's|\.\./\.\./\.\./guides/)|/guides)|g' \
+        -e 's|\.\./\.\./\.\./guides)|/guides)|g' \
         -e 's|\.\./\.\./\.\./helpers/client-setup/README\.md|https://github.com/llm-d/llm-d/tree/main/helpers/client-setup|g' \
         "$file"
 done
@@ -250,11 +250,11 @@ find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|advanced/disaggregation\.md|advanced/disaggregation/index.md|g' \
         -e 's|advanced/autoscaling/autoscaling\.md|advanced/autoscaling/index.md|g' \
         -e 's|advanced/batch/README\.md|advanced/batch/index.md|g' \
-        -e 's|\](/docs/guides/README)|\](/docs/guides)|g' \
-        -e 's|\](/docs/experimental/batch-gateway)|\](/docs/guides/experimental/batch-gateway)|g' \
-        -e 's|\](/docs/architecture/core/epp)|\](/docs/architecture/core/router/epp)|g' \
-        -e 's|\](/docs/well-lit-paths/\([^)]*\)\.md)|\](/docs/guides/\1)|g' \
-        -e 's|\](well-lit-paths/\([^)]*\))|\](/docs/guides/\1)|g' \
+        -e 's|\](/guides/README)|\](/guides)|g' \
+        -e 's|\](/experimental/batch-gateway)|\](/guides/experimental/batch-gateway)|g' \
+        -e 's|\](/architecture/core/epp)|\](/architecture/core/router/epp)|g' \
+        -e 's|\](/well-lit-paths/\([^)]*\)\.md)|\](/guides/\1)|g' \
+        -e 's|\](well-lit-paths/\([^)]*\))|\](/guides/\1)|g' \
         -e 's|\](.*\/guides/tiered-prefix-cache)|\](https://github.com/llm-d/llm-d/tree/main/guides/tiered-prefix-cache)|g' \
         -e 's|\](.*\/guides/batch-gateway)|\](https://github.com/llm-d/llm-d/tree/main/guides/batch-gateway)|g' \
         -e 's|\](.*\/guides/asynchronous-processing)|\](https://github.com/llm-d/llm-d/tree/main/guides/asynchronous-processing)|g' \
@@ -270,11 +270,11 @@ find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](/guides/asynchronous-processing)|\](https://github.com/llm-d/llm-d/tree/main/guides/asynchronous-processing)|g' \
         -e 's|\](/guides/optimized-baseline)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline)|g' \
         -e 's|\](/guides/precise-prefix-cache-aware)|\](https://github.com/llm-d/llm-d/tree/main/guides/precise-prefix-cache-aware)|g' \
-        -e 's|\](.*\/docs/infra-providers)|\](/docs/resources/infra-providers)|g' \
-        -e 's|\](.*\/infra-providers)|\](/docs/resources/infra-providers)|g' \
-        -e 's|\](/docs/infra-providers)|\](/docs/resources/infra-providers)|g' \
-        -e 's|\](infra-providers/\([^)]*\))|\](/docs/resources/infra-providers/\1)|g' \
-        -e 's|\](/docs/\([^)]*\)/README\.md)|\](/docs/\1)|g' \
+        -e 's|\](.*\/docs/infra-providers)|\](/resources/infra-providers)|g' \
+        -e 's|\](.*\/infra-providers)|\](/resources/infra-providers)|g' \
+        -e 's|\](/infra-providers)|\](/resources/infra-providers)|g' \
+        -e 's|\](infra-providers/\([^)]*\))|\](/resources/infra-providers/\1)|g' \
+        -e 's|\](/\([^)]*\)/README\.md)|\](/\1)|g' \
         "$file"
 done
 
@@ -282,11 +282,11 @@ done
 # gateway/index.md comes from guides/prereq/gateways/README.md — fix relative paths
 if [[ -f "$DOCS_DIR/resources/gateway/index.md" ]]; then
     sed_inplace \
-        -e 's|\](../../guides/README\.md)|\](/docs/guides)|g' \
-        -e 's|\](../../guides/index\.md)|\](/docs/guides)|g' \
-        -e 's|\](./gke\.md)|\](/docs/resources/gateway/gke)|g' \
-        -e 's|\](./istio\.md)|\](/docs/resources/gateway/istio)|g' \
-        -e 's|\](./agentgateway\.md)|\](/docs/resources/gateway/agentgateway)|g' \
+        -e 's|\](../../guides/README\.md)|\](/guides)|g' \
+        -e 's|\](../../guides/index\.md)|\](/guides)|g' \
+        -e 's|\](./gke\.md)|\](/resources/gateway/gke)|g' \
+        -e 's|\](./istio\.md)|\](/resources/gateway/istio)|g' \
+        -e 's|\](./agentgateway\.md)|\](/resources/gateway/agentgateway)|g' \
         "$DOCS_DIR/resources/gateway/index.md"
 fi
 
@@ -294,9 +294,9 @@ fi
 # rdma/rdma-configuration.md comes from resources-new/rdma/README.md
 if [[ -f "$DOCS_DIR/resources/rdma/rdma-configuration.md" ]]; then
     sed_inplace \
-        -e 's|\](../../well-lit-paths/pd-disaggregation\.md)|\](/docs/guides/pd-disaggregation)|g' \
-        -e 's|\](../../well-lit-paths/wide-expert-parallelism\.md)|\](/docs/guides/wide-expert-parallelism)|g' \
-        -e 's|\](../../architecture/core/model-servers\.md)|\](/docs/architecture/core/model-servers)|g' \
+        -e 's|\](../../well-lit-paths/pd-disaggregation\.md)|\](/guides/pd-disaggregation)|g' \
+        -e 's|\](../../well-lit-paths/wide-expert-parallelism\.md)|\](/guides/wide-expert-parallelism)|g' \
+        -e 's|\](../../architecture/core/model-servers\.md)|\](/architecture/core/model-servers)|g' \
         "$DOCS_DIR/resources/rdma/rdma-configuration.md"
 fi
 
@@ -305,7 +305,7 @@ fi
 if [[ -f "$DOCS_DIR/resources/monitoring/metrics.md" ]]; then
     sed_inplace \
         -e 's|\](../../../guides/recipes/modelserver/components/monitoring/)|\](https://github.com/llm-d/llm-d/tree/main/guides/recipes/modelserver/components/monitoring)|g' \
-        -e 's|\](../../getting-started/quickstart\.md)|\](/docs/getting-started/quickstart)|g' \
+        -e 's|\](../../getting-started/quickstart\.md)|\](/getting-started/quickstart)|g' \
         "$DOCS_DIR/resources/monitoring/metrics.md"
 fi
 
@@ -314,12 +314,12 @@ fi
 # Convert them to Docusaurus-compatible paths
 echo "    Fixing API reference links..."
 sed_inplace \
-    -e 's|\](inferencepool\.md)|\](/docs/api-reference/inferencepool)|g' \
-    -e 's|\](inferenceobjective\.md)|\](/docs/api-reference/inferenceobjective)|g' \
-    -e 's|\](inferencemodelrewrite\.md)|\](/docs/api-reference/inferencemodelrewrite)|g' \
-    -e 's|\](endpointpickerconfig\.md)|\](/docs/api-reference/endpointpickerconfig)|g' \
-    -e 's|\](epp-http-headers\.md)|\](/docs/api-reference/epp-http-headers)|g' \
-    -e 's|\](glossary\.md)|\](/docs/api-reference/glossary)|g' \
+    -e 's|\](inferencepool\.md)|\](/api-reference/inferencepool)|g' \
+    -e 's|\](inferenceobjective\.md)|\](/api-reference/inferenceobjective)|g' \
+    -e 's|\](inferencemodelrewrite\.md)|\](/api-reference/inferencemodelrewrite)|g' \
+    -e 's|\](endpointpickerconfig\.md)|\](/api-reference/endpointpickerconfig)|g' \
+    -e 's|\](epp-http-headers\.md)|\](/api-reference/epp-http-headers)|g' \
+    -e 's|\](glossary\.md)|\](/api-reference/glossary)|g' \
     "$DOCS_DIR/api-reference/index.md"
 
 # === Fix architecture index.md relative paths ===
@@ -327,31 +327,31 @@ sed_inplace \
 # Convert ./core/* and ./advanced/* to absolute paths with /architecture/ prefix
 echo "    Fixing architecture index.md relative paths..."
 sed_inplace \
-    -e 's|\(\[.*\]\)(\./core/inferencepool)|\1(/docs/architecture/core/inferencepool)|g' \
-    -e 's|\(\[.*\]\)(\./core/model-servers)|\1(/docs/architecture/core/model-servers)|g' \
-    -e 's|\(\[.*\]\)(\./core/router/proxy)|\1(/docs/architecture/core/router/proxy)|g' \
-    -e 's|\(\[.*\]\)(\./core/router/)|\1(/docs/architecture/core/router)|g' \
-    -e 's|\(\[.*\]\)(\./core/router)|\1(/docs/architecture/core/router)|g' \
-    -e 's|\(\[.*\]\)(\./core/router/epp/)|\1(/docs/architecture/core/router/epp)|g' \
-    -e 's|\(\[.*\]\)(\./advanced/kv-management/)|\1(/docs/architecture/advanced/kv-management)|g' \
-    -e 's|\(\[.*\]\)(\./advanced/kv-management)|\1(/docs/architecture/advanced/kv-management)|g' \
-    -e 's|\](core/router/README\.md)|\](/docs/architecture/core/router)|g' \
-    -e 's|\](core/router/epp/README\.md)|\](/docs/architecture/core/router/epp)|g' \
-    -e 's|\](core/inferencepool\.md)|\](/docs/architecture/core/inferencepool)|g' \
-    -e 's|\](core/model-servers\.md)|\](/docs/architecture/core/model-servers)|g' \
-    -e 's|\](advanced/kv-management/README\.md)|\](/docs/architecture/advanced/kv-management)|g' \
-    -e 's|\](/docs/core/router/README\.md)|\](/docs/architecture/core/router)|g' \
-    -e 's|\](/docs/core/router/epp/README\.md)|\](/docs/architecture/core/router/epp)|g' \
-    -e 's|\](/docs/advanced/kv-management/README\.md)|\](/docs/architecture/advanced/kv-management)|g' \
+    -e 's|\(\[.*\]\)(\./core/inferencepool)|\1(/architecture/core/inferencepool)|g' \
+    -e 's|\(\[.*\]\)(\./core/model-servers)|\1(/architecture/core/model-servers)|g' \
+    -e 's|\(\[.*\]\)(\./core/router/proxy)|\1(/architecture/core/router/proxy)|g' \
+    -e 's|\(\[.*\]\)(\./core/router/)|\1(/architecture/core/router)|g' \
+    -e 's|\(\[.*\]\)(\./core/router)|\1(/architecture/core/router)|g' \
+    -e 's|\(\[.*\]\)(\./core/router/epp/)|\1(/architecture/core/router/epp)|g' \
+    -e 's|\(\[.*\]\)(\./advanced/kv-management/)|\1(/architecture/advanced/kv-management)|g' \
+    -e 's|\(\[.*\]\)(\./advanced/kv-management)|\1(/architecture/advanced/kv-management)|g' \
+    -e 's|\](core/router/README\.md)|\](/architecture/core/router)|g' \
+    -e 's|\](core/router/epp/README\.md)|\](/architecture/core/router/epp)|g' \
+    -e 's|\](core/inferencepool\.md)|\](/architecture/core/inferencepool)|g' \
+    -e 's|\](core/model-servers\.md)|\](/architecture/core/model-servers)|g' \
+    -e 's|\](advanced/kv-management/README\.md)|\](/architecture/advanced/kv-management)|g' \
+    -e 's|\](/core/router/README\.md)|\](/architecture/core/router)|g' \
+    -e 's|\](/core/router/epp/README\.md)|\](/architecture/core/router/epp)|g' \
+    -e 's|\](/advanced/kv-management/README\.md)|\](/architecture/advanced/kv-management)|g' \
     "$DOCS_DIR/architecture/index.md"
 
 # === Fix router index.md relative paths ===
 # Similar issue with router/index.md
 sed_inplace \
-    -e 's|\](\.\/epp/)|\](/docs/architecture/core/router/epp)|g' \
-    -e 's|\](\.\/epp)|\](/docs/architecture/core/router/epp)|g' \
-    -e 's|\](epp/README\.md)|\](/docs/architecture/core/router/epp)|g' \
-    -e 's|\](/docs/architecture/core/epp/README\.md)|\](/docs/architecture/core/router/epp)|g' \
+    -e 's|\](\.\/epp/)|\](/architecture/core/router/epp)|g' \
+    -e 's|\](\.\/epp)|\](/architecture/core/router/epp)|g' \
+    -e 's|\](epp/README\.md)|\](/architecture/core/router/epp)|g' \
+    -e 's|\](/architecture/core/epp/README\.md)|\](/architecture/core/router/epp)|g' \
     "$DOCS_DIR/architecture/core/router/index.md"
 
 # === Clean up known issues ===

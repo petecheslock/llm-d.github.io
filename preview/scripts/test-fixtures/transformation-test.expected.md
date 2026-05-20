@@ -212,26 +212,26 @@ Content with @ symbol.
 Test that well-lit-paths links are transformed correctly:
 
 Single level up:
-[Optimized Baseline](/docs/guides/optimized-baseline)
+[Optimized Baseline](/guides/optimized-baseline)
 
 Two levels up:
-[PD Disaggregation](/docs/guides/pd-disaggregation)
+[PD Disaggregation](/guides/pd-disaggregation)
 
 Index/README:
-[All Guides](/docs/guides)
+[All Guides](/guides)
 
 With any number of parent directories:
-[Guide Link](/docs/guides/flow-control)
+[Guide Link](/guides/flow-control)
 
 ## 11. README.md Link Transformations
 
 Test that README links are transformed correctly:
 
 Link to accelerators README:
-[Accelerators](/docs/accelerators)
+[Accelerators](/accelerators)
 
 Link to architecture router epp README:
-[EPP](/docs/architecture/core/router/epp)
+[EPP](/architecture/core/router/epp)
 
 Link to KV management README:
-[KV Management](/docs/architecture/advanced/kv-management)
+[KV Management](/architecture/advanced/kv-management)
