@@ -763,7 +763,10 @@ async function checkLinks() {
     console.log(`   Broken links found: ${brokenLinks.length}`);
 
     if (brokenLinks.length > 0) {
-      console.log(`\n⚠️  Found ${brokenLinks.length} broken links. See report for details.`);
+      console.log(`\n⚠️  Found ${brokenLinks.length} broken links:\n`);
+      console.log('─'.repeat(80));
+      console.log(report);
+      console.log('─'.repeat(80));
       await stopServer();
       process.exit(1); // Exit with error code to fail CI
     } else {
