@@ -21,12 +21,12 @@ function HeroSection() {
         <div className={styles.buttons}>
           <Link
             className="button button--primary button--lg"
-            to="/docs/getting-started">
+            to="/getting-started">
             Get Started
           </Link>
           <Link
             className="button button--outline button--lg"
-            to="/docs/getting-started/quickstart"
+            to="/getting-started/quickstart"
             style={{marginLeft: '0.75rem'}}>
             Quickstart
           </Link>
@@ -39,27 +39,27 @@ function HeroSection() {
 const sections = [
   {
     title: 'Getting Started',
-    to: '/docs/getting-started',
+    to: '/getting-started',
     description: 'Introduction to llm-d, quickstart guide, feature matrix, and release artifacts.',
   },
   {
     title: 'Architecture',
-    to: '/docs/architecture',
+    to: '/architecture',
     description: 'Core components — Proxy, InferencePool, EPP, Model Servers — and advanced features.',
   },
   {
     title: 'Guides',
-    to: '/docs/guides',
+    to: '/guides',
     description: 'Step-by-step adoption procedures: scheduling, disaggregation, expert parallelism, caching.',
   },
   {
     title: 'Resources',
-    to: '/docs/resources/gateway',
+    to: '/resources/gateway',
     description: 'Gateway setup, API configuration, monitoring, multi-model deployment, and RDMA.',
   },
   {
     title: 'API Reference',
-    to: '/docs/api-reference',
+    to: '/api-reference',
     description: 'API specifications and reference documentation.',
   },
 ];
