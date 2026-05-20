@@ -22,20 +22,68 @@ function isVersionGTE(version: string, target: string): boolean {
 }
 
 export default function VersionDropdown(): React.JSX.Element {
-  const {releases} = usePluginData('llmd-versions-plugin') as {
-    releases: string[];
-  };
+  const pluginData = usePluginData('llmd-versions-plugin') as {
+    releases?: string[];
+  } | undefined;
+
   const location = useLocation();
+  const [releases, setReleases] = React.useState<string[]>(pluginData?.releases || []);
+
+  // Fallback: if plugin data is missing, fetch releases.json directly.
+  // Always fetch from the root /docs/ build since both dev and versioned builds
+  // contain the same releases.json with the full list.
+  React.useEffect(() => {
+    if (!pluginData?.releases || pluginData.releases.length === 0) {
+      const base =
+        typeof window !== 'undefined' ? window.location.origin : '';
+      fetch(`${base}/docs/releases.json`)
+        .then(res => res.json())
+        .then(data => {
+          // Validate that data is an array of strings
+          if (Array.isArray(data) && data.every(v => typeof v === 'string')) {
+            setReleases(data);
+          } else {
+            console.warn('[VersionDropdown] Invalid releases.json format, expected array of strings');
+          }
+        })
+        .catch(err => console.warn('[VersionDropdown] Failed to load releases.json:', err));
+    }
+  }, [pluginData]);
 
   // Latest stable version (first in releases list)
   const latestTag = releases?.[0];
   const olderReleases = releases?.slice(1) || [];
 
+  // Detect current version from the actual browser URL (window.location.pathname).
+  // useLocation() returns a path relative to Docusaurus's baseUrl, which strips
+  // the '/docs/' prefix, making it unreliable for detecting which versioned build
+  // we're in. window.location.pathname always reflects the full URL as shown in
+  // the browser, so '/docs/0.7.0/getting-started' → "0.7.0".
+  const getCurrentVersion = (): string | null => {
+    const path =
+      typeof window !== 'undefined' ? window.location.pathname : location.pathname;
+
+    // Full URL: /docs/0.7.0/...
+    let match = path.match(/^\/docs\/(\d+\.\d+(?:\.\d+)?)\//);
+    if (match) return match[1];
+
+    // Relative path after baseUrl strip: /0.7.0/...
+    match = path.match(/^\/(\d+\.\d+(?:\.\d+)?)\//);
+    return match ? match[1] : null;
+  };
+
+  const currentVersion = getCurrentVersion();
+
   // Extract current page path to preserve when switching versions
   // e.g., /docs/architecture/core/proxy -> architecture/core/proxy
   // e.g., /docs/0.7.0/architecture -> architecture (strip version)
+  // Uses window.location.pathname for the same reason as getCurrentVersion():
+  // useLocation() is baseUrl-relative and won't contain the /docs/ prefix when
+  // the versioned build has baseUrl='/docs/0.7.0/', causing version-switch links
+  // to always fall back to 'getting-started' instead of the current page.
   const getCurrentPagePath = () => {
-    const path = location.pathname;
+    const path =
+      typeof window !== 'undefined' ? window.location.pathname : location.pathname;
     const match = path.match(/^\/docs\/(.+)$/);
     if (!match) return 'getting-started';
 
@@ -61,7 +109,7 @@ export default function VersionDropdown(): React.JSX.Element {
       return `/docs/${version}/${pagePath}`;
     } else {
       // Pre-0.7.0 versions link to GitHub
-      return `${REPO_URL}/${tag}/docs/wip-docs-new`;
+      return `${REPO_URL}/${tag}/docs`;
     }
   };
 
@@ -71,14 +119,26 @@ export default function VersionDropdown(): React.JSX.Element {
     return !isVersionGTE(version, MIN_WEBSITE_VERSION);
   };
 
+  // Get display label for dropdown button
+  const getDropdownLabel = () => {
+    if (!currentVersion) return 'dev ▾';
+
+    const vTag = `v${currentVersion}`;
+    if (vTag === latestTag) return `${vTag} (latest) ▾`;
+    return `${vTag} ▾`;
+  };
+
   return (
     <div className="navbar__item dropdown dropdown--hoverable">
       <a className="navbar__link" href="#" onClick={(e) => e.preventDefault()}>
-        dev ▾
+        {getDropdownLabel()}
       </a>
       <ul className="dropdown__menu">
         <li>
-          <a className="dropdown__link dropdown__link--active" href="/docs/">
+          <a
+            className={`dropdown__link ${!currentVersion ? 'dropdown__link--active' : ''}`}
+            href={`/docs/${getCurrentPagePath()}`}
+          >
             dev (main)
           </a>
         </li>
@@ -90,7 +150,7 @@ export default function VersionDropdown(): React.JSX.Element {
             }} />
             <li>
               <a
-                className="dropdown__link"
+                className={`dropdown__link ${currentVersion && `v${currentVersion}` === latestTag ? 'dropdown__link--active' : ''}`}
                 href={getVersionUrl(latestTag)}
                 {...(isExternalLink(latestTag) && {
                   target: '_blank',
@@ -107,7 +167,7 @@ export default function VersionDropdown(): React.JSX.Element {
             {olderReleases.map((tag) => (
               <li key={tag}>
                 <a
-                  className="dropdown__link"
+                  className={`dropdown__link ${currentVersion && `v${currentVersion}` === tag ? 'dropdown__link--active' : ''}`}
                   href={getVersionUrl(tag)}
                   {...(isExternalLink(tag) && {
                     target: '_blank',
