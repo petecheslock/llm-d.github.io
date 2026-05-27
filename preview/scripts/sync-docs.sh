@@ -297,6 +297,7 @@ find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](/docs/\([^)]*\)/README\.md)|\](/docs/\1)|g' \
         -e 's|\](/docs/guides/predicted-latency-based-scheduling)|\](/docs/guides/predicted-latency-routing)|g' \
         -e 's|\](/guides/predicted-latency-based-scheduling)|\](/guides/predicted-latency-routing)|g' \
+        -e 's|llm-d-router/tree/main/pkg/epp/framework/plugins/scheduling/profile)|llm-d-router/tree/main/pkg/epp/framework/plugins/scheduling/profilehandler)|g' \
         -e 's|\](/docs/guides/predicted-latency)|\](/docs/guides/predicted-latency-routing)|g' \
         -e 's|\](/guides/predicted-latency)|\](/guides/predicted-latency-routing)|g' \
         -e 's|\](../../guides/predicted-latency)|\](/guides/predicted-latency-routing)|g' \
@@ -396,8 +397,8 @@ find "$DOCS_DIR/guides" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](../../docs/monitoring/README\.md)|\](https://github.com/llm-d/llm-d/tree/main/docs/monitoring)|g' \
         -e 's|\](../../../docs/monitoring/README\.md)|\](https://github.com/llm-d/llm-d/tree/main/docs/monitoring)|g' \
         -e 's|\](/docs/monitoring/README\.md)|\](https://github.com/llm-d/llm-d/tree/main/docs/monitoring)|g' \
-        -e 's|\](../../../../../prereq/infrastructure/README\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/prereq/infrastructure)|g' \
-        -e 's|\](/docs/prereq/infrastructure/README\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/prereq/infrastructure)|g' \
+        -e 's|\](../../../../../prereq/infrastructure/README\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/prereq/multi-node-serving)|g' \
+        -e 's|\](/docs/prereq/infrastructure/README\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/prereq/multi-node-serving)|g' \
         "$file"
 done
 
@@ -429,11 +430,11 @@ find "$DOCS_DIR/guides" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](/docs/guides/README\.hpa-epp/index\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/workload-autoscaling)|g' \
         -e 's|\](./README\.wva\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/workload-autoscaling)|g' \
         -e 's|\](/docs/guides/README\.wva\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/workload-autoscaling)|g' \
-        -e 's|\](../../04_customizing_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/04_customizing_a_guide.md)|g' \
-        -e 's|\](/docs/04_customizing_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/04_customizing_a_guide.md)|g' \
-        -e 's|\](../../02_verifying_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/02_verifying_a_guide.md)|g' \
-        -e 's|\](/docs/02_verifying_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/02_verifying_a_guide.md)|g' \
-        -e 's|\](../../02_verifying_a_guide\.md#following-logs-for-requests)|\](https://github.com/llm-d/llm-d/tree/main/guides/02_verifying_a_guide.md#following-logs-for-requests)|g' \
+        -e 's|\](../../04_customizing_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/prereq/gateways)|g' \
+        -e 's|\](/docs/04_customizing_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/prereq/gateways)|g' \
+        -e 's|\](../../02_verifying_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline)|g' \
+        -e 's|\](/docs/02_verifying_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline)|g' \
+        -e 's|\](../../02_verifying_a_guide\.md#following-logs-for-requests)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline)|g' \
         "$file"
 done
 

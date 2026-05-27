@@ -76,9 +76,47 @@ const config: Config = {
             // Map index.md back to README.md (sync script renames these)
             const sourcePath = cleanPath.replace(/\/index\.md$/, '/README.md');
 
-            // Guide pages come from guides/ in the upstream repo, not docs/
+            // Guide pages: flat .md files are overview pages from docs/well-lit-paths/;
+            // directory-based guides (*/index.md at depth >2) come from guides/*/README.md
             if (cleanPath.startsWith('guides/')) {
-              return `https://github.com/llm-d/llm-d/blob/main/${sourcePath}`;
+              const parts = cleanPath.split('/');
+              if (cleanPath.endsWith('/index.md') && parts.length > 2) {
+                // Directory-based guide: guides/[name]/index.md → guides/[name]/README.md
+                return `https://github.com/llm-d/llm-d/blob/main/${sourcePath}`;
+              }
+              // Flat overview page synced from docs/well-lit-paths/
+              // Special case: precise-prefix-cache-aware was renamed to precise-prefix-cache-routing
+              if (cleanPath === 'guides/precise-prefix-cache-aware.md') {
+                return 'https://github.com/llm-d/llm-d/blob/main/docs/well-lit-paths/precise-prefix-cache-routing.md';
+              }
+              const wellLitPath = sourcePath.replace(/^guides\//, 'docs/well-lit-paths/');
+              return `https://github.com/llm-d/llm-d/blob/main/${wellLitPath}`;
+            }
+
+            // Gateway pages come from guides/prereq/gateways/ in the upstream repo
+            if (cleanPath.startsWith('resources/gateway/')) {
+              const gatewayFile = sourcePath.replace(/^resources\/gateway\//, '');
+              return `https://github.com/llm-d/llm-d/blob/main/guides/prereq/gateways/${gatewayFile}`;
+            }
+
+            // Infra-provider pages come from docs/infra-providers/ (not docs/resources/infra-providers/)
+            if (cleanPath.startsWith('resources/infra-providers/')) {
+              if (cleanPath === 'resources/infra-providers/index.md') {
+                return 'https://github.com/llm-d/llm-d/blob/main/docs/infra-providers/README.md';
+              }
+              const providerName = cleanPath.replace(/^resources\/infra-providers\//, '').replace(/\.md$/, '');
+              return `https://github.com/llm-d/llm-d/blob/main/docs/infra-providers/${providerName}/README.md`;
+            }
+
+            // Renamed files: source file names differ from local file names
+            if (cleanPath === 'resources/rdma/rdma-configuration.md') {
+              return 'https://github.com/llm-d/llm-d/blob/main/docs/resources/rdma/README.md';
+            }
+            if (cleanPath === 'architecture/advanced/autoscaling/workload-variant-autoscaling.md') {
+              return 'https://github.com/llm-d/llm-d/blob/main/docs/architecture/advanced/autoscaling/wva.md';
+            }
+            if (cleanPath === 'architecture/advanced/autoscaling/igw-hpa.md') {
+              return 'https://github.com/llm-d/llm-d/blob/main/docs/architecture/advanced/autoscaling/hpa-keda.md';
             }
 
             return `https://github.com/llm-d/llm-d/blob/main/docs/${sourcePath}`;

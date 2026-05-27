@@ -118,6 +118,18 @@ else
     rm -rf "${WORKTREE_PATH}/preview/src"
     cp -r "$PROJECT_DIR/preview/src" "${WORKTREE_PATH}/preview/src"
 
+    # Apply fixups for known stale GitHub links in committed release-branch content.
+    # These patch specific link targets that changed in upstream after the branch was cut.
+    echo "  Applying link fixups to release branch docs..."
+    if [[ "$(uname)" == "Darwin" ]]; then
+      SED_INPLACE=(sed -i '')
+    else
+      SED_INPLACE=(sed -i)
+    fi
+    find "${WORKTREE_PATH}/preview/docs" -name "*.md" -print0 | xargs -0 "${SED_INPLACE[@]}" \
+      -e 's|github.com/llm-d/llm-d/tree/main/guides/precise-prefix-cache-aware|github.com/llm-d/llm-d/tree/main/guides/precise-prefix-cache-routing|g' \
+      -e 's|github.com/llm-d/llm-d/tree/main/guides/predicted-latency-based-scheduling|github.com/llm-d/llm-d/tree/main/guides/predicted-latency-routing|g'
+
     cd "${WORKTREE_PATH}/preview"
     npm install --silent
 
