@@ -696,9 +696,9 @@ async function checkLinks() {
                 githubUrls.set(url, new Set());
               }
               githubUrls.get(url).add(currentPath);
-              // Skip adding to externalUrls — GitHub links are handled by the
-              // dedicated GitHub pass to avoid double-reporting the same broken URL.
-              continue;
+              // Only skip externalUrls when checkGitHubLinks is enabled; otherwise
+              // fall through so the URL is still validated via the external pass.
+              if (config.checkGitHubLinks) continue;
             }
             externalUrls.add(url);
             continue;
