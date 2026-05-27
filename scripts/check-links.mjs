@@ -16,7 +16,8 @@
  * - checkGitHubLinks: true (default) - Check GitHub links even when checkExternalLinks is false
  *
  * Environment Variables:
- * - GITHUB_TOKEN: Optional GitHub token for better rate limits (5000/hr vs 60/hr)
+ * - GITHUB_TOKEN: Optional GitHub token to avoid rate limiting on github.com HEAD requests.
+ *   Without a token, github.com may rate-limit repeated unauthenticated requests.
  *   In GitHub Actions, this is automatically available as ${{ secrets.GITHUB_TOKEN }}
  *
  * Usage:
@@ -685,12 +686,19 @@ async function checkLinks() {
         if (url.startsWith('http://') || url.startsWith('https://')) {
           const urlObj = new URL(url);
           if (urlObj.host !== `${config.serverHost}:${config.serverPort}`) {
-            // Check if this is a GitHub URL
-            if (url.includes('github.com/llm-d/')) {
+            // Classify as a GitHub llm-d URL only when hostname is exactly github.com
+            // and the path starts with /llm-d/ — prevents matching substrings in query
+            // params or other domains, and avoids leaking auth tokens to third-party hosts.
+            const isLlmDGitHubUrl = urlObj.hostname === 'github.com' &&
+              urlObj.pathname.startsWith('/llm-d/');
+            if (isLlmDGitHubUrl) {
               if (!githubUrls.has(url)) {
                 githubUrls.set(url, new Set());
               }
               githubUrls.get(url).add(currentPath);
+              // Skip adding to externalUrls — GitHub links are handled by the
+              // dedicated GitHub pass to avoid double-reporting the same broken URL.
+              continue;
             }
             externalUrls.add(url);
             continue;
@@ -779,23 +787,19 @@ async function checkLinks() {
         ? { headers: { 'Authorization': `Bearer ${config.githubToken}` } }
         : {};
 
-      for (const url of githubUrlArray) {
-        // Skip if should be ignored
-        if (config.ignorePatterns.some(pattern => url.includes(pattern))) {
-          continue;
-        }
-
-        const result = await rateLimiter.run(() =>
-          validateExternalUrl(url, config.externalTimeout, githubOptions)
+      const githubPromises = githubUrlArray
+        .filter(url => !config.ignorePatterns.some(pattern => url.includes(pattern)))
+        .map(url =>
+          rateLimiter.run(() => validateExternalUrl(url, config.externalTimeout, githubOptions))
+            .then(result => {
+              githubResults.set(url, result);
+              githubChecked++;
+              if (githubChecked % 10 === 0) {
+                process.stdout.write(`\r   Checked ${githubChecked}/${githubUrlArray.length} GitHub URLs...`);
+              }
+            })
         );
-
-        githubResults.set(url, result);
-        githubChecked++;
-
-        if (githubChecked % 10 === 0) {
-          process.stdout.write(`\r   Checked ${githubChecked}/${githubUrlArray.length} GitHub URLs...`);
-        }
-      }
+      await Promise.all(githubPromises);
 
       console.log(`\r   Checked ${githubChecked} GitHub URLs ✓\n`);
 
