@@ -61,7 +61,18 @@ const config: Config = {
 
   themes: ['@docusaurus/theme-mermaid'],
 
-  plugins: [require.resolve('./plugins/versions-plugin')],
+  plugins: [
+    require.resolve('./plugins/versions-plugin'),
+    // Search UI only — the unified index is built at the site root by
+    // scripts/merge-search-index.mjs after build-all.sh merges /docs output.
+    [
+      require.resolve('docusaurus-lunr-search'),
+      {
+        languages: ['en'],
+        includeRoutes: ['__unified_search_at_site_root__'],
+      },
+    ],
+  ],
 
   presets: [
     [
