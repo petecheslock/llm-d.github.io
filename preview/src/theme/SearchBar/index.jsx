@@ -117,6 +117,17 @@ const Search = (props) => {
     [props.isSearchBarExpanded],
   );
 
+  const handleSearchIconKeyDown = useCallback(
+    (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') {
+        return;
+      }
+      e.preventDefault();
+      toggleSearchIconClick(e);
+    },
+    [toggleSearchIconClick],
+  );
+
   let placeholder;
   if (isBrowser) {
     loadAlgolia();
@@ -140,7 +151,7 @@ const Search = (props) => {
           'search-icon-hidden': props.isSearchBarExpanded,
         })}
         onClick={toggleSearchIconClick}
-        onKeyDown={toggleSearchIconClick}
+        onKeyDown={handleSearchIconKeyDown}
         tabIndex={0}
       />
       <input
