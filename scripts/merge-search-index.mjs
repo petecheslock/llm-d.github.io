@@ -2,127 +2,38 @@
 /**
  * merge-search-index.mjs
  *
- * After build-all.sh copies the /docs subsite into build/docs/, merge those
- * pages into the main site's lunr search index so one search box covers both
- * llm-d.ai and llm-d.ai/docs.
+ * After build-all.sh copies the /docs subsite into build/docs/, merge the
+ * root-site and docs-site search outputs into a single lunr index at build/.
  *
- * The main Docusaurus build runs before docs are copied, so docusaurus-lunr-search
- * only indexes blog/community/landing pages. This script scans the canonical
- * /docs HTML output (build/docs/, excluding versioned and dev trees) and
- * rebuilds the combined index at the build/ root.
+ * This intentionally consumes generated JSON artifacts only:
+ *   - build/search-doc.json (main site)
+ *   - build/docs/search-doc.json (docs subsite)
+ *
+ * Avoid importing internal source files from docusaurus-lunr-search so this
+ * script remains stable across plugin upgrades.
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
-import os from 'node:os';
 import {fileURLToPath} from 'node:url';
-import {Worker} from 'node:worker_threads';
 import lunr from 'lunr';
-import {createRequire} from 'node:module';
-
-const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_DIR = path.resolve(__dirname, '..');
 const BUILD_DIR = path.join(PROJECT_DIR, 'build');
-const DOCS_DIR = path.join(BUILD_DIR, 'docs');
-const HTML_TO_DOC = require.resolve('docusaurus-lunr-search/src/html-to-doc.js');
-
 const SEARCH_DOC = path.join(BUILD_DIR, 'search-doc.json');
 const LUNR_INDEX = path.join(BUILD_DIR, 'lunr-index.json');
+const DOCS_SEARCH_DOC = path.join(BUILD_DIR, 'docs', 'search-doc.json');
 
-const SEMVER_DIR = /^\d+\.\d+\.\d+$/;
-const SKIP_DOC_DIRS = new Set(['dev', 'assets', 'img']);
-
-function isIndexableDocsHtml(relativePath) {
-  if (relativePath === '404.html') return false;
-  if (relativePath.startsWith('assets/')) return false;
-
-  const parts = relativePath.split('/');
-  if (parts.some((part) => SEMVER_DIR.test(part) || SKIP_DOC_DIRS.has(part))) {
-    return false;
+function readSearchDoc(searchDocPath, label) {
+  if (!fs.existsSync(searchDocPath)) {
+    throw new Error(`missing ${label}: ${searchDocPath}`);
   }
 
-  return relativePath.endsWith('.html');
-}
-
-function htmlPathToUrl(relativePath) {
-  const withoutExt = relativePath.replace(/\.html$/, '');
-  if (withoutExt === 'index') return '/docs';
-  if (withoutExt.endsWith('/index')) {
-    return `/docs/${withoutExt.slice(0, -'/index'.length)}`;
-  }
-  return `/docs/${withoutExt}`;
-}
-
-function discoverDocsFiles() {
-  const files = [];
-
-  function walk(dir, prefix = '') {
-    for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
-      const relative = prefix ? `${prefix}/${entry.name}` : entry.name;
-      if (entry.isDirectory()) {
-        const topLevel = relative.split('/')[0];
-        if (SEMVER_DIR.test(topLevel) || SKIP_DOC_DIRS.has(topLevel)) {
-          continue;
-        }
-        walk(path.join(dir, entry.name), relative);
-        continue;
-      }
-
-      if (!isIndexableDocsHtml(relative)) continue;
-
-      files.push({
-        path: path.join(dir, entry.name),
-        url: htmlPathToUrl(relative),
-      });
-    }
-  }
-
-  if (fs.existsSync(DOCS_DIR)) {
-    walk(DOCS_DIR);
-  }
-
-  return files;
-}
-
-function scanHtmlFiles(files) {
-  if (!files.length) return Promise.resolve([]);
-
-  const docs = [];
-  let nextIndex = 0;
-  let activeWorkers = 0;
-  const workerCount = Math.min(Math.max(2, os.cpus().length), files.length);
-
-  return new Promise((resolve, reject) => {
-    const handleMessage = ([isDoc, payload], worker) => {
-      if (isDoc) {
-        docs.push(payload);
-      } else if (nextIndex < files.length) {
-        worker.postMessage(files[nextIndex++]);
-      } else {
-        worker.postMessage(null);
-      }
-    };
-
-    for (let i = 0; i < workerCount; i++) {
-      if (nextIndex >= files.length) break;
-
-      const worker = new Worker(HTML_TO_DOC, {workerData: {loadedVersions: null}});
-      worker.on('error', reject);
-      worker.on('message', (message) => handleMessage(message, worker));
-      worker.on('exit', (code) => {
-        if (code !== 0) {
-          reject(new Error(`HTML scanner exited with code ${code}`));
-          return;
-        }
-        activeWorkers -= 1;
-        if (activeWorkers <= 0) resolve(docs);
-      });
-
-      activeWorkers += 1;
-      worker.postMessage(files[nextIndex++]);
-    }
-  });
+  const payload = JSON.parse(fs.readFileSync(searchDocPath, 'utf8'));
+  return {
+    searchDocs: payload.searchDocs ?? [],
+    options: payload.options ?? {},
+  };
 }
 
 function buildLunrIndex(searchDocs, options = {}) {
@@ -168,20 +79,10 @@ function updateHashedCopies(searchDocContents, lunrIndexContents) {
 }
 
 async function main() {
-  if (!fs.existsSync(SEARCH_DOC)) {
-    console.error('merge-search-index: missing build/search-doc.json — run main site build first');
-    process.exit(1);
-  }
-
-  const existing = JSON.parse(fs.readFileSync(SEARCH_DOC, 'utf8'));
-  const mainDocs = existing.searchDocs ?? [];
-  const options = existing.options ?? {languages: ['en']};
-
-  const docsFiles = discoverDocsFiles();
-  console.log(`merge-search-index: scanning ${docsFiles.length} /docs pages`);
-
-  const docsEntries = await scanHtmlFiles(docsFiles);
-  const mergedDocs = [...mainDocs, ...docsEntries];
+  const main = readSearchDoc(SEARCH_DOC, 'main site search doc');
+  const docs = readSearchDoc(DOCS_SEARCH_DOC, 'docs site search doc');
+  const options = Object.keys(main.options).length > 0 ? main.options : docs.options;
+  const mergedDocs = [...main.searchDocs, ...docs.searchDocs];
 
   const lunrIndex = buildLunrIndex(mergedDocs, options);
   const searchDocContents = JSON.stringify({searchDocs: mergedDocs, options});
@@ -193,7 +94,7 @@ async function main() {
 
   const docsUrlCount = mergedDocs.filter((doc) => doc.url?.startsWith('/docs')).length;
   console.log(
-    `merge-search-index: ${mergedDocs.length} total entries (${mainDocs.length} main + ${docsEntries.length} docs, ${docsUrlCount} /docs URLs)`,
+    `merge-search-index: ${mergedDocs.length} total entries (${main.searchDocs.length} main + ${docs.searchDocs.length} docs, ${docsUrlCount} /docs URLs)`,
   );
 }
 

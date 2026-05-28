@@ -63,13 +63,12 @@ const config: Config = {
 
   plugins: [
     require.resolve('./plugins/versions-plugin'),
-    // Search UI only — the unified index is built at the site root by
-    // scripts/merge-search-index.mjs after build-all.sh merges /docs output.
+    // Build docs search output so the site-root merge step can compose a
+    // unified index from build/search-doc.json + build/docs/search-doc.json.
     [
       require.resolve('docusaurus-lunr-search'),
       {
         languages: ['en'],
-        includeRoutes: ['__unified_search_at_site_root__'],
       },
     ],
   ],
