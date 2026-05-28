@@ -1,7 +1,7 @@
 import React, {useRef, useCallback, useState, useEffect} from 'react';
 import clsx from 'clsx';
 import useIsBrowser from '@docusaurus/useIsBrowser';
-import {HighlightSearchResults} from './HighlightSearchResults';
+import {HighlightSearchResults} from './shared/HighlightSearchResults';
 import {navigateToSearchResult} from './resolveSearchUrl';
 
 // Unified index is built at the site root by scripts/merge-search-index.mjs
@@ -12,6 +12,7 @@ const Search = (props) => {
   const initialized = useRef(false);
   const searchBarRef = useRef(null);
   const [indexReady, setIndexReady] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const isBrowser = useIsBrowser();
 
   const initAlgolia = (searchDocs, searchIndex, DocSearch, options) => {
@@ -39,7 +40,7 @@ const Search = (props) => {
               wordToHighlight = tempDoc.textContent;
             }
           } catch (e) {
-            console.log(e);
+            console.error('Failed to extract highlight word:', e);
           }
         }
 
@@ -55,12 +56,34 @@ const Search = (props) => {
 
   const getSearchDoc = () =>
     process.env.NODE_ENV === 'production'
-      ? fetch(UNIFIED_SEARCH_DOC).then((content) => content.json())
+      ? fetch(UNIFIED_SEARCH_DOC)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Failed to load search index: ${response.status}`);
+            }
+            return response.json();
+          })
+          .catch((error) => {
+            console.error('Search index loading failed:', error);
+            setLoadError(true);
+            return {searchDocs: [], options: {}};
+          })
       : Promise.resolve({});
 
   const getLunrIndex = () =>
     process.env.NODE_ENV === 'production'
-      ? fetch(UNIFIED_LUNR_INDEX).then((content) => content.json())
+      ? fetch(UNIFIED_LUNR_INDEX)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Failed to load lunr index: ${response.status}`);
+            }
+            return response.json();
+          })
+          .catch((error) => {
+            console.error('Lunr index loading failed:', error);
+            setLoadError(true);
+            return [];
+          })
       : Promise.resolve([]);
 
   const loadAlgolia = () => {
@@ -68,8 +91,8 @@ const Search = (props) => {
       Promise.all([
         getSearchDoc(),
         getLunrIndex(),
-        import('./DocSearch'),
-        import('./algolia.css'),
+        import('./shared/DocSearch'),
+        import('./shared/algolia.css'),
       ]).then(([searchDocFile, searchIndex, {default: DocSearch}]) => {
         const {searchDocs, options} = searchDocFile;
         if (!searchDocs || searchDocs.length === 0) {
@@ -123,7 +146,7 @@ const Search = (props) => {
       <input
         id="search_input_react"
         type="search"
-        placeholder={indexReady ? placeholder : 'Loading...'}
+        placeholder={loadError ? 'Search unavailable' : (indexReady ? placeholder : 'Loading...')}
         aria-label="Search"
         className={clsx(
           'navbar__search-input',

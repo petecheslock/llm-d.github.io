@@ -4,13 +4,14 @@ import {useHistory} from '@docusaurus/router';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import {usePluginData} from '@docusaurus/useGlobalData';
 import useIsBrowser from '@docusaurus/useIsBrowser';
-import {HighlightSearchResults} from './HighlightSearchResults';
+import {HighlightSearchResults} from '../../../preview/src/theme/SearchBar/shared/HighlightSearchResults';
 import {navigateToSearchResult} from './resolveSearchUrl';
 
 const Search = (props) => {
   const initialized = useRef(false);
   const searchBarRef = useRef(null);
   const [indexReady, setIndexReady] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const history = useHistory();
   const {siteConfig = {}} = useDocusaurusContext();
   const pluginConfig = (siteConfig.plugins || []).find(
@@ -48,7 +49,7 @@ const Search = (props) => {
               wordToHighlight = tempDoc.textContent;
             }
           } catch (e) {
-            console.log(e);
+            console.error('Failed to extract highlight word:', e);
           }
         }
 
@@ -65,16 +66,34 @@ const Search = (props) => {
   const pluginData = usePluginData('docusaurus-lunr-search');
   const getSearchDoc = () =>
     process.env.NODE_ENV === 'production'
-      ? fetch(`${assetUrl}${pluginData.fileNames.searchDoc}`).then((content) =>
-          content.json(),
-        )
+      ? fetch(`${assetUrl}${pluginData.fileNames.searchDoc}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Failed to load search index: ${response.status}`);
+            }
+            return response.json();
+          })
+          .catch((error) => {
+            console.error('Search index loading failed:', error);
+            setLoadError(true);
+            return {searchDocs: [], options: {}};
+          })
       : Promise.resolve({});
 
   const getLunrIndex = () =>
     process.env.NODE_ENV === 'production'
-      ? fetch(`${assetUrl}${pluginData.fileNames.lunrIndex}`).then((content) =>
-          content.json(),
-        )
+      ? fetch(`${assetUrl}${pluginData.fileNames.lunrIndex}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Failed to load lunr index: ${response.status}`);
+            }
+            return response.json();
+          })
+          .catch((error) => {
+            console.error('Lunr index loading failed:', error);
+            setLoadError(true);
+            return [];
+          })
       : Promise.resolve([]);
 
   const loadAlgolia = () => {
@@ -82,8 +101,8 @@ const Search = (props) => {
       Promise.all([
         getSearchDoc(),
         getLunrIndex(),
-        import('./DocSearch'),
-        import('./algolia.css'),
+        import('../../../preview/src/theme/SearchBar/shared/DocSearch'),
+        import('../../../preview/src/theme/SearchBar/shared/algolia.css'),
       ]).then(([searchDocFile, searchIndex, {default: DocSearch}]) => {
         const {searchDocs, options} = searchDocFile;
         if (!searchDocs || searchDocs.length === 0) {
@@ -137,7 +156,7 @@ const Search = (props) => {
       <input
         id="search_input_react"
         type="search"
-        placeholder={indexReady ? placeholder : 'Loading...'}
+        placeholder={loadError ? 'Search unavailable' : (indexReady ? placeholder : 'Loading...')}
         aria-label="Search"
         className={clsx(
           'navbar__search-input',
