@@ -1,5 +1,5 @@
 /*
-Aloglia DocSearch Adapter for Lunr.js
+Algolia DocSearch Adapter for Lunr.js
 ====================================
 Written by:  Praveen N
 github: praveenn77
