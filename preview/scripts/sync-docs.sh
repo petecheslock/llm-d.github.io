@@ -157,6 +157,7 @@ sed_inplace \
     -e 's|\](workload-autoscaling\.md)|\](/guides/workload-autoscaling)|g' \
     -e 's|\](asynchronous-processing\.md)|\](/guides/asynchronous-processing)|g' \
     -e 's|\](experimental/batch-gateway\.md)|\](/guides/batch-gateway)|g' \
+    -e 's|\](no-kubernetes-deployment\.md)|\](/guides/no-kubernetes-deployment)|g' \
     "$DOCS_DIR/guides/index.md"
 
 if [[ ! -d "$SRC/guides/predicted-latency-based-scheduling" ]]; then
@@ -339,6 +340,7 @@ find "$DOCS_DIR/guides" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](../prereq/gateway-provider/index\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/prereq/gateway-provider)|g' \
         -e 's|\](../../prereq/gateway-provider/index\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/prereq/gateway-provider)|g' \
         -e 's|\](../asynchronous-processing/README\.md)|\](../asynchronous-processing/index.md)|g' \
+        -e 's|\](../pd-disaggregation/README\.md)|\](/guides/pd-disaggregation)|g' \
         -e 's|\](/docs/guides/cpu/README\.md)|\](/docs/guides/tiered-prefix-cache/cpu)|g' \
         -e 's|\](/docs/guides/storage/README\.md)|\](/docs/guides/tiered-prefix-cache/storage)|g' \
         -e 's|\](/docs/guides/redis/README\.md)|\](/docs/guides/asynchronous-processing/redis)|g' \
@@ -430,6 +432,12 @@ find "$DOCS_DIR/guides" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](/docs/guides/README\.hpa-epp/index\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/workload-autoscaling)|g' \
         -e 's|\](./README\.wva\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/workload-autoscaling)|g' \
         -e 's|\](/docs/guides/README\.wva\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/workload-autoscaling)|g' \
+        -e 's|\](../optimized-baseline/modelserver)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline/modelserver)|g' \
+        -e 's|\](../optimized-baseline/modelserver/)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline/modelserver)|g' \
+        -e 's|\](../optimized-baseline/modelserver/gpu/vllm/base/patch-vllm\.yaml)|\](https://github.com/llm-d/llm-d/blob/main/guides/optimized-baseline/modelserver/gpu/vllm/base/patch-vllm.yaml)|g' \
+        -e 's|\](./router/epp/config\.yaml)|\](https://github.com/llm-d/llm-d/blob/main/guides/no-kubernetes-deployment/router/epp/config.yaml)|g' \
+        -e 's|\](./router/epp/endpoints\.yaml)|\](https://github.com/llm-d/llm-d/blob/main/guides/no-kubernetes-deployment/router/epp/endpoints.yaml)|g' \
+        -e 's|\](./router/envoy/envoy\.yaml)|\](https://github.com/llm-d/llm-d/blob/main/guides/no-kubernetes-deployment/router/envoy/envoy.yaml)|g' \
         -e 's|\](../../04_customizing_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/prereq/gateways)|g' \
         -e 's|\](/docs/04_customizing_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/prereq/gateways)|g' \
         -e 's|\](../../02_verifying_a_guide\.md)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline)|g' \
@@ -449,6 +457,8 @@ find "$DOCS_DIR/guides" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](/docs/architecture/core/router/epp/flow-control\.md)|\](/architecture/core/router/epp/flow-control)|g' \
         -e 's|\](../../docs/architecture/core/epp/flow-control\.md)|\](/architecture/core/router/epp/flow-control)|g' \
         -e 's|\](/docs/architecture/core/epp/flow-control\.md)|\](/architecture/core/router/epp/flow-control)|g' \
+        -e 's|\](../../docs/api-reference/epp-http-headers\.md)|\](/api-reference/epp-http-headers)|g' \
+        -e 's|\](/docs/api-reference/epp-http-headers\.md)|\](/api-reference/epp-http-headers)|g' \
         -e 's|\](../optimized-baseline/README\.md#supported-hardware-backends)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline#supported-hardware-backends)|g' \
         -e 's|\](/docs/optimized-baseline/README\.md#supported-hardware-backends)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline#supported-hardware-backends)|g' \
         -e 's|\](../optimized-baseline)|\](/guides/optimized-baseline)|g' \
