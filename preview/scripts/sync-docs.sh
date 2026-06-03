@@ -26,6 +26,7 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 DOCS_DIR="$PROJECT_DIR/docs"
 GUIDES_DIR="$PROJECT_DIR/guides"
 STATIC_DIR="$PROJECT_DIR/static/img/docs"
+UPSTREAM_REF="$BRANCH"
 
 echo "==> Syncing docs from llm-d/llm-d @ $BRANCH"
 
@@ -290,6 +291,9 @@ find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](/docs/infra-providers)|\](/docs/resources/infra-providers)|g' \
         -e 's|\](infra-providers/\([^)]*\))|\](/resources/infra-providers/\1)|g' \
         -e 's|\](/docs/\([^)]*\)/README\.md)|\](/docs/\1)|g' \
+        -e 's|\](../../getting-started/quickstart\.md)|\](/getting-started/quickstart)|g' \
+        -e 's|\](../../architecture/advanced/batch/batch-gateway\.md)|\](/architecture/advanced/batch/batch-gateway)|g' \
+        -e 's|llm-d-router/tree/main/pkg/epp/framework/plugins/scheduling/profile)|llm-d-router/tree/main/pkg/epp/framework/plugins/scheduling/profilehandler)|g' \
         -e 's|\](../../guides/optimized-baseline)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline)|g' \
         -e 's|\](../../guides/precise-prefix-cache-routing)|\](https://github.com/llm-d/llm-d/tree/main/guides/precise-prefix-cache-routing)|g' \
         -e 's|\](../../guides/tiered-prefix-cache)|\](https://github.com/llm-d/llm-d/tree/main/guides/tiered-prefix-cache)|g' \
@@ -567,6 +571,17 @@ done
 echo "    Fixing /img/docs/images/ paths..."
 find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
     sed_inplace 's|/img/docs/images/|/img/docs/|g' "$file"
+done
+
+# === Rewrite upstream repo links to the synced branch ===
+# Keeps dev docs pointing to main while making release docs point to their
+# matching upstream release branch.
+echo "    Repointing llm-d upstream links to $UPSTREAM_REF..."
+find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
+    sed_inplace \
+        -e "s|https://github.com/llm-d/llm-d/tree/main/|https://github.com/llm-d/llm-d/tree/$UPSTREAM_REF/|g" \
+        -e "s|https://github.com/llm-d/llm-d/blob/main/|https://github.com/llm-d/llm-d/blob/$UPSTREAM_REF/|g" \
+        "$file"
 done
 
 # === Generate stubs for pages in outline that don't have source content yet ===
