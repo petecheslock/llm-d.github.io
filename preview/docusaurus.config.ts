@@ -90,14 +90,36 @@ const config: Config = {
             // directory-based guides (*/index.md at depth >2) come from guides/*/README.md
             if (cleanPath.startsWith('guides/')) {
               const parts = cleanPath.split('/');
+              const flatGuideToWellLitFile: Record<string, string> = {
+                'precise-prefix-cache-aware.md': 'precise-prefix-cache-routing',
+                'predicted-latency-routing.md': 'predicted-latency',
+                'wide-ep-lws.md': 'wide-expert-parallelism',
+                'batch-gateway.md': 'experimental/batch-gateway',
+              };
+              const guideDirToWellLitFile: Record<string, string> = {
+                'optimized-baseline': 'optimized-baseline',
+                'precise-prefix-cache-routing': 'precise-prefix-cache-routing',
+                'tiered-prefix-cache': 'tiered-prefix-cache',
+                'asynchronous-processing': 'asynchronous-processing',
+                'flow-control': 'flow-control',
+                'pd-disaggregation': 'pd-disaggregation',
+                'predicted-latency-routing': 'predicted-latency',
+                'wide-ep-lws': 'wide-expert-parallelism',
+                'workload-autoscaling': 'workload-autoscaling',
+                'no-kubernetes-deployment': 'no-kubernetes-deployment',
+              };
               if (cleanPath.endsWith('/index.md') && parts.length > 2) {
-                // Directory-based guide: guides/[name]/index.md → guides/[name]/README.md
+                const wellLitFile = guideDirToWellLitFile[parts[1]];
+                if (wellLitFile) {
+                  return `https://github.com/llm-d/llm-d/blob/main/docs/well-lit-paths/${wellLitFile}.md`;
+                }
+                // Non Well-Lit directory content (e.g. recipes) still lives under guides/
                 return `https://github.com/llm-d/llm-d/blob/main/${sourcePath}`;
               }
-              // Flat overview page synced from docs/well-lit-paths/
-              // Special case: precise-prefix-cache-aware was renamed to precise-prefix-cache-routing
-              if (cleanPath === 'guides/precise-prefix-cache-aware.md') {
-                return 'https://github.com/llm-d/llm-d/blob/main/docs/well-lit-paths/precise-prefix-cache-routing.md';
+              const flatGuideName = parts[1];
+              const flatWellLitFile = flatGuideToWellLitFile[flatGuideName];
+              if (flatWellLitFile) {
+                return `https://github.com/llm-d/llm-d/blob/main/docs/well-lit-paths/${flatWellLitFile}.md`;
               }
               const wellLitPath = sourcePath.replace(/^guides\//, 'docs/well-lit-paths/');
               return `https://github.com/llm-d/llm-d/blob/main/${wellLitPath}`;
@@ -207,7 +229,7 @@ const config: Config = {
           items: [
             {label: 'Getting Started', to: '/getting-started'},
             {label: 'Architecture', to: '/architecture'},
-            {label: 'Guides', to: '/guides'},
+            {label: 'Well-Lit Paths', to: '/guides'},
             {label: 'Resources', to: '/resources/gateway'},
           ],
         },
