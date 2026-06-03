@@ -120,49 +120,36 @@ cp_doc "$WIP/architecture/advanced/batch/README.md"           "$DOCS_DIR/archite
 cp_doc "$WIP/architecture/advanced/batch/batch-gateway.md"    "$DOCS_DIR/architecture/advanced/batch/batch-gateway.md"
 cp_doc "$WIP/architecture/advanced/batch/async-processor.md"  "$DOCS_DIR/architecture/advanced/batch/async-processor.md"
 
-# === Guides ===
-echo "    Copying detailed guide README.md files from guides/..."
+# === Well-Lit Paths ===
+echo "    Copying well-lit-paths overview pages..."
 
-find "$SRC/guides" -name "README.md" -type f 2>/dev/null | grep -v "/prereq/" | grep -v "/experimental/" | while read -r readme_file; do
-    rel_path="${readme_file#$SRC/guides/}"
-    dst_path="$DOCS_DIR/guides/${rel_path%README.md}index.md"
-    mkdir -p "$(dirname "$dst_path")"
-    cp "$readme_file" "$dst_path"
-done
-
-# Fix unclosed tab blocks in upstream content
-echo "    Fixing unclosed tab blocks..."
-# experimental-dp-aware has <!-- TABS:START --> and <!-- TAB:CoreWeave --> but missing <!-- TABS:END -->
-# The tab should close after the kubectl command, before "### Deploy InferencePool"
-if [[ -f "$DOCS_DIR/guides/wide-ep-lws/experimental-dp-aware/index.md" ]]; then
-    # Insert <!-- TABS:END --> before the "### Deploy InferencePool" heading
-    sed_inplace '/^### Deploy InferencePool$/i\
-<!-- TABS:END -->\
-' "$DOCS_DIR/guides/wide-ep-lws/experimental-dp-aware/index.md"
-fi
-
-echo "    Copying well-lit-paths overview pages as fallback..."
-
-cp_doc "$WIP/well-lit-paths/README.md" "$DOCS_DIR/guides/index.md"
+cp_doc "$WIP/well-lit-paths/README.md"                      "$DOCS_DIR/guides/index.md"
+cp_doc "$WIP/well-lit-paths/optimized-baseline.md"          "$DOCS_DIR/guides/optimized-baseline.md"
+cp_doc "$WIP/well-lit-paths/precise-prefix-cache-routing.md" "$DOCS_DIR/guides/precise-prefix-cache-routing.md"
+cp_doc "$WIP/well-lit-paths/tiered-prefix-cache.md"         "$DOCS_DIR/guides/tiered-prefix-cache.md"
+cp_doc "$WIP/well-lit-paths/asynchronous-processing.md"     "$DOCS_DIR/guides/asynchronous-processing.md"
+cp_doc "$WIP/well-lit-paths/flow-control.md"                "$DOCS_DIR/guides/flow-control.md"
+cp_doc "$WIP/well-lit-paths/pd-disaggregation.md"           "$DOCS_DIR/guides/pd-disaggregation.md"
+cp_doc "$WIP/well-lit-paths/predicted-latency.md"           "$DOCS_DIR/guides/predicted-latency.md"
+cp_doc "$WIP/well-lit-paths/wide-expert-parallelism.md"     "$DOCS_DIR/guides/wide-expert-parallelism.md"
+cp_doc "$WIP/well-lit-paths/workload-autoscaling.md"        "$DOCS_DIR/guides/workload-autoscaling.md"
+cp_doc "$WIP/well-lit-paths/no-kubernetes-deployment.md"    "$DOCS_DIR/guides/no-kubernetes-deployment.md"
+cp_doc "$WIP/well-lit-paths/experimental/batch-gateway.md"  "$DOCS_DIR/guides/batch-gateway.md"
 
 sed_inplace \
     -e 's|\](optimized-baseline\.md)|\](/guides/optimized-baseline)|g' \
-    -e 's|\](predicted-latency\.md)|\](/guides/predicted-latency-routing)|g' \
+    -e 's|\](predicted-latency\.md)|\](/guides/predicted-latency)|g' \
     -e 's|\](precise-prefix-cache-aware\.md)|\](/guides/precise-prefix-cache-routing)|g' \
     -e 's|\](precise-prefix-cache-routing\.md)|\](/guides/precise-prefix-cache-routing)|g' \
     -e 's|\](tiered-prefix-cache\.md)|\](/guides/tiered-prefix-cache)|g' \
     -e 's|\](pd-disaggregation\.md)|\](/guides/pd-disaggregation)|g' \
-    -e 's|\](wide-expert-parallelism\.md)|\](/guides/wide-ep-lws)|g' \
+    -e 's|\](wide-expert-parallelism\.md)|\](/guides/wide-expert-parallelism)|g' \
     -e 's|\](flow-control\.md)|\](/guides/flow-control)|g' \
     -e 's|\](workload-autoscaling\.md)|\](/guides/workload-autoscaling)|g' \
     -e 's|\](asynchronous-processing\.md)|\](/guides/asynchronous-processing)|g' \
     -e 's|\](experimental/batch-gateway\.md)|\](/guides/batch-gateway)|g' \
     -e 's|\](no-kubernetes-deployment\.md)|\](/guides/no-kubernetes-deployment)|g' \
     "$DOCS_DIR/guides/index.md"
-
-if [[ ! -d "$SRC/guides/predicted-latency-based-scheduling" ]]; then
-    cp_doc "$WIP/well-lit-paths/predicted-latency.md" "$DOCS_DIR/guides/predicted-latency.md"
-fi
 
 # === Resources / Observability ===
 # llm-d/llm-d#1542: docs/resources/observability/ (setup, metrics, tracing, promql).
@@ -222,6 +209,7 @@ cp "$ASSETS"/images/*.png "$STATIC_DIR/" 2>/dev/null || true
 cp_doc "$WIP/resources/rdma/networking-stack.svg" "$STATIC_DIR/" 2>/dev/null || true
 cp_doc "$WIP/architecture/core/images/flow_control_dashboard.png" "$STATIC_DIR/" 2>/dev/null || true
 cp_doc "$WIP/architecture/advanced/autoscaling/hpa-architecture.svg" "$STATIC_DIR/" 2>/dev/null || true
+cp_doc "$WIP/well-lit-paths/no-kubernetes-deployment.svg" "$STATIC_DIR/" 2>/dev/null || true
 
 # Infrastructure Providers images
 echo "    Copying infrastructure provider images..."
@@ -295,7 +283,7 @@ find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|advanced/autoscaling/autoscaling\.md|advanced/autoscaling/index.md|g' \
         -e 's|advanced/batch/README\.md|advanced/batch/index.md|g' \
         -e 's|\](/docs/guides/README)|\](/docs/guides)|g' \
-        -e 's|\](/docs/experimental/batch-gateway)|\](/docs/guides/experimental/batch-gateway)|g' \
+        -e 's|\](/docs/experimental/batch-gateway)|\](/guides/batch-gateway)|g' \
         -e 's|\](/docs/architecture/core/epp)|\](/docs/architecture/core/router/epp)|g' \
         -e 's|\](/docs/well-lit-paths/\([^)]*\)\.md)|\](/docs/guides/\1)|g' \
         -e 's|\](well-lit-paths/\([^)]*\))|\](/guides/\1)|g' \
@@ -304,15 +292,20 @@ find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](/docs/infra-providers)|\](/docs/resources/infra-providers)|g' \
         -e 's|\](infra-providers/\([^)]*\))|\](/resources/infra-providers/\1)|g' \
         -e 's|\](/docs/\([^)]*\)/README\.md)|\](/docs/\1)|g' \
-        -e 's|\](/docs/guides/predicted-latency-based-scheduling)|\](/docs/guides/predicted-latency-routing)|g' \
-        -e 's|\](/guides/predicted-latency-based-scheduling)|\](/guides/predicted-latency-routing)|g' \
+        -e 's|\](/docs/guides/predicted-latency-based-scheduling)|\](/docs/guides/predicted-latency)|g' \
+        -e 's|\](/guides/predicted-latency-based-scheduling)|\](/guides/predicted-latency)|g' \
+        -e 's|\](/docs/guides/no-kubernetes-deployment)|\](/guides/no-kubernetes-deployment)|g' \
+        -e 's|\](/docs/guides/precise-prefix-cache-routing)|\](/guides/precise-prefix-cache-routing)|g' \
+        -e 's|\](/docs/guides/predicted-latency)|\](/guides/predicted-latency)|g' \
+        -e 's|\](/docs/guides/wide-expert-parallelism)|\](/guides/wide-expert-parallelism)|g' \
+        -e 's|\](/docs/guides/batch-gateway)|\](/guides/batch-gateway)|g' \
         -e 's|llm-d-router/tree/main/pkg/epp/framework/plugins/scheduling/profile)|llm-d-router/tree/main/pkg/epp/framework/plugins/scheduling/profilehandler)|g' \
-        -e 's|\](/docs/guides/predicted-latency)|\](/docs/guides/predicted-latency-routing)|g' \
-        -e 's|\](/guides/predicted-latency)|\](/guides/predicted-latency-routing)|g' \
-        -e 's|\](../../guides/predicted-latency)|\](/guides/predicted-latency-routing)|g' \
-        -e 's|\](/docs/guides/wide-expert-parallelism)|\](/docs/guides/wide-ep-lws)|g' \
-        -e 's|\](/guides/wide-expert-parallelism)|\](/guides/wide-ep-lws)|g' \
-        -e 's|\](../../guides/wide-expert-parallelism)|\](/guides/wide-ep-lws)|g' \
+        -e 's|\](/docs/guides/predicted-latency-routing)|\](/docs/guides/predicted-latency)|g' \
+        -e 's|\](/guides/predicted-latency-routing)|\](/guides/predicted-latency)|g' \
+        -e 's|\](../../guides/predicted-latency-routing)|\](/guides/predicted-latency)|g' \
+        -e 's|\](/docs/guides/wide-ep-lws)|\](/docs/guides/wide-expert-parallelism)|g' \
+        -e 's|\](/guides/wide-ep-lws)|\](/guides/wide-expert-parallelism)|g' \
+        -e 's|\](../../guides/wide-ep-lws)|\](/guides/wide-expert-parallelism)|g' \
         -e 's|\](../../../../guides/tiered-prefix-cache)|\](/guides/tiered-prefix-cache)|g' \
         -e 's|\](/guides/tiered-prefix-cache)|\](/guides/tiered-prefix-cache)|g' \
         -e 's|\](../../../../guides/batch-gateway)|\](/guides/batch-gateway)|g' \
@@ -320,6 +313,10 @@ find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](../../../guides/batch-gateway)|\](/guides/batch-gateway)|g' \
         -e 's|\](../../../guides/asynchronous-processing)|\](/guides/asynchronous-processing)|g' \
         -e 's|\](../../guides/pd-disaggregation/README\.md)|\](/guides/pd-disaggregation)|g' \
+        -e 's|\](../../guides/no-kubernetes-deployment)|\](/guides/no-kubernetes-deployment)|g' \
+        -e 's|\](../../guides/precise-prefix-cache-routing)|\](/guides/precise-prefix-cache-routing)|g' \
+        -e 's|\](../../getting-started/quickstart\.md)|\](/getting-started/quickstart)|g' \
+        -e 's|\](../../architecture/advanced/batch/batch-gateway\.md)|\](/architecture/advanced/batch/batch-gateway)|g' \
         "$file"
 done
 
@@ -503,7 +500,7 @@ fi
 if [[ -f "$DOCS_DIR/resources/rdma/rdma-configuration.md" ]]; then
     sed_inplace \
         -e 's|\](../../well-lit-paths/pd-disaggregation\.md)|\](/guides/pd-disaggregation)|g' \
-        -e 's|\](../../well-lit-paths/wide-expert-parallelism\.md)|\](/guides/wide-ep-lws)|g' \
+        -e 's|\](../../well-lit-paths/wide-expert-parallelism\.md)|\](/guides/wide-expert-parallelism)|g' \
         -e 's|\](../../architecture/core/model-servers\.md)|\](/architecture/core/model-servers)|g' \
         "$DOCS_DIR/resources/rdma/rdma-configuration.md"
 fi
