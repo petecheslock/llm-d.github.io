@@ -20,6 +20,47 @@ cp_doc() {
     fi
 }
 
+set_doc_slug() {
+    local file="$1"
+    local slug="$2"
+
+    if [[ ! -f "$file" ]]; then
+        return
+    fi
+
+    local first_line
+    IFS= read -r first_line < "$file" || true
+
+    if [[ "$first_line" == "---" ]]; then
+        awk -v slug="$slug" '
+            BEGIN {in_frontmatter=1; slug_set=0}
+            NR==1 {print; next}
+            in_frontmatter==1 && /^---$/ {
+                if (!slug_set) {
+                    print "slug: " slug
+                }
+                print
+                in_frontmatter=0
+                next
+            }
+            in_frontmatter==1 && /^slug:[[:space:]]*/ {
+                print "slug: " slug
+                slug_set=1
+                next
+            }
+            {print}
+        ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+        return
+    fi
+
+    {
+        printf -- "---\n"
+        printf -- "slug: %s\n" "$slug"
+        printf -- "---\n\n"
+        cat "$file"
+    } > "$file.tmp" && mv "$file.tmp" "$file"
+}
+
 BRANCH="${1:-main}"
 REPO_URL="https://github.com/llm-d/llm-d.git"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -151,6 +192,21 @@ sed_inplace \
     -e 's|\](experimental/batch-gateway\.md)|\](/guides/batch-gateway)|g' \
     -e 's|\](no-kubernetes-deployment\.md)|\](/guides/no-kubernetes-deployment)|g' \
     "$DOCS_DIR/guides/index.md"
+
+# Publish well-lit paths at /well-lit-paths/* while keeping source files and doc IDs
+# under docs/guides/* for sync/edit compatibility.
+set_doc_slug "$DOCS_DIR/guides/index.md" "/well-lit-paths"
+set_doc_slug "$DOCS_DIR/guides/optimized-baseline.md" "/well-lit-paths/optimized-baseline"
+set_doc_slug "$DOCS_DIR/guides/precise-prefix-cache-routing.md" "/well-lit-paths/precise-prefix-cache-routing"
+set_doc_slug "$DOCS_DIR/guides/tiered-prefix-cache.md" "/well-lit-paths/tiered-prefix-cache"
+set_doc_slug "$DOCS_DIR/guides/asynchronous-processing.md" "/well-lit-paths/asynchronous-processing"
+set_doc_slug "$DOCS_DIR/guides/flow-control.md" "/well-lit-paths/flow-control"
+set_doc_slug "$DOCS_DIR/guides/pd-disaggregation.md" "/well-lit-paths/pd-disaggregation"
+set_doc_slug "$DOCS_DIR/guides/predicted-latency.md" "/well-lit-paths/predicted-latency"
+set_doc_slug "$DOCS_DIR/guides/wide-expert-parallelism.md" "/well-lit-paths/wide-expert-parallelism"
+set_doc_slug "$DOCS_DIR/guides/workload-autoscaling.md" "/well-lit-paths/workload-autoscaling"
+set_doc_slug "$DOCS_DIR/guides/no-kubernetes-deployment.md" "/well-lit-paths/no-kubernetes-deployment"
+set_doc_slug "$DOCS_DIR/guides/batch-gateway.md" "/well-lit-paths/batch-gateway"
 
 # === Resources / Observability ===
 # llm-d/llm-d#1542: docs/resources/observability/ (setup, metrics, tracing, promql).
@@ -571,6 +627,17 @@ done
 echo "    Fixing /img/docs/images/ paths..."
 find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
     sed_inplace 's|/img/docs/images/|/img/docs/|g' "$file"
+done
+
+# === Canonicalize in-site guide links to /well-lit-paths ===
+echo "    Canonicalizing /guides links to /well-lit-paths..."
+find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
+    sed_inplace \
+        -e 's|\](/docs/guides/\([^)]*\))|\](/docs/well-lit-paths/\1)|g' \
+        -e 's|\](/docs/guides)|\](/docs/well-lit-paths)|g' \
+        -e 's|\](/guides/\([^)]*\))|\](/well-lit-paths/\1)|g' \
+        -e 's|\](/guides)|\](/well-lit-paths)|g' \
+        "$file"
 done
 
 # === Rewrite upstream repo links to the synced branch ===

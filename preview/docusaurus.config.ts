@@ -63,6 +63,20 @@ const config: Config = {
 
   plugins: [
     require.resolve('./plugins/versions-plugin'),
+    [
+      require.resolve('@docusaurus/plugin-client-redirects'),
+      {
+        createRedirects(existingPath: string) {
+          if (existingPath.startsWith('/well-lit-paths')) {
+            return [existingPath.replace('/well-lit-paths', '/guides')];
+          }
+          if (existingPath.startsWith('/guides')) {
+            return [existingPath.replace('/guides', '/well-lit-paths')];
+          }
+          return undefined;
+        },
+      },
+    ],
     // Build docs search output so the site-root merge step can compose a
     // unified index from build/search-doc.json + build/docs/search-doc.json.
     [
@@ -229,7 +243,7 @@ const config: Config = {
           items: [
             {label: 'Getting Started', to: '/getting-started'},
             {label: 'Architecture', to: '/architecture'},
-            {label: 'Well-Lit Paths', to: '/guides'},
+            {label: 'Well-Lit Paths', to: '/well-lit-paths'},
             {label: 'Resources', to: '/resources/gateway'},
           ],
         },
