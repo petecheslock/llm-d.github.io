@@ -279,8 +279,6 @@ find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|getting-started/README\.md|getting-started/index.md|g' \
         -e 's|api-reference/README\.md|api-reference/index.md|g' \
         -e 's|resources/rdma/README\.md|resources/rdma/rdma-configuration.md|g' \
-        -e 's|advanced/disaggregation\.md|advanced/disaggregation/index.md|g' \
-        -e 's|advanced/autoscaling/autoscaling\.md|advanced/autoscaling/index.md|g' \
         -e 's|advanced/batch/README\.md|advanced/batch/index.md|g' \
         -e 's|\](/docs/guides/README)|\](/docs/guides)|g' \
         -e 's|\](/docs/experimental/batch-gateway)|\](/guides/batch-gateway)|g' \
@@ -292,20 +290,18 @@ find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](/docs/infra-providers)|\](/docs/resources/infra-providers)|g' \
         -e 's|\](infra-providers/\([^)]*\))|\](/resources/infra-providers/\1)|g' \
         -e 's|\](/docs/\([^)]*\)/README\.md)|\](/docs/\1)|g' \
-        -e 's|\](/docs/guides/predicted-latency-based-scheduling)|\](/docs/guides/predicted-latency)|g' \
-        -e 's|\](/guides/predicted-latency-based-scheduling)|\](/guides/predicted-latency)|g' \
-        -e 's|\](/docs/guides/no-kubernetes-deployment)|\](/guides/no-kubernetes-deployment)|g' \
-        -e 's|\](/docs/guides/precise-prefix-cache-routing)|\](/guides/precise-prefix-cache-routing)|g' \
-        -e 's|\](/docs/guides/predicted-latency)|\](/guides/predicted-latency)|g' \
-        -e 's|\](/docs/guides/wide-expert-parallelism)|\](/guides/wide-expert-parallelism)|g' \
-        -e 's|\](/docs/guides/batch-gateway)|\](/guides/batch-gateway)|g' \
-        -e 's|llm-d-router/tree/main/pkg/epp/framework/plugins/scheduling/profile)|llm-d-router/tree/main/pkg/epp/framework/plugins/scheduling/profilehandler)|g' \
-        -e 's|\](/docs/guides/predicted-latency-routing)|\](/docs/guides/predicted-latency)|g' \
-        -e 's|\](/guides/predicted-latency-routing)|\](/guides/predicted-latency)|g' \
-        -e 's|\](../../guides/predicted-latency-routing)|\](/guides/predicted-latency)|g' \
-        -e 's|\](/docs/guides/wide-ep-lws)|\](/docs/guides/wide-expert-parallelism)|g' \
-        -e 's|\](/guides/wide-ep-lws)|\](/guides/wide-expert-parallelism)|g' \
-        -e 's|\](../../guides/wide-ep-lws)|\](/guides/wide-expert-parallelism)|g' \
+        -e 's|\](../../guides/optimized-baseline)|\](https://github.com/llm-d/llm-d/tree/main/guides/optimized-baseline)|g' \
+        -e 's|\](../../guides/precise-prefix-cache-routing)|\](https://github.com/llm-d/llm-d/tree/main/guides/precise-prefix-cache-routing)|g' \
+        -e 's|\](../../guides/tiered-prefix-cache)|\](https://github.com/llm-d/llm-d/tree/main/guides/tiered-prefix-cache)|g' \
+        -e 's|\](../../guides/asynchronous-processing)|\](https://github.com/llm-d/llm-d/tree/main/guides/asynchronous-processing)|g' \
+        -e 's|\](../../guides/flow-control)|\](https://github.com/llm-d/llm-d/tree/main/guides/flow-control)|g' \
+        -e 's|\](../../guides/pd-disaggregation)|\](https://github.com/llm-d/llm-d/tree/main/guides/pd-disaggregation)|g' \
+        -e 's|\](../../guides/predicted-latency-routing)|\](https://github.com/llm-d/llm-d/tree/main/guides/predicted-latency-routing)|g' \
+        -e 's|\](../../guides/wide-ep-lws)|\](https://github.com/llm-d/llm-d/tree/main/guides/wide-ep-lws)|g' \
+        -e 's|\](../../guides/workload-autoscaling)|\](https://github.com/llm-d/llm-d/tree/main/guides/workload-autoscaling)|g' \
+        -e 's|\](../../guides/no-kubernetes-deployment)|\](https://github.com/llm-d/llm-d/tree/main/guides/no-kubernetes-deployment)|g' \
+        -e 's|\](../../../guides/batch-gateway)|\](https://github.com/llm-d/llm-d/tree/main/guides/batch-gateway)|g' \
+        -e 's|\](../../../guides/asynchronous-processing)|\](https://github.com/llm-d/llm-d/tree/main/guides/asynchronous-processing)|g' \
         -e 's|\](../../../../guides/tiered-prefix-cache)|\](/guides/tiered-prefix-cache)|g' \
         -e 's|\](/guides/tiered-prefix-cache)|\](/guides/tiered-prefix-cache)|g' \
         -e 's|\](../../../../guides/batch-gateway)|\](/guides/batch-gateway)|g' \
@@ -313,10 +309,6 @@ find "$DOCS_DIR" -name "*.md" -print0 | while IFS= read -r -d '' file; do
         -e 's|\](../../../guides/batch-gateway)|\](/guides/batch-gateway)|g' \
         -e 's|\](../../../guides/asynchronous-processing)|\](/guides/asynchronous-processing)|g' \
         -e 's|\](../../guides/pd-disaggregation/README\.md)|\](/guides/pd-disaggregation)|g' \
-        -e 's|\](../../guides/no-kubernetes-deployment)|\](/guides/no-kubernetes-deployment)|g' \
-        -e 's|\](../../guides/precise-prefix-cache-routing)|\](/guides/precise-prefix-cache-routing)|g' \
-        -e 's|\](../../getting-started/quickstart\.md)|\](/getting-started/quickstart)|g' \
-        -e 's|\](../../architecture/advanced/batch/batch-gateway\.md)|\](/architecture/advanced/batch/batch-gateway)|g' \
         "$file"
 done
 
