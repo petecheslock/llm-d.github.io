@@ -175,7 +175,7 @@ echo "    Copying well-lit-paths overview pages..."
 
 cp_doc "$WIP/well-lit-paths/README.md"                      "$DOCS_DIR/guides/index.md"
 cp_doc "$WIP/well-lit-paths/optimized-baseline.md"          "$DOCS_DIR/guides/optimized-baseline.md"
-cp_doc "$WIP/well-lit-paths/multimodal-serving.md"          "$DOCS_DIR/guides/multimodal-serving.md"
+cp_doc "$WIP/workloads/multimodal-serving.md"               "$DOCS_DIR/guides/multimodal-serving.md"
 cp_doc "$WIP/well-lit-paths/precise-prefix-cache-routing.md" "$DOCS_DIR/guides/precise-prefix-cache-routing.md"
 cp_doc "$WIP/well-lit-paths/tiered-prefix-cache.md"         "$DOCS_DIR/guides/tiered-prefix-cache.md"
 cp_doc "$WIP/well-lit-paths/asynchronous-processing.md"     "$DOCS_DIR/guides/asynchronous-processing.md"
@@ -241,7 +241,9 @@ fi
 if [[ -f "$DOCS_DIR/guides/multimodal-serving.md" ]]; then
     sed_inplace \
         -e 's|^\$\$\\text{Tokens} = \\frac{\\text{Image Width} \\times \\text{Image Height}}{\\text{Factor}}\$\$|`Tokens = (Image Width * Image Height) / Factor`|g' \
-        -e 's|\](../../guides/multimodal-serving/optimized-baseline)|\](/guides/optimized-baseline)|g' \
+        -e 's|\](../../guides/multimodal-serving/optimized-baseline)|\](https://github.com/llm-d/llm-d/tree/main/guides/multimodal-serving/optimized-baseline)|g' \
+        -e 's|\](../well-lit-paths/optimized-baseline\.md)|\](/guides/optimized-baseline)|g' \
+        -e 's|\](../well-lit-paths/optimized-baseline\.md#architecture)|\](/guides/optimized-baseline#architecture)|g' \
         -e 's|\](../../guides/multimodal-serving/e-disaggregation)|\](/guides/pd-disaggregation)|g' \
         -e 's|\](../advanced/kv-management/kv-indexer\.md)|\](/architecture/advanced/kv-management/kv-indexer)|g' \
         "$DOCS_DIR/guides/multimodal-serving.md"
@@ -772,6 +774,10 @@ generate_stub "$DOCS_DIR/resources/infra-providers/gke.md" "Google Kubernetes En
 generate_stub "$DOCS_DIR/resources/infra-providers/minikube.md" "Minikube" "Deploy llm-d on Minikube"
 generate_stub "$DOCS_DIR/resources/infra-providers/openshift.md" "OpenShift" "Deploy llm-d on OpenShift"
 generate_stub "$DOCS_DIR/resources/infra-providers/openshift-aws.md" "OpenShift on AWS" "Deploy llm-d on OpenShift on AWS"
+
+# Guides stubs
+generate_stub "$DOCS_DIR/guides/multimodal-serving.md" "Multimodal Serving" "Multimodal serving guide"
+set_doc_slug "$DOCS_DIR/guides/multimodal-serving.md" "/well-lit-paths/multimodal-serving"
 
 TOTAL=$(find "$DOCS_DIR" -name "*.md" | wc -l | tr -d ' ')
 echo "==> Done. $TOTAL docs synced from llm-d/llm-d @ $BRANCH"
