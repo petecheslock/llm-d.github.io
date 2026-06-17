@@ -174,21 +174,21 @@ cp_doc "$WIP/architecture/advanced/batch/async-processor.md"  "$DOCS_DIR/archite
 echo "    Copying well-lit-paths overview pages..."
 
 cp_doc "$WIP/well-lit-paths/README.md"                      "$DOCS_DIR/guides/index.md"
-cp_doc "$WIP/well-lit-paths/optimized-baseline.md"          "$DOCS_DIR/guides/optimized-baseline.md"
-cp_doc "$WIP/workloads/multimodal-serving.md"               "$DOCS_DIR/guides/multimodal-serving.md"
-cp_doc "$WIP/well-lit-paths/precise-prefix-cache-routing.md" "$DOCS_DIR/guides/precise-prefix-cache-routing.md"
-cp_doc "$WIP/well-lit-paths/tiered-prefix-cache.md"         "$DOCS_DIR/guides/tiered-prefix-cache.md"
-cp_doc "$WIP/well-lit-paths/asynchronous-processing.md"     "$DOCS_DIR/guides/asynchronous-processing.md"
-cp_doc "$WIP/well-lit-paths/flow-control.md"                "$DOCS_DIR/guides/flow-control.md"
-cp_doc "$WIP/well-lit-paths/pd-disaggregation.md"           "$DOCS_DIR/guides/pd-disaggregation.md"
-cp_doc "$WIP/well-lit-paths/predicted-latency.md"           "$DOCS_DIR/guides/predicted-latency.md"
-cp_doc "$WIP/well-lit-paths/wide-expert-parallelism.md"     "$DOCS_DIR/guides/wide-expert-parallelism.md"
-cp_doc "$WIP/well-lit-paths/workload-autoscaling.md"        "$DOCS_DIR/guides/workload-autoscaling.md"
-cp_doc "$WIP/well-lit-paths/no-kubernetes-deployment.md"    "$DOCS_DIR/guides/no-kubernetes-deployment.md"
-cp_doc "$WIP/well-lit-paths/batch-gateway.md"               "$DOCS_DIR/guides/batch-gateway.md"
-# Agentic Serving lives at guides/agentic-serving/README.md upstream; sync as a
-# directory doc (index.md) so the editUrl directory branch resolves it correctly.
-cp_doc "$SRC/guides/agentic-serving/README.md"             "$DOCS_DIR/guides/agentic-serving/index.md"
+cp_doc "$WIP/well-lit-paths/capabilities/optimized-baseline.md"          "$DOCS_DIR/guides/optimized-baseline.md"
+cp_doc "$WIP/well-lit-paths/workloads/multimodal-serving.md"             "$DOCS_DIR/guides/multimodal-serving.md"
+cp_doc "$WIP/well-lit-paths/capabilities/precise-prefix-cache-routing.md" "$DOCS_DIR/guides/precise-prefix-cache-routing.md"
+cp_doc "$WIP/well-lit-paths/capabilities/tiered-prefix-cache.md"         "$DOCS_DIR/guides/tiered-prefix-cache.md"
+cp_doc "$WIP/well-lit-paths/workloads/batch-serving/asynchronous-processing.md" "$DOCS_DIR/guides/asynchronous-processing.md"
+cp_doc "$WIP/well-lit-paths/operations/flow-control.md"                  "$DOCS_DIR/guides/flow-control.md"
+cp_doc "$WIP/well-lit-paths/capabilities/pd-disaggregation.md"           "$DOCS_DIR/guides/pd-disaggregation.md"
+cp_doc "$WIP/well-lit-paths/capabilities/predicted-latency.md"           "$DOCS_DIR/guides/predicted-latency.md"
+cp_doc "$WIP/well-lit-paths/capabilities/wide-expert-parallelism.md"     "$DOCS_DIR/guides/wide-expert-parallelism.md"
+cp_doc "$WIP/well-lit-paths/operations/workload-autoscaling.md"          "$DOCS_DIR/guides/workload-autoscaling.md"
+cp_doc "$WIP/well-lit-paths/operations/no-kubernetes-deployment.md"      "$DOCS_DIR/guides/no-kubernetes-deployment.md"
+cp_doc "$WIP/well-lit-paths/workloads/batch-serving/batch-gateway.md"    "$DOCS_DIR/guides/batch-gateway.md"
+# Agentic Serving overview lives at well-lit-paths/workloads/agentic-serving.md; synced
+# as a directory doc (index.md) so the editUrl branch resolves correctly.
+cp_doc "$WIP/well-lit-paths/workloads/agentic-serving.md"                "$DOCS_DIR/guides/agentic-serving/index.md"
 
 sed_inplace \
     -e 's|\](optimized-baseline\.md)|\](/guides/optimized-baseline)|g' \
@@ -206,6 +206,9 @@ sed_inplace \
     -e 's|\](\./multimodal-serving/optimized-baseline/README\.md)|\](/guides/multimodal-serving)|g' \
     -e 's|\](no-kubernetes-deployment\.md)|\](/guides/no-kubernetes-deployment)|g' \
     -e 's|\](../workloads/README\.md)|\](https://github.com/llm-d/llm-d/blob/main/docs/workloads/README.md)|g' \
+    -e 's|\](capabilities/README\.md)|\](/well-lit-paths)|g' \
+    -e 's|\](workloads/README\.md)|\](/well-lit-paths)|g' \
+    -e 's|\](operations/README\.md)|\](/well-lit-paths)|g' \
     "$DOCS_DIR/guides/index.md"
 
 # Publish well-lit paths at /well-lit-paths/* while keeping source files and doc IDs
@@ -225,14 +228,14 @@ set_doc_slug "$DOCS_DIR/guides/no-kubernetes-deployment.md" "/well-lit-paths/no-
 set_doc_slug "$DOCS_DIR/guides/batch-gateway.md" "/well-lit-paths/batch-gateway"
 set_doc_slug "$DOCS_DIR/guides/agentic-serving/index.md" "/well-lit-paths/agentic-serving"
 
-# Patch agentic-serving internal links (sibling guides -> site URLs; workload page -> upstream).
+# Patch agentic-serving internal links (sibling well-lit-paths -> site URLs; full guide -> upstream).
 if [[ -f "$DOCS_DIR/guides/agentic-serving/index.md" ]]; then
     sed_inplace \
-        -e 's|\](../optimized-baseline/README\.md)|\](/guides/optimized-baseline)|g' \
-        -e 's|\](../tiered-prefix-cache/README\.md)|\](/guides/tiered-prefix-cache)|g' \
-        -e 's|\](../precise-prefix-cache-routing/README\.md)|\](/guides/precise-prefix-cache-routing)|g' \
-        -e 's|\](../pd-disaggregation/README\.md)|\](/guides/pd-disaggregation)|g' \
-        -e 's|\](../../docs/workloads/agentic-serving\.md|\](https://github.com/llm-d/llm-d/blob/main/docs/workloads/agentic-serving.md|g' \
+        -e 's|\](../well-lit-paths/capabilities/optimized-baseline\.md)|\](/guides/optimized-baseline)|g' \
+        -e 's|\](../well-lit-paths/capabilities/tiered-prefix-cache\.md)|\](/guides/tiered-prefix-cache)|g' \
+        -e 's|\](../well-lit-paths/capabilities/precise-prefix-cache-routing\.md)|\](/guides/precise-prefix-cache-routing)|g' \
+        -e 's|\](../well-lit-paths/capabilities/pd-disaggregation\.md)|\](/guides/pd-disaggregation)|g' \
+        -e 's|\](../../guides/agentic-serving)|\](https://github.com/llm-d/llm-d/tree/main/guides/agentic-serving)|g' \
         -e 's|\](agentic-code-generation\.md)|\](https://github.com/llm-d/llm-d/blob/main/guides/agentic-serving/agentic-code-generation.md)|g' \
         "$DOCS_DIR/guides/agentic-serving/index.md"
 fi
@@ -246,6 +249,9 @@ if [[ -f "$DOCS_DIR/guides/multimodal-serving.md" ]]; then
         -e 's|\](../well-lit-paths/optimized-baseline\.md#architecture)|\](/guides/optimized-baseline#architecture)|g' \
         -e 's|\](../../guides/multimodal-serving/e-disaggregation)|\](/guides/pd-disaggregation)|g' \
         -e 's|\](../advanced/kv-management/kv-indexer\.md)|\](/architecture/advanced/kv-management/kv-indexer)|g' \
+        -e 's|\](../well-lit-paths/capabilities/optimized-baseline\.md#\([^)]*\))|\](/guides/optimized-baseline#\1)|g' \
+        -e 's|\](../well-lit-paths/capabilities/optimized-baseline\.md)|\](/guides/optimized-baseline)|g' \
+        -e 's|\](../architecture/core/router/epp/README\.md)|\](/architecture/core/router/epp)|g' \
         "$DOCS_DIR/guides/multimodal-serving.md"
 fi
 
@@ -311,7 +317,7 @@ cp "$ASSETS"/images/*.png "$STATIC_DIR/" 2>/dev/null || true
 cp_doc "$WIP/resources/rdma/networking-stack.svg" "$STATIC_DIR/" 2>/dev/null || true
 cp_doc "$WIP/architecture/core/images/flow_control_dashboard.png" "$STATIC_DIR/" 2>/dev/null || true
 cp_doc "$WIP/architecture/advanced/autoscaling/hpa-architecture.svg" "$STATIC_DIR/" 2>/dev/null || true
-cp_doc "$WIP/well-lit-paths/no-kubernetes-deployment.svg" "$STATIC_DIR/" 2>/dev/null || true
+cp_doc "$WIP/assets/no-kubernetes-deployment.svg" "$STATIC_DIR/" 2>/dev/null || true
 
 # Infrastructure Providers images
 echo "    Copying infrastructure provider images..."
@@ -606,8 +612,8 @@ fi
 # rdma/rdma-configuration.md comes from resources-new/rdma/README.md
 if [[ -f "$DOCS_DIR/resources/rdma/rdma-configuration.md" ]]; then
     sed_inplace \
-        -e 's|\](../../well-lit-paths/pd-disaggregation\.md)|\](/guides/pd-disaggregation)|g' \
-        -e 's|\](../../well-lit-paths/wide-expert-parallelism\.md)|\](/guides/wide-expert-parallelism)|g' \
+        -e 's|\](../../well-lit-paths/capabilities/pd-disaggregation\.md)|\](/guides/pd-disaggregation)|g' \
+        -e 's|\](../../well-lit-paths/capabilities/wide-expert-parallelism\.md)|\](/guides/wide-expert-parallelism)|g' \
         -e 's|\](../../architecture/core/model-servers\.md)|\](/architecture/core/model-servers)|g' \
         "$DOCS_DIR/resources/rdma/rdma-configuration.md"
 fi
