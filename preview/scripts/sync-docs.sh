@@ -263,12 +263,13 @@ else
     cp_doc "$WIP/guides/monitoring/tracing.md"                "$DOCS_DIR/resources/observability/tracing.md"
 fi
 
-# Gateway docs now live under docs/resources/gateway/
-cp_doc "$WIP/resources/gateway/README.md"                    "$DOCS_DIR/resources/gateway/index.md"
-cp_doc "$WIP/resources/gateway/istio.md"                     "$DOCS_DIR/resources/gateway/istio.md"
-cp_doc "$WIP/resources/gateway/gke.md"                       "$DOCS_DIR/resources/gateway/gke.md"
-cp_doc "$WIP/resources/gateway/agentgateway.md"              "$DOCS_DIR/resources/gateway/agentgateway.md"
-cp_doc "$WIP/resources/gateway/install-crds.md"              "$DOCS_DIR/resources/gateway/install-crds.md"
+# === Resources / Gateway ===
+# PR llm-d/llm-d#1778 consolidated gateway docs to docs/resources/gateway/
+cp_doc "$WIP/resources/gateway/README.md"              "$DOCS_DIR/resources/gateway/index.md"
+cp_doc "$WIP/resources/gateway/install-crds.md"        "$DOCS_DIR/resources/gateway/install-crds.md"
+cp_doc "$WIP/resources/gateway/istio.md"               "$DOCS_DIR/resources/gateway/istio.md"
+cp_doc "$WIP/resources/gateway/gke.md"                 "$DOCS_DIR/resources/gateway/gke.md"
+cp_doc "$WIP/resources/gateway/agentgateway.md"        "$DOCS_DIR/resources/gateway/agentgateway.md"
 
 cp_doc "$WIP/resources/rdma/README.md"                      "$DOCS_DIR/resources/rdma/rdma-configuration.md"
 
@@ -739,6 +740,7 @@ STUBEOF
 
 # Resources stubs
 generate_stub "$DOCS_DIR/resources/gateway/index.md" "Gateway" "Gateway deployment and configuration guides"
+generate_stub "$DOCS_DIR/resources/gateway/install-crds.md" "Gateway CRD Installation" "Installing Gateway API and Inference Extension CRDs"
 generate_stub "$DOCS_DIR/resources/gateway/istio.md" "Istio" "Deploying llm-d with Istio gateway"
 generate_stub "$DOCS_DIR/resources/gateway/gke.md" "GKE" "Deploying llm-d with GKE gateway"
 generate_stub "$DOCS_DIR/resources/gateway/agentgateway.md" "Agent Gateway" "Deploying llm-d with Agent Gateway"
