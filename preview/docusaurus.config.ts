@@ -107,8 +107,10 @@ const config: Config = {
           editUrl: ({docPath}) => {
             // Remove the extra 'docs/' prefix that Docusaurus adds
             const cleanPath = docPath.replace(/^docs\//, '');
-            // Map index.md back to README.md (sync script renames these)
-            const sourcePath = cleanPath.replace(/\/index\.md$/, '/README.md');
+            // Map index.md/index.mdx back to README.md/README.mdx (sync script renames these)
+            const sourcePath = cleanPath
+              .replace(/\/index\.mdx$/, '/README.mdx')
+              .replace(/\/index\.md$/, '/README.md');
 
             // Guide pages: flat .md files are overview pages from docs/well-lit-paths/ subdirs;
             // directory-based guides (*/index.md at depth >2) may also be from well-lit-paths/.
@@ -186,10 +188,39 @@ const config: Config = {
               return 'https://github.com/llm-d/llm-d/blob/main/docs/infrastructure/rdma/README.md';
             }
             if (cleanPath === 'architecture/advanced/autoscaling/workload-variant-autoscaling.md') {
-              return 'https://github.com/llm-d/llm-d/blob/main/docs/architecture/advanced/autoscaling/wva.md';
+              return 'https://github.com/llm-d/llm-d/blob/main/docs/architecture/advanced/autoscaling/hpa-wva.md';
             }
             if (cleanPath === 'architecture/advanced/autoscaling/igw-hpa.md') {
-              return 'https://github.com/llm-d/llm-d/blob/main/docs/architecture/advanced/autoscaling/hpa-keda.md';
+              return 'https://github.com/llm-d/llm-d/blob/main/docs/architecture/advanced/autoscaling/hpa-epp.md';
+            }
+
+            // Accelerators page is synced from docs/getting-started/accelerators.md (not docs/accelerators/)
+            if (cleanPath === 'accelerators/index.md') {
+              return 'https://github.com/llm-d/llm-d/blob/main/docs/getting-started/accelerators.md';
+            }
+
+            // Operations files were reorganized: site uses resources/operations/ but upstream uses operations/
+            if (cleanPath.startsWith('resources/operations/')) {
+              const opPath = cleanPath.replace(/^resources\/operations\//, '');
+              const sourceFile = opPath === 'index.md' ? 'README.md' : opPath.replace(/\/index\.md$/, '/README.md');
+              return `https://github.com/llm-d/llm-d/blob/main/docs/operations/${sourceFile}`;
+            }
+
+            // Infrastructure files: site uses resources/infrastructure/ but upstream uses infrastructure/
+            if (cleanPath.startsWith('resources/infrastructure/')) {
+              const infraPath = cleanPath.replace(/^resources\/infrastructure\//, '');
+              const sourceFile = infraPath === 'index.md' ? 'README.md' : infraPath.replace(/\/index\.md$/, '/README.md');
+              return `https://github.com/llm-d/llm-d/blob/main/docs/infrastructure/${sourceFile}`;
+            }
+
+            // getting-started/README was renamed to README.mdx on main
+            if (cleanPath === 'getting-started/index.md') {
+              return 'https://github.com/llm-d/llm-d/blob/main/docs/getting-started/README.mdx';
+            }
+
+            // getting-started/artifacts.md was moved to api-reference/artifacts.md on main
+            if (cleanPath === 'getting-started/artifacts.md') {
+              return 'https://github.com/llm-d/llm-d/blob/main/docs/api-reference/artifacts.md';
             }
 
             // llm-d#1542: monitoring/ renamed to observability/ on main. Release doc
@@ -303,15 +334,15 @@ const config: Config = {
         {
           title: 'Community',
           items: [
-            {label: 'Contact us', href: '/community'},
-            {label: 'Contributing', href: '/community/contribute'},
-            {label: 'Code of Conduct', href: '/community/code-of-conduct'},
+            {html: '<a href="/community" class="footer__link-item">Contact us</a>'},
+            {html: '<a href="/community/contribute" class="footer__link-item">Contributing</a>'},
+            {html: '<a href="/community/code-of-conduct" class="footer__link-item">Code of Conduct</a>'},
           ],
         },
         {
           title: 'More',
           items: [
-            {label: 'Blog', href: '/blog'},
+            {html: '<a href="/blog" class="footer__link-item">Blog</a>'},
             {label: 'Privacy Policy', href: 'https://www.redhat.com/en/about/privacy-policy'},
           ],
         },
